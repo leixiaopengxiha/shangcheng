@@ -1,18 +1,24 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    首页
+    <!-- <router-link to="/main/about/myas/haha">去我的详情</router-link> -->
+    <el-switch v-model="data.isshow" active-color="#13ce66" inactive-color="#ff4949">
+</el-switch>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+// import {postRouterpage} from '../api/user'
+import {reactive} from 'vue'
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+  setup(){
+    const  data = reactive({
+       isshow:true
+    })
+    return {
+      data
+    }
   }
+
 }
 </script>
