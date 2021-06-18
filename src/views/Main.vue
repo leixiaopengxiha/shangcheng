@@ -64,6 +64,7 @@ export default {
   background-color: #e9eef3;
   color: #333;
   box-sizing: border-box;
+  padding: 15px;
   width: calc(100vw - 180px);
   height:calc(100vh - 60px) ;
   overflow: hidden;

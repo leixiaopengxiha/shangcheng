@@ -9,7 +9,7 @@
         label-width="150px"
         class="demo-ruleForm"
       >
-        <el-form-item label="用户名" prop="username">
+        <el-form-item label="用户名" prop="username" v-if="!editlist">
           <el-input v-model="ruleForm.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pass">
@@ -38,10 +38,10 @@
 </template>
 
 <script>
-import { postRegister } from "@/api/user";
+import { postRegister,postUpdateUserPwd } from "@/api/user";
 import md5 from "js-md5";
 export default {
-  props: ["menuadd"],
+  props: ["menuadd","editlist"],
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -94,20 +94,48 @@ export default {
         this.$message.error(data.message);
       }
     },
+    async postUpdateUserPwds(doc){
+      let data = await postUpdateUserPwd(doc);
+      if (data.code == 2000) {
+        this.$message.success({
+          message: "修改成功",
+          type: "success",
+        });
+        this.menuadd("addshou");
+      } else {
+        this.$message.error(data.message);
+      }
+    },
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          let { username, pass } = this.ruleForm;
-          let psw2 = parseInt(pass, 16).toString();
-          let password = md5(psw2);
-          this.postRegisters({
-            username,
-            password,
-          });
-        } else {
-          return false;
-        }
-      });
+        if(this.editlist){
+          this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let { pass } = this.ruleForm;
+            let psw2 = parseInt(pass, 16).toString();
+            let password = md5(psw2);
+            this.postUpdateUserPwds({
+              ...this.editlist,
+              password,
+            });
+          } else {
+            return false;
+          }
+        });
+        }else{
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let { username, pass } = this.ruleForm;
+            let psw2 = parseInt(pass, 16).toString();
+            let password = md5(psw2);
+            this.postRegisters({
+              username,
+              password,
+            });
+          } else {
+            return false;
+          }
+        });
+      }
     },
   },
 };

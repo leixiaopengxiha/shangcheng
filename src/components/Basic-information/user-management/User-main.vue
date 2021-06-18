@@ -1,10 +1,22 @@
 <template>
   <div class="menu-boxs">
-    <div class="menu-operation">
-      <div>
-        <el-button type="primary" @click="menuAdd">添加</el-button>
+    <div class="menu-nav">
+      <div class="menu-shou">
+        <el-input
+          class="input-user"
+          placeholder="请输入内容用户名"
+          v-model="username"
+          clearable>
+        </el-input>
+         <el-button type="primary" @click="AllUserpages">查询</el-button>
+      </div>
+      <div class="menu-operation">
+        <div>
+          <el-button type="primary" @click="menuAdd">添加</el-button>
+        </div>
       </div>
     </div>
+   
 
     <div class="table-boxa">
       <el-table
@@ -12,7 +24,7 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        :height="height"
+        :height="height+'vh'"
         align="center"
         :highlight-current-row="true"
         :cell-style="{ textAlign: 'center' }"
@@ -28,8 +40,9 @@
                   <img class="img-colum" :src="scope.row.avatar" >
               </template>
         </el-table-column>
-
         <el-table-column prop="date" label="创建时间" >
+        </el-table-column>
+          <el-table-column prop="operationtime" label="操作时间" >
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template #default="scope">
@@ -46,11 +59,11 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="menu-operation block" style="margin-top: 40px" v-if="total">
+    <div class="menu-operation block" style="margin-top: 20px" v-if="total">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
+        :current-page="currentPage"
         :page-size="size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -61,6 +74,7 @@
     <UserAdd
       v-if="ishouAdd"
       :menuadd="menuAdd"
+      :editlist='editList'
     ></UserAdd>
   </div>
 </template>
@@ -73,10 +87,12 @@ export default {
       ishouAdd: false,
       tableData: [],
       multipleSelection: [],
-      height: "17vh",
-      total: 100,
+      height: "17",
+      total: 0,
       size: 10,
-      currentPage4: 1,
+      currentPage: 1,
+      username:'',
+      editList:''
     };
   },
   components: {
@@ -89,21 +105,30 @@ export default {
   methods: {
     // 获取
     async AllUserpages() {
-      let router = await AllUserpage();
+      let data = {
+          size:this.size,
+          currentPage:this.currentPage
+      }
+      if(this.username){
+        data.username = this.username
+      }
+      let router = await AllUserpage(data);
       if (router.code == 2000) {
-        if (this.size > router.data.length) {
+        if (router.data.length<7||this.height>74) {
           if (router.data.length == 0) {
-            this.height = "15vh";
+            this.height = "15";
           }else if (router.data.length == 1) {
-            this.height = "15vh";
+            this.height = "15";
           } 
-           else {
-            this.height = `${router.data.length * 10}vh`;
+          else {
+            this.height = `${router.data.length * 10}`;
           }
         } else {
-          this.height = "70vh";
+          this.height = "74";
         }
         this.tableData = router.data;
+        this.total = router.total
+         this.loading.close();
       } else {
         this.$message.error(router.message);
       }
@@ -123,24 +148,25 @@ export default {
     },
 
     menuAdd(ishow) {
-        console.log('sjdk')
+      this.editList = ''
       if (ishow == "addshou") {
         this.AllUserpages();
       }
       this.ishouAdd = !this.ishouAdd;
     },
     handleSizeChange(val) {
-    //   this.height = "70vh";
-      console.log(`每页 ${val} 条`);
+      this.size = val
+      this.AllUserpages()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.currentPage = val
+      this.AllUserpages()
     },
     handleSelectionChange(val) {
-      // console.log(val);
       this.multipleSelection = val;
     },
     handleEdit(index, row) {
+      this.editList = row
       this.ishouAdd = true;
     },
     handleDelete(index, row) {
@@ -157,8 +183,18 @@ export default {
     width: 20px;
     height: 20px;
 }
+.menu-nav{
+  display: flex;
+}
+.menu-shou{
+  flex:1;
+}
+.input-user{
+  width: 30%;
+  margin-right: 10px;
+}
 .table-boxa {
-  margin: 20px 0;
+  margin: 10px 0;
 }
 .menu-operation {
   display: flex;

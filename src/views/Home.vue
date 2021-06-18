@@ -1,7 +1,7 @@
 <template>
   <div>
     首页
-    <!-- <router-link to="/main/about/myas/haha">去我的详情</router-link> -->
+    <router-link to="/main/home/myas">去我的详情</router-link>
     <el-switch v-model="data.isshow" active-color="#13ce66" inactive-color="#ff4949">
 </el-switch>
   </div>

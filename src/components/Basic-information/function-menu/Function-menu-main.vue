@@ -1,18 +1,28 @@
 <template>
   <div class="menu-boxs">
-    <div class="menu-operation">
-      <div>
-        <el-button type="primary" @click="menuAdd">添加</el-button>
+     <div class="menu-nav">
+      <div class="menu-shou">
+        <el-input
+          class="input-user"
+          placeholder="请输入内容用户名"
+          v-model="title"
+          clearable>
+        </el-input>
+         <el-button type="primary" @click="postRouterpages">查询</el-button>
+      </div>
+      <div class="menu-operation">
+        <div>
+          <el-button type="primary" @click="menuAdd">添加</el-button>
+        </div>
       </div>
     </div>
-
     <div class="table-boxa">
       <el-table
         ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        :height="height"
+        :height="height+'vh'"
         align="center"
         :highlight-current-row="true"
         :cell-style="{ textAlign: 'center' }"
@@ -57,11 +67,11 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="menu-operation block" style="margin-top: 40px" v-if="total">
+    <div class="menu-operation block" style="margin-top: 20px" v-if="total">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
+        :current-page="currentPage"
         :page-size="size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -78,18 +88,20 @@
 </template>
 <script>
 import FunctionMenuAdd from './Function-menu-add'
-import { postRouterpage, postDeleteRouterpage } from "../../../api/user";
+import { postDeleteRouterpage,AllQueryRouterList } from "../../../api/user";
 export default {
   data() {
     return {
       ishouAdd: false,
-      currentPage4: 1,
+      currentPage: 1,
       tableData: [],
       multipleSelection: [],
-      height: "15vh",
+      height: "17",
       total: 1,
       size: 10,
       rowList: {},
+      title:'',
+      loading:{}
     };
   },
   components: {
@@ -108,18 +120,36 @@ export default {
     },
     // 获取
     async postRouterpages() {
-      let router = await postRouterpage();
+       let data = {
+          size:this.size,
+          currentPage:this.currentPage
+      }
+      if(this.title){
+        data.title = this.title
+      }
+      this.loading = this.$loading({
+          lock: true,
+          text: '正在加载中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+      let router = await AllQueryRouterList(data);
       if (router.code == 2000) {
-        if (this.size > router.data.length) {
+        if (router.data.length<7||this.height>74) {
           if (router.data.length == 0) {
-            this.height = "15vh";
-          } else {
-            this.height = `${router.data.length * 9}vh`;
+            this.height = "14";
+          }else if (router.data.length == 1) {
+            this.height = "14";
+          } 
+          else {
+            this.height = `${router.data.length * 10}`;
           }
         } else {
-          this.height = "70vh";
+          this.height = "74";
         }
         this.tableData = router.data;
+        this.total = router.total
+        this.loading.close();
       } else {
         this.$message.error(data.message);
       }
@@ -146,14 +176,14 @@ export default {
       this.ishouAdd = !this.ishouAdd;
     },
     handleSizeChange(val) {
-      this.height = "70vh";
-      // console.log(`每页 ${val} 条`);
+      this.size = val;
+      this.postRouterpages();
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.postRouterpages();
     },
     handleSelectionChange(val) {
-      // console.log(val);
       this.multipleSelection = val;
     },
     handleEdit(index, row) {
@@ -169,6 +199,16 @@ export default {
 <style lang="less" scoped>
 .menu-boxs {
   // position: relative;
+}
+.menu-nav{
+  display: flex;
+}
+.menu-shou{
+  flex:1;
+}
+.input-user{
+  width: 30%;
+  margin-right: 10px;
 }
 .table-boxa {
   margin: 20px 0;

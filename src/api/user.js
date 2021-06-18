@@ -1,44 +1,5 @@
 // 请求接口
-import axios from "axios";
-import router from '../router'
-import { ElMessage } from 'element-plus'
-// 设置默认访问路径
-axios.defaults.baseURL = process.env.VUE_APP_EXTERNAL_LINK;
-
-// 在封装axios的文件中添加拦截器
-// 添加请求拦截器，在请求头中加token
-axios.interceptors.request.use(
-    config => {
-    let userList= JSON.parse(sessionStorage.getItem('userList'))
-      // 判断本地的cookie中是否有token
-    if (userList) {
-        if(userList.token){
-            config.headers['authorization'] =userList.token
-        }
-    } else {
-        // 跳转到登录页面(这里使用router，是因为路由文件引入到了此文件里)
-        // router.push('/login')
-    }
-    return config
-    },
-    error => {
-      return Promise.reject(error)
-    })
-  
-// 请求拦截 响应拦截 Interceptors 拦截器
-axios.interceptors.response.use(
-    (res) => {
-        if(res.data.code==4001){
-            sessionStorage.clear()
-            ElMessage.error(res.data.message);
-            router.push('/login')
-        }
-        return res.data;
-    },
-    (err) => {
-        Promise.reject(err);
-    }
-);
+import axios from './api'
 
 // 获取数据
 export let postStats = (data) => {
@@ -91,16 +52,24 @@ export let postRouterpage = ()=>{
         method: "post",
     });
 }
-// 获取用户列表
-export let AllUserpage = ()=>{
+// 用户管理获取路由
+export let AllQueryRouterList = (data)=>{
     return axios({
-        url: "/alluserpage",
+        url: "/queryrouterlist",
         method: "post",
+        data,
     });
 }
 
-// deleteuserpage
 // 获取用户列表
+export let AllUserpage = (data)=>{
+    return axios({
+        url: "/alluserpage",
+        method: "post",
+        data,
+    });
+}
+// 删除用户
 export let Deleteuserpage = (data)=>{
     return axios({
         url: "/deleteuserpage",
@@ -108,16 +77,7 @@ export let Deleteuserpage = (data)=>{
         data,
     });
 }
-// export let getStats = (a) => {
-//     return axios({
-//         url: "/login",
-//         method: "get",
-//         // 传参
-//         params: {
-//             user: '123123'
-//         }
-//     });
-// }
+// 新增路由
 export let postAddrouterpage = (data)=>{
     return axios({
         url: "/addrouterpage",
@@ -126,7 +86,7 @@ export let postAddrouterpage = (data)=>{
         data,
     });
 }
-
+// 删除配置路由
 export let postDeleteRouterpage = (data)=>{
     return axios({
         url: "/deleterouterpage",
@@ -135,11 +95,28 @@ export let postDeleteRouterpage = (data)=>{
         data,
     });
 }
-
-
+// 更改路由信息
 export let postUpdateRouterListPage = (data)=>{
     return axios({
         url: "/updaterouterlistpage",
+        method: "post",
+        // 传参
+        data,
+    });
+}
+// 修改用户信息
+export let postUpdateUserPage = (data)=>{
+    return axios({
+        url: "/updateuserpage",
+        method: "post",
+        // 传参
+        data,
+    });
+}
+// 修改用户密码
+export let postUpdateUserPwd = (data)=>{
+    return axios({
+        url: "/updateuserpwd",
         method: "post",
         // 传参
         data,
