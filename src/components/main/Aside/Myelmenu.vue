@@ -35,7 +35,7 @@ export default {
             count,
             route,
             funSelect,
-             navactive: computed(() => store.state.navactive),
+            navactive: computed(() => store.state.navactive),
         }
     }
 }

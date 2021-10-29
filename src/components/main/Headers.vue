@@ -1,7 +1,14 @@
 <template>
   <div class="header-box">
-    <h3>{{ userList.nickname }}</h3>
-    <img @click="btnheader" class="imgs" :src="userList.avatar" alt="" />
+    <div class="header-contenr">
+      <span class="c-texts">消息提示：</span>
+      <span>欢迎进入</span>
+    </div>
+    <div class="flex-end">
+      <h3>{{ userList.nickname }}</h3>
+      <img @click="btnheader" class="imgs" :src="userList.avatar" alt="" />
+    </div>
+    
   </div>
   <el-drawer title="设置" v-model="data.drawer" :with-header="false">
     <h3>设置</h3>
@@ -20,7 +27,7 @@ import { useStore } from "vuex";
 import { computed, onMounted, reactive } from "vue";
 import { useRouter, useRoute} from 'vue-router';
 export default {
-  name: "header",
+  name: "headers",
   setup() {
     const store = useStore();
      const router = useRouter();
@@ -48,10 +55,19 @@ export default {
 </script>
 <style lang="less" scoped>
 .header-box {
-  text-align: right;
   font-size: 15px;
   display: flex;
-  justify-content: flex-end;
+}
+.header-contenr{
+  flex:1;
+  text-align: left;
+}
+.flex-end{
+   display: flex;
+   justify-content: flex-end;
+}
+.c-texts{
+  color: red;
 }
 .imgs {
   width: 40px;

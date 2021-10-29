@@ -64,7 +64,7 @@ export default {
             let userList =JSON.parse(sessionStorage.getItem('userList'))
             sessionStorage.setItem('LoginSt',2)
             sessionStorage.setItem('userList',JSON.stringify({...data.data,...userList}))
-            this.$router.push('/main')
+            this.$router.replace('/main')
             this.loading.close();
             this.showlogin = false 
         }else{

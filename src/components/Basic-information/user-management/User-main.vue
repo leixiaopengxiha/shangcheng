@@ -42,12 +42,15 @@
         </el-table-column>
         <el-table-column prop="date" label="创建时间" >
         </el-table-column>
-          <el-table-column prop="operationtime" label="操作时间" >
+          <el-table-column prop="operationtime" label="登录时间" >
         </el-table-column>
-        <el-table-column label="操作" width="150">
+        <el-table-column label="操作" width="270">
           <template #default="scope">
+             <el-button size="mini" @click="handleMenu(scope.$index, scope.row)"
+              >用户管理</el-button
+            >
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button
+              >修改密码</el-button
             >
             <el-button
               size="mini"
@@ -92,7 +95,8 @@ export default {
       size: 10,
       currentPage: 1,
       username:'',
-      editList:''
+      editList:'',
+      loading:{}
     };
   },
   components: {
@@ -112,6 +116,12 @@ export default {
       if(this.username){
         data.username = this.username
       }
+      this.loading = this.$loading({
+        lock: true,
+        text: '正在加载中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       let router = await AllUserpage(data);
       if (router.code == 2000) {
         if (router.data.length<7||this.height>74) {
@@ -128,13 +138,20 @@ export default {
         }
         this.tableData = router.data;
         this.total = router.total
-         this.loading.close();
+        this.loading.close();
       } else {
+        this.loading.close();
         this.$message.error(router.message);
       }
     },
     // 删除
     async Deleteuserpages(row) {
+      this.loading = this.$loading({
+        lock: true,
+        text: '正在加载中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       let data = await Deleteuserpage(row);
       if (data.code == 2000) {
         this.$message.success({
@@ -166,12 +183,16 @@ export default {
       this.multipleSelection = val;
     },
     handleEdit(index, row) {
-      this.editList = row
+      this.editList = JSON.parse(JSON.stringify(row))
       this.ishouAdd = true;
     },
     handleDelete(index, row) {
       this.Deleteuserpages(row);
     },
+    handleMenu(index, row){
+      this.$store.dispatch('HandleMenu', JSON.parse(JSON.stringify(row)))
+      this.$router.push('/main/user-management/User-menu')
+    }
   },
 };
 </script>

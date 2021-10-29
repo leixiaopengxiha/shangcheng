@@ -15,6 +15,9 @@
         <el-form-item label="菜单URL" prop="path">
           <el-input v-model="ruleForm.path"></el-input>
         </el-form-item>
+         <el-form-item label="重定向" >
+          <el-input v-model="ruleForm.redirect"></el-input>
+        </el-form-item>
         <el-form-item label="路由name" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
@@ -75,6 +78,7 @@ export default {
         title: "",
         name: "",
         path: "",
+        redirect: "",
         component: "",
         icon: "",
         sidebar: "0",
@@ -101,17 +105,18 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState(["routeListOpstion",]),
+  },
   mounted() {
     // 修改
     this.shows = Object.keys(this.rowlist).length == 0 ? false : true;
+
     if (this.shows) {
-      let cascader = [this.rowlist.pid];
-      this.ruleForm = { ...this.rowlist, cascader };
+      this.ruleForm = this.rowlist;
     }
   },
-  computed: {
-    ...mapState(["routeListOpstion"]),
-  },
+
   methods: {
     // 添加接口
     async postAddrouterpages(row) {
@@ -145,7 +150,7 @@ export default {
         if (valid) {
           if (this.ruleForm.cascader.length) {
             let ids = this.ruleForm.cascader.length - 1;
-            this.ruleForm.pid = this.ruleForm.cascader[ids];
+            this.ruleForm.pid =JSON.parse(JSON.stringify(this.ruleForm.cascader[ids]));
           }
           if (!this.shows) {
             this.postAddrouterpages(this.ruleForm);

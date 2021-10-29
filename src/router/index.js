@@ -75,14 +75,17 @@ router.beforeEach(async (to, from, next) => {
             router.addRoute(mains);
             router.addRoute(err);
             stores.dispatch('AppState',true );
-            next('/main/home');
+            router.replace("/main/home");
+            next();
 
           } else {
             stores.dispatch('AppState',true );
-            next('/login');
+            router.replace("/login");
+            next();
           }
         }).catch(err=>{
-          next('/login');
+          router.replace("/login");
+          next();
           stores.dispatch('AppState',true );
           ElMessage.error('服务器异常请联系管理员');
         })

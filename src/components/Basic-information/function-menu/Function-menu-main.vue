@@ -43,7 +43,8 @@
              <i :class="scope.row.icon"></i>
            </template>
         </el-table-column>
-        <el-table-column prop="path" label="路由地址"> </el-table-column>
+         <el-table-column prop="path" label="路由地址"> </el-table-column>
+        <el-table-column prop="redirect" label="重定向"> </el-table-column>
         <el-table-column prop="component" label="组件路径"> </el-table-column>
 
         <el-table-column prop="sidebar" label="使用状态" width="150">
@@ -187,7 +188,7 @@ export default {
       this.multipleSelection = val;
     },
     handleEdit(index, row) {
-      this.rowList = row;
+      this.rowList = JSON.parse(JSON.stringify(row));
       this.ishouAdd = true;
     },
     handleDelete(index, row) {

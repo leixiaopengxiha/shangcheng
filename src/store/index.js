@@ -10,7 +10,8 @@ export default createStore({
       naem:11
     },
     appState:false,
-    navactive:''
+    navactive:'',
+    handleMenu:{},
   },
   mutations: {
     Roterlists(state,data){
@@ -35,6 +36,9 @@ export default createStore({
     },
     Navactives(state,data){
       state.navactive=data
+    },
+    HandleMenus(state,data){
+      state.handleMenu=data
     }
   },
   actions: {
@@ -56,6 +60,9 @@ export default createStore({
     Navactive({commit},data){
       commit('Navactives',data)
     },
+    HandleMenu({commit},data){
+      commit('HandleMenus',data)
+    }
   },
   modules: {
   }

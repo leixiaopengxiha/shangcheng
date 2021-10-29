@@ -5,7 +5,7 @@
     </el-aside>
     <el-container>
       <el-header>
-        <Header></Header>
+        <Headers></Headers>
     </el-header>
       <el-main>
         <router-view v-if="$route.meta.keepAlive!=1"></router-view>
@@ -22,17 +22,17 @@ import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
 import Myelmenu  from '@/components/main/Aside/Myelmenu';
 import { useRouter, useRoute} from 'vue-router';
-import Header from '@/components/main/Header'
+import Headers from '@/components/main/Headers'
 export default {
   components:{
     Myelmenu,
-    Header
+    Headers
   },
   setup() {
     const store = useStore();
     const router = useRouter()
     onMounted(()=>{
-       let routerpath = store.state.routerpath
+      let routerpath = store.state.routerpath
       router.push(routerpath)
     })
     return {

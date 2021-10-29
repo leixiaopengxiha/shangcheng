@@ -122,3 +122,13 @@ export let postUpdateUserPwd = (data)=>{
         data,
     });
 }
+
+// 给用户添加路由权限
+export let postUpUserRouter = (data)=>{
+    return axios({
+        url: "/upuserrouter",
+        method: "post",
+        // 传参
+        data,
+    });
+}
