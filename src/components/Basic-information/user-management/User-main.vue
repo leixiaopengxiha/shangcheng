@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-boxs">
+  <div class="menu-boxs container-adapt">
     <div class="menu-nav">
       <div class="menu-shou">
         <el-input
@@ -16,15 +16,14 @@
         </div>
       </div>
     </div>
-   
 
-    <div class="table-boxa">
+    <div class="table-boxa table-box-adapt">
       <el-table
         ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        :height="height+'vh'"
+        height='100%'
         align="center"
         :highlight-current-row="true"
         :cell-style="{ textAlign: 'center' }"
@@ -190,6 +189,7 @@ export default {
       this.Deleteuserpages(row);
     },
     handleMenu(index, row){
+      sessionStorage.setItem('HandleMenu',JSON.stringify(row))
       this.$store.dispatch('HandleMenu', JSON.parse(JSON.stringify(row)))
       this.$router.push('/main/user-management/User-menu')
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-boxs">
+  <div class="menu-boxs container-adapt">
      <div class="menu-nav">
       <div class="menu-shou">
         <el-input
@@ -16,13 +16,13 @@
         </div>
       </div>
     </div>
-    <div class="table-boxa">
+    <div class="table-boxa table-box-adapt">
       <el-table
         ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        :height="height+'vh'"
+        height='100%'
         align="center"
         :highlight-current-row="true"
         :cell-style="{ textAlign: 'center' }"
@@ -136,18 +136,6 @@ export default {
         });
       let router = await AllQueryRouterList(data);
       if (router.code == 2000) {
-        if (router.data.length<7||this.height>74) {
-          if (router.data.length == 0) {
-            this.height = "14";
-          }else if (router.data.length == 1) {
-            this.height = "14";
-          } 
-          else {
-            this.height = `${router.data.length * 10}`;
-          }
-        } else {
-          this.height = "74";
-        }
         this.tableData = router.data;
         this.total = router.total
         this.loading.close();

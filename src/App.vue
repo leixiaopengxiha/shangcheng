@@ -117,4 +117,10 @@ ul {
   left: 0%;
   z-index: 100;
 }
+.container-adapt{
+   height: calc(100vh - 100px);
+}
+.table-box-adapt{
+   height: calc(100vh - 200px);
+}
 </style>

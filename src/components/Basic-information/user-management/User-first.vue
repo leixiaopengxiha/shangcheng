@@ -8,11 +8,12 @@
         node-key="id"
         ref="tree"
         highlight-current
+        class="table-box-adapt table-box-scroll"
         :props="defaultProps">
         </el-tree>
-        <div class="buttons">
-        <el-button @click="getCheckedKeys">保存</el-button>
-        <el-button @click="cancel">取消</el-button>
+         <div class="menu-operation menu-operation-btn">
+            <el-button  type="primary" @click="getCheckedKeys">保存</el-button>
+            <el-button  @click="cancel">返回</el-button>
         </div>
     </div>
 </template>
@@ -33,11 +34,16 @@ export default {
         tableData:[],
       };
     },
-     computed: {
+    computed: {
         ...mapState(["handleMenu","routeList"]),
     },
     mounted(){
-       this.postRouterpagesa()
+    if(!this.handleMenu['roles']){
+       let handleMenu =  JSON.parse(sessionStorage.getItem('HandleMenu'))
+         this.$store.dispatch('HandleMenu', handleMenu)
+    }
+
+    this.postRouterpagesa()
     },
     methods: {
          // 获取
@@ -74,7 +80,6 @@ export default {
                     message: router.message,
                     type: "success",
                 });
-                this.$router.push('/main/user-management')
             } else {
                 this.loading.close();
                 this.$message.error(router.message);
@@ -89,12 +94,25 @@ export default {
             this.$router.push('/main/user-management')
         },
         setCheckedKeysd() {
-            this.$refs.tree.setCheckedKeys(this.handleMenu.roles);
+           let roles =  this.handleMenu['roles']
+            this.$refs.tree.setCheckedKeys(roles);
         },
     },
+    
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 
+.menu-operation {
+  display: flex;
+  justify-content: flex-end;
+}
+.menu-operation-btn{
+    margin-top: 10px;
+}
+.table-box-scroll{
+    overflow: hidden;
+    overflow-y: scroll;
+}
 </style>
