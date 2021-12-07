@@ -1,5 +1,5 @@
-
 <template>
+   <!--  角色路由权限 -->
     <div>
         <el-tree
         :data="tableData"
@@ -12,7 +12,7 @@
         :props="defaultProps">
         </el-tree>
          <div class="menu-operation menu-operation-btn">
-            <el-button  type="primary" @click="getCheckedKeys">保存</el-button>
+            <el-button  :disabled="(handleMenu.id=='4000000000000007')?true:false" type="primary" @click="getCheckedKeys">保存</el-button>
             <el-button  @click="cancel">返回</el-button>
         </div>
     </div>
@@ -20,7 +20,7 @@
 
 <script>
 import {mapState} from 'vuex'
-import { postUpUserRouter,postRouterpage } from "../../../api/user";
+import { postRouterpage,postAllRolePermissions,postAddRolePermissions } from "../../../api/user";
 import {Router_tree} from '../../../util/router_tree'
 export default {
  
@@ -28,14 +28,14 @@ export default {
       return {
         defaultProps: {
           children: 'children',
-          label: 'title'
+          label: 'title',
         },
         loading:{},
         tableData:[],
       };
     },
     computed: {
-        ...mapState(["handleMenu"]),
+        ...mapState(["handleMenu","userList"]),
     },
     mounted(){
     if(!this.handleMenu['username']){
@@ -43,9 +43,27 @@ export default {
         this.$store.dispatch('HandleMenu', handleMenu)
     }
     this.postRouterpagesa()
-    this.postRouterpagesa({userId:this.handleMenu.username})
+    console.log()
+    console.log(this.handleMenu.id)
+    this.postAllRolePermissionss({roleId:this.handleMenu.id})
     },
     methods: {
+       async postAllRolePermissionss(data){
+           this.loading = this.$loading({
+                lock: true,
+                text: '正在加载中',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
+            let router = await postAllRolePermissions(data);
+            if (router.code == 2000) {
+                this.loading.close();
+                this.setCheckedKeysd(router.data)
+            } else {
+                this.loading.close();
+                this.$message.error(data.message);
+            }
+       },
          // 获取
         async postRouterpagesa(data) {
             this.loading = this.$loading({
@@ -57,25 +75,21 @@ export default {
             let router = await postRouterpage(data);
             if (router.code == 2000) {
                 this.loading.close();
-                if(data){
-                    this.setCheckedKeysd(router.data)
-                }else{
-                    this.tableData =Router_tree(router.data);
-                }
+                this.tableData =Router_tree(router.data);
             } else {
                 this.loading.close();
                 this.$message.error(data.message);
             }
         },
          // 
-        async postUpUserRouters(data) {
+        async postAddRolePermissionss(data) {
             this.loading = this.$loading({
                 lock: true,
                 text: '正在加载中',
                 spinner: 'el-icon-loading',
                 background: 'rgba(0, 0, 0, 0.7)'
             });
-            let router = await postUpUserRouter(data);
+            let router = await postAddRolePermissions(data);
             if (router.code == 2000) {
                 this.loading.close();
                 this.$message.success({
@@ -88,18 +102,15 @@ export default {
             }
         },
         getCheckedKeys() {
-            console.log(this.handleMenu)
-            // let datas = {...this.handleMenu,roles:this.$refs.tree.getCheckedKeys()}
-            // this.postUpUserRouters(datas)
+            let datas = {roleId:this.handleMenu.id,list:this.$refs.tree.getCheckedKeys()}
+            this.postAddRolePermissionss(datas)
             
         },
         cancel(){
-            this.$router.push('/main/user-management')
+            this.$router.push('/main/role-management/role-management-main')
         },
         setCheckedKeysd(data) {
-            console.log(data)
-            let roles = data.length&&data.map(item=>item.id)
-            this.$refs.tree.setCheckedKeys(roles);
+            this.$refs.tree.setCheckedKeys(data);
         },
     },
     

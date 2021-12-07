@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, } from 'vue-router'
+import { createRouter,createWebHistory } from 'vue-router'
 
 // import axios from 'axios'
 import stores from '../store/index'
@@ -25,12 +25,15 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 
 router.beforeEach(async (to, from, next) => {
-
+  if(to.path=='/'){
+    sessionStorage.clear()
+    next('/login');
+  }
   if(to.path!='/login'||to.path!='/main'||to.path!='/main/home'){
     let navactive = sessionStorage.getItem("navactive");
     stores.dispatch("Navactive", navactive?navactive:'');
@@ -54,7 +57,8 @@ router.beforeEach(async (to, from, next) => {
   if(to.path=='/404'){
     stores.dispatch("RouterPath", "/main");
   }
-  if (to.path == '/main'||to.path=='/main/home') {
+
+  if (to.path.indexOf('/main')!= -1 || to.path == '/404') {
     if (!stores.state.routeList.length) {
        await postRouterpage().then(( data ) => {
           if (data.code == 2000) {
@@ -63,7 +67,14 @@ router.beforeEach(async (to, from, next) => {
             let yijiList= Router_tree(routelist)
             let mains= routes.filter(item=>item.path=='/main')[0]
             mains.children = yijiList;
-            mains.redirect = '/main/home';
+            let navactive = sessionStorage.getItem("navactive");
+            let urls = sessionStorage.getItem("urls");
+            let url = urls ? (urls=='/404' ? '/main/home' : urls) : '/main/home'
+            if(!navactive){
+              sessionStorage.setItem("navactive",'/main/home');
+            }
+            stores.dispatch('RouterPath',url)
+            mains.redirect = url
             let sidebarLsit= sidelist.filter(item=>item.sidebar==1)
             let sidebarLsits=[]
             if(sidebarLsit.length){
@@ -75,7 +86,7 @@ router.beforeEach(async (to, from, next) => {
             router.addRoute(mains);
             router.addRoute(err);
             stores.dispatch('AppState',true );
-            router.replace("/main/home");
+            router.replace(url);
             next();
 
           } else {

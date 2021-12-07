@@ -1,7 +1,11 @@
 <template>
-    <el-empty description="没有此页面"></el-empty>
-    {{data.time}}
-    <router-link to="/main/home">回到首页</router-link>
+    <div class="box-404">
+        <el-empty description="没有此页面"></el-empty>
+        <div class="text-404">
+            {{data.time}}
+            <router-link to="/main">回到首页</router-link>
+        </div>
+    </div>
 </template>
 <script>
 import { onMounted, reactive,  } from "vue";
@@ -18,7 +22,6 @@ export default {
            if(data.time==0){
                clearInterval(times)
                router.replace("/main/home");
-
            }else{
                data.time--
            }
@@ -31,3 +34,14 @@ export default {
   },
 }
 </script>
+<style lang="less" scoped>
+.box-404{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.text-404{
+    text-align: center;
+}
+</style>

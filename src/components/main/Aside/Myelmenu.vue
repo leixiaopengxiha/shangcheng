@@ -26,7 +26,7 @@ export default {
     setup(props){
         const store = useStore();
        let funSelect=(e)=>{
-           store.dispatch('Navactive',e)
+            store.dispatch('Navactive',e)
             sessionStorage.setItem("navactive",e);
         }
         const route = useRoute();

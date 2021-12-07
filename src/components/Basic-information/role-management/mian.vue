@@ -1,13 +1,28 @@
 <template>
+    <!-- <div>角色管理列表页面</div> -->
+
   <div class="menu-boxs container-adapt">
     <div class="menu-nav">
       <div class="menu-shou">
-        <el-input
-          class="input-user"
-          placeholder="请输入内容用户名"
-          v-model="username"
-          clearable>
-        </el-input>
+        <div class="menu-box">
+          <span >角色编号：</span>
+          <el-input
+            class="input-user"
+            placeholder="请输入角色编号"
+            v-model="id"
+            clearable>
+          </el-input>
+        </div>
+        <div class="menu-box">
+          <span>角色名称：</span>
+           <el-input
+            class="input-user"
+            placeholder="请输入角色名称"
+            v-model="jsmc"
+            clearable>
+          </el-input>
+        </div>
+        
          <el-button type="primary" @click="AllUserpages">查询</el-button>
       </div>
       <div class="menu-operation">
@@ -29,34 +44,36 @@
         :cell-style="{ textAlign: 'center' }"
         :header-cell-style="{ textAlign: 'center' }"
       >
-        <!-- <el-table-column type="selection"> </el-table-column> -->
-        <el-table-column prop="username" label="用户名">
+         <el-table-column prop="id" label="角色编号" sortable>
         </el-table-column>
-        <el-table-column prop="nickname" label="昵称">
+        <el-table-column prop="jsmc" label="角色名称">
         </el-table-column>
-         <el-table-column prop="avatar" label="头像">
-              <template #default="scope">
-                  <img class="img-colum" :src="scope.row.avatar" >
-              </template>
+
+        <el-table-column prop="jslx" label="角色类型" :formatter='(row, column, cellValue, index)=>formatterFun(cellValue,jslxList)' >
         </el-table-column>
-        <el-table-column prop="date" label="创建时间" >
+
+        <el-table-column prop="syzt" label="使用状态"  :formatter='(row, column, cellValue, index)=>formatterFun(cellValue,syztList)' >
         </el-table-column>
-          <el-table-column prop="operationtime" label="登录时间" >
+
+        <el-table-column prop="jszl" label="角色种类" :formatter='(row, column, cellValue, index)=>formatterFun(cellValue,jszlList)'>
         </el-table-column>
-        <el-table-column label="操作" width="200">
+      
+        <el-table-column label="操作" width="250">
           <template #default="scope">
-             <!-- <el-button size="mini" @click="handleMenu(scope.$index, scope.row)"
-              >用户管理</el-button
-            > -->
-            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-              >修改密码</el-button
-            >
+             <el-button size="mini" :disabled="(scope.row.id=='4000000000000007')?true:false"   @click="handleMenu(scope.$index, scope.row)">
+               配置
+              </el-button>
+             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">
+               修改
+              </el-button>
             <el-button
               size="mini"
               type="danger"
+              disabled
               @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button
-            >
+              >
+                删除
+              </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -73,16 +90,16 @@
       </el-pagination>
     </div>
     <!-- 添编辑加弹框 -->
-    <UserAdd
+    <ManagementAdd
       v-if="ishouAdd"
       :menuadd="menuAdd"
       :editlist='editList'
-    ></UserAdd>
+    ></ManagementAdd>
   </div>
 </template>
 <script>
-import UserAdd from './User-add'
-import { AllUserpage, Deleteuserpage } from "../../../api/user";
+import ManagementAdd from './management-add.vue'
+import { postAllRoleManagement, Deleteuserpage } from "@/api/user";
 export default {
   data() {
     return {
@@ -93,27 +110,38 @@ export default {
       total: 0,
       size: 10,
       currentPage: 1,
-      username:'',
+      jsmc:'',
+      id:'',
       editList:'',
-      loading:{}
+      loading:{},
+      jslxList:[{key:'1',vuale:'功能角色'},{key:'2',vuale:'数据角色'}],
+      syztList:[{key:'1',vuale:'启用'},{key:'2',vuale:'冻结'}],
+      jszlList:[{key:'1',vuale:'业务角色'},{key:'2',vuale:'管理员角色'}],
     };
   },
   components: {
-      UserAdd
+      ManagementAdd
   },
   mounted() {
     this.AllUserpages();
   },
   computed: {},
   methods: {
+    formatterFun(e,data){
+      let vuale =  data.filter(item=>item.key==e)[0].vuale
+      return  vuale
+    },
     // 获取
     async AllUserpages() {
       let data = {
           size:this.size,
           currentPage:this.currentPage
       }
-      if(this.username){
-        data.username = this.username
+      if(this.jsmc){
+        data.jsmc = this.jsmc
+      }
+      if(this.id){
+        data.id = this.id
       }
       this.loading = this.$loading({
         lock: true,
@@ -121,7 +149,7 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      let router = await AllUserpage(data);
+      let router = await postAllRoleManagement(data);
       if (router.code == 2000) {
         if (router.data.length<7||this.height>74) {
           if (router.data.length == 0) {
@@ -188,11 +216,11 @@ export default {
     handleDelete(index, row) {
       this.Deleteuserpages(row);
     },
-    // handleMenu(index, row){
-    //   sessionStorage.setItem('HandleMenu',JSON.stringify(row))
-    //   this.$store.dispatch('HandleMenu', JSON.parse(JSON.stringify(row)))
-    //   this.$router.push('/main/user-management/User-menu')
-    // }
+    handleMenu(index, row){
+      sessionStorage.setItem('HandleMenu',JSON.stringify(row))
+      this.$store.dispatch('HandleMenu', JSON.parse(JSON.stringify(row)))
+      this.$router.push('/main/role-management/role-menu')
+    }
   },
 };
 </script>
@@ -209,9 +237,11 @@ export default {
 }
 .menu-shou{
   flex:1;
+  display: flex;
 }
 .input-user{
-  width: 30%;
+  // width: 30%;
+  flex: 1.5;
   margin-right: 10px;
 }
 .table-boxa {
@@ -220,5 +250,13 @@ export default {
 .menu-operation {
   display: flex;
   justify-content: flex-end;
+}
+.menu-box{
+  display: flex;
+  align-items:center;
+  justify-content:center;
+}
+.flex-1{
+  flex: 1;
 }
 </style>

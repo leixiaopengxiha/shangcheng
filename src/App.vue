@@ -26,13 +26,13 @@ export default {
       if (typeof document.addEventListener === "undefined") {
         console.error("浏览器不支持addEventListener,请升级");
       } else {
-        document.addEventListener("visibilitychange", () => {
-          if (document.visibilityState == "hidden") {
-            console.log('visibilitychange___-----')
-            // _this.sendCurVideoTime(localStorage.getItem("webviewDuration"));
-          }
-        });
+        // document.addEventListener("visibilitychange", () => {
+        //   if (document.visibilityState == "hidden") {
+        //     // console.log('visibilitychange___-----')
+        //   }
+        // });
         window.addEventListener("beforeunload", () => {
+            sessionStorage.setItem("urls",route.path);
             sessionStorage.setItem("navactive",store.state.navactive);
         });
       }
@@ -49,13 +49,6 @@ export default {
         if (store.state.loginSt == 1) {
           store.dispatch("RouterPath", "/main");
           router.push("/login");
-        } else {
-          if (route.path == "/404") {
-            store.dispatch("RouterPath", "/main");
-          } else {
-            store.dispatch("RouterPath", route.path);
-          }
-          router.push("/main");
         }
       },600)
     });

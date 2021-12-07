@@ -1,10 +1,10 @@
 // 请求接口
 import axios from './api'
-
+let url = '/basicsRouter'
 // 获取数据
 export let postStats = (data) => {
     return axios({
-        url: "/regiser",
+        url: `${url}/regiser`,
         method: "post",
         // 传参
         data: {
@@ -16,7 +16,7 @@ export let postStats = (data) => {
 // 登录
 export let postLogin= (data) => {
     return axios({
-        url: "/login",
+        url:  `${url}/login`,
         method: "post",
         // 传参
         data: {
@@ -28,7 +28,7 @@ export let postLogin= (data) => {
 // 注册
 export let postRegister= (data) => {
     return axios({
-        url: "/register",
+        url: `${url}/register`,
         method: "post",
         // 传参
         data,
@@ -37,7 +37,7 @@ export let postRegister= (data) => {
 // 获取用户信息
 export let getGetInfo = (data)=>{
     return axios({
-        url: "/GetInfo",
+        url: `${url}/GetInfo`,
         method: "get",
         // 传参
         params: {
@@ -46,16 +46,17 @@ export let getGetInfo = (data)=>{
     });
 }
 // 获取路由
-export let postRouterpage = ()=>{
+export let postRouterpage = (data)=>{
     return axios({
-        url: "/routerpage",
+        url: `${url}/routerpage`,
         method: "post",
+        data,
     });
 }
 // 用户管理获取路由
 export let AllQueryRouterList = (data)=>{
     return axios({
-        url: "/queryrouterlist",
+        url:  `${url}/queryrouterlist`,
         method: "post",
         data,
     });
@@ -64,7 +65,7 @@ export let AllQueryRouterList = (data)=>{
 // 获取用户列表
 export let AllUserpage = (data)=>{
     return axios({
-        url: "/alluserpage",
+        url: `${url}/alluserpage`,
         method: "post",
         data,
     });
@@ -72,7 +73,7 @@ export let AllUserpage = (data)=>{
 // 删除用户
 export let Deleteuserpage = (data)=>{
     return axios({
-        url: "/deleteuserpage",
+        url: `${url}/deleteuserpage`,
         method: "post",
         data,
     });
@@ -80,7 +81,7 @@ export let Deleteuserpage = (data)=>{
 // 新增路由
 export let postAddrouterpage = (data)=>{
     return axios({
-        url: "/addrouterpage",
+        url: `${url}/addrouterpage`,
         method: "post",
         // 传参
         data,
@@ -89,7 +90,7 @@ export let postAddrouterpage = (data)=>{
 // 删除配置路由
 export let postDeleteRouterpage = (data)=>{
     return axios({
-        url: "/deleterouterpage",
+        url: `${url}/deleterouterpage`,
         method: "post",
         // 传参
         data,
@@ -98,7 +99,7 @@ export let postDeleteRouterpage = (data)=>{
 // 更改路由信息
 export let postUpdateRouterListPage = (data)=>{
     return axios({
-        url: "/updaterouterlistpage",
+        url: `${url}/updaterouterlistpage`,
         method: "post",
         // 传参
         data,
@@ -107,7 +108,7 @@ export let postUpdateRouterListPage = (data)=>{
 // 修改用户信息
 export let postUpdateUserPage = (data)=>{
     return axios({
-        url: "/updateuserpage",
+        url: `${url}/updateuserpage`,
         method: "post",
         // 传参
         data,
@@ -116,7 +117,7 @@ export let postUpdateUserPage = (data)=>{
 // 修改用户密码
 export let postUpdateUserPwd = (data)=>{
     return axios({
-        url: "/updateuserpwd",
+        url: `${url}/updateuserpwd`,
         method: "post",
         // 传参
         data,
@@ -126,7 +127,77 @@ export let postUpdateUserPwd = (data)=>{
 // 给用户添加路由权限
 export let postUpUserRouter = (data)=>{
     return axios({
-        url: "/upuserrouter",
+        url: `${url}/upuserrouter`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+
+// 添加角色管理
+export let postAddrolemanagement = (data)=>{
+    return axios({
+        url: `${url}/addrolemanagement`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 添加角色人员
+export let postAddRolePersonnel = (data)=>{
+    return axios({
+        url: `${url}/addRolePersonnel`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 添加角色路由权限
+export let postAddRolePermissions = (data)=>{
+    return axios({
+        url: `${url}/addRolePermissions`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+// 获取角色管理列表
+export let postAllRoleManagement = (data)=>{
+    return axios({
+        url: `${url}/allRoleManagement`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 修改角色管理
+export let postUpdateRoleManagement = (data)=>{
+    return axios({
+        url: `${url}/updateRoleManagement`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 获取角色人员管理
+export let postAllRolePersonnel = (data)=>{
+    return axios({
+        url: `${url}/allRolePersonnel`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 获取角色路由权限
+export let postAllRolePermissions = (data)=>{
+    return axios({
+        url: `${url}/allRolePermissions`,
         method: "post",
         // 传参
         data,

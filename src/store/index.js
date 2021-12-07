@@ -7,7 +7,7 @@ export default createStore({
     loginSt:1,
     routerpath:'/main/home',
     userList:{
-      naem:11
+      name:11
     },
     appState:false,
     navactive:'',
