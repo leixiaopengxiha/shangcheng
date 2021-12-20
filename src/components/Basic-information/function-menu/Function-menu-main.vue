@@ -117,9 +117,7 @@ export default {
   methods: {
     fnPid(pid) {
       if (pid != undefined) {
-        console.log(this.routerData)
         let aa = this.routerData.find((item) => item.id == pid);
-        console.log(aa)
         return aa?aa.title:'上级菜单已删除请进行修改';
       }
     },

@@ -111,9 +111,7 @@ export default {
     },
     submitForm(formName) {
         if(this.editlist){
-          console.log(this.ruleForm)
           this.$refs[formName].validate((valid) => {
-            console.log(valid)
           if (valid) {
             this.postUpdateRoleManagements(this.ruleForm)
           } else {

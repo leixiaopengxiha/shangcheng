@@ -12,46 +12,19 @@
         label-width="150px"
         class="demo-ruleForm"
       >
-        <el-form-item label="菜单名称" prop="title">
-          <el-input v-model="ruleForm.title"></el-input>
+        <el-form-item label="表单编号" prop="fromId"  v-if="fromId">
+          <el-input v-model="ruleForm.fromId"></el-input>
         </el-form-item>
-        <el-form-item label="菜单URL" prop="path">
-          <el-input v-model="ruleForm.path"></el-input>
+        <el-form-item label="表单名称" prop="fromName">
+          <el-input v-model="ruleForm.fromName"></el-input>
         </el-form-item>
-         <el-form-item label="重定向" >
-          <el-input v-model="ruleForm.redirect"></el-input>
+        <el-form-item label="字体大小" prop="fontSize">
+          <el-input v-model="ruleForm.fontSize"></el-input>
         </el-form-item>
-        <el-form-item label="路由name" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label="路由组件路径" prop="component">
-          <el-input v-model="ruleForm.component"></el-input>
-        </el-form-item>
-        <el-form-item label="上级菜单" prop="cascader">
-          <el-cascader
-            :options="routeListOpstion"
-            v-model="ruleForm.cascader"
-            :clearable="true"
-            :props="Props"
-            class="cascader-box"
-          ></el-cascader>
-        </el-form-item>
-        <el-form-item label="显示顺序" prop="sortid">
-          <el-input type="number" v-model="ruleForm.sortid"></el-input>
-        </el-form-item>
-        <el-form-item label="菜单图标" prop="icon">
-          <el-input v-model="ruleForm.icon"></el-input>
-        </el-form-item>
-        <el-form-item label="是否加入侧边栏" prop="sidebar">
+        <el-form-item label="使用状态" prop="sidebar">
           <el-radio-group v-model="ruleForm.sidebar">
-            <el-radio label="0"> 否 </el-radio>
-            <el-radio label="1"> 是 </el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="是否缓存组件" prop="keepAlive">
-          <el-radio-group v-model="ruleForm.keepAlive">
-            <el-radio label="0"> 否 </el-radio>
-            <el-radio label="1"> 是 </el-radio>
+            <el-radio label="0"> 禁用 </el-radio>
+            <el-radio label="1"> 使用 </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item class="btn-box">
@@ -78,30 +51,21 @@ export default {
         checkStrictly: true,
       },
       ruleForm: {
-        title: "",
-        name: "",
-        path: "",
-        redirect: "",
-        component: "",
-        icon: "",
-        sidebar: "0",
-        cascader: [0],
-        pid: "0",
-        sortid: 1,
-        keepAlive:'0',
+        fromId:'',
+        fromName: "",
+        fontSize: "14",
+        sidebar: '1',
       },
       rules: {
-        title: [{ required: true, message: "请输入菜单名称", trigger: "blur" }],
-        path: [{ required: true, message: "请输入菜单URL", trigger: "blur" }],
-        name: [{ required: true, message: "请输入路由name", trigger: "blur" }],
-        component: [
-          { required: true, message: "请输入路由组件路径", trigger: "blur" },
+        fromId: [
+          { required: true, message: "请输入表单编号", trigger: ["blur",'change'] },
         ],
-        cascader:[{ required: true, message: "请输入菜单名称", trigger: "blur" }],
-        sidebar: [
+        fromName: [{ required: true, message: "请输入表单名称", trigger: "blur" }],
+        fontSize: [{ required: true, message: "请设置字体大小", trigger: "blur" }],
+        sortid: [
           {
             required: true,
-            message: "请选择是否加入侧边栏",
+            message: "请选择使用状态",
             trigger: "change",
           },
         ],

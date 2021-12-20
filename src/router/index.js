@@ -1,4 +1,4 @@
-import { createRouter,createWebHistory } from 'vue-router'
+import { createRouter,createWebHashHistory, createWebHistory } from 'vue-router'
 
 // import axios from 'axios'
 import stores from '../store/index'
@@ -25,7 +25,9 @@ const routes = [
 ]
 
 const router = createRouter({
+  // history: createWebHashHistory(),
   history: createWebHistory(),
+  scrollBehavior: () => ({ y: 0 }),
   routes
 })
 
@@ -69,7 +71,8 @@ router.beforeEach(async (to, from, next) => {
             mains.children = yijiList;
             let navactive = sessionStorage.getItem("navactive");
             let urls = sessionStorage.getItem("urls");
-            let url = urls ? (urls=='/404' ? '/main/home' : urls) : '/main/home'
+            let isurls = (urls=='/404' ? '/main/home' : urls)
+            let url = urls ? isurls : '/main/home'
             if(!navactive){
               sessionStorage.setItem("navactive",'/main/home');
             }
@@ -110,5 +113,14 @@ router.beforeEach(async (to, from, next) => {
   }
 
 })
+
+router.onError((error) => {
+  const pattern = /Loading chunk (\d)+ failed/g;
+  const isChunkLoadFailed = error.message.match(pattern);
+  const targetPath = router.history.pending.fullPath;
+  if (isChunkLoadFailed) {
+    router.replace(targetPath);
+  }
+});
 
 export default router

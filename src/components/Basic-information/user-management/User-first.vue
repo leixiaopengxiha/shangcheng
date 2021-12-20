@@ -97,7 +97,6 @@ export default {
             this.$router.push('/main/user-management')
         },
         setCheckedKeysd(data) {
-            console.log(data)
             let roles = data.length&&data.map(item=>item.id)
             this.$refs.tree.setCheckedKeys(roles);
         },

@@ -43,7 +43,6 @@ export default {
         this.$store.dispatch('HandleMenu', handleMenu)
     }
     this.postRouterpagesa()
-    console.log()
     console.log(this.handleMenu.id)
     this.postAllRolePermissionss({roleId:this.handleMenu.id})
     },

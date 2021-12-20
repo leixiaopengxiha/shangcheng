@@ -53,7 +53,6 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)'
             });
             let router = await postAllRolePersonnel(data);
-            console.log(router)
             if (router.code == 2000) {
                 this.loading.close();
                 this.setCheckedKeysd(router.data)
@@ -71,7 +70,6 @@ export default {
                 background: 'rgba(0, 0, 0, 0.7)'
             });
             let router = await AllUserpage();
-            console.log(router)
             if (router.code == 2000) {
                 this.loading.close();
                 let arr =  router.data.filter(item=>item.username!='admin')
@@ -103,7 +101,6 @@ export default {
         },
         getCheckedKeys() {
             let datas = {roleId:this.handleMenu.id,list:this.$refs.tree.getCheckedKeys()}
-            console.log(datas)
             this.postAddRolePersonnels(datas)
             
         },

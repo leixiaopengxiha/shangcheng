@@ -205,7 +205,6 @@ export default {
       this.postDeleteRouterpages(row);
     },
     handleConfigure(index, row){
-      console.log(row,'配置')
       this.$router.push('/main/form-configuration/from-to-configure')
     },
   },

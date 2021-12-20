@@ -17,7 +17,6 @@ export default {
       time: 2,
     });
     onMounted(()=>{
-        console.log(data.time)
        let times =  setInterval(()=>{
            if(data.time==0){
                clearInterval(times)

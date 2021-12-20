@@ -36,7 +36,6 @@ export default {
     },
     methods: {
         handleClick(tab, event) {
-            console.log(tab.props);
             sessionStorage.setItem('user-menu-tab',this.activeName)
         },
     },
