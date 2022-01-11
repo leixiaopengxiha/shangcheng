@@ -7,7 +7,7 @@
           <el-input
             class="input-user"
             placeholder="表单编号"
-            v-model="fromId"
+            v-model="formId"
             clearable>
           </el-input>
         </div>
@@ -16,12 +16,12 @@
            <el-input
             class="input-user"
             placeholder="表单名称"
-            v-model="fromName"
+            v-model="formName"
             clearable>
           </el-input>
         </div>
         
-         <el-button type="primary" @click="postRouterpages">查询</el-button>
+         <el-button type="primary" @click="postGetAllFormLists">查询</el-button>
       </div>
       <div class="menu-operation">
         <div>
@@ -42,9 +42,9 @@
         :header-cell-style="{ textAlign: 'center' }"
       >
         <!-- <el-table-column type="selection"> </el-table-column> -->
-        <el-table-column prop="fromName" label="表单名称">
+        <el-table-column prop="formName" label="表单名称">
         </el-table-column>
-        <el-table-column prop="fromId" label="表单编号" >
+        <el-table-column prop="formId" label="表单编号" >
         </el-table-column>
          <el-table-column prop="fontSize" label="字体大小" >
         </el-table-column>
@@ -54,7 +54,7 @@
           }}</template>
         </el-table-column>
 
-        <el-table-column label="操作" width="250">
+        <el-table-column label="操作" width="200">
           <template #default="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button
@@ -65,12 +65,12 @@
               @click="handleConfigure(scope.$index, scope.row)"
               >配置</el-button
             >
-            <el-button
+            <!-- <el-button
               size="mini"
               type="danger"
               @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button
-            >
+            > -->
           </template>
         </el-table-column>
       </el-table>
@@ -96,7 +96,7 @@
 </template>
 <script>
 import FormConfigurationAdd from './form-configuration-add'
-import { postDeleteRouterpage,AllQueryRouterList } from "../../../api/user";
+import { postGetAllFormList } from "../../../api/user";
 export default {
   data() {
     return {
@@ -108,8 +108,8 @@ export default {
       total: 1,
       size: 10,
       rowList: {},
-      fromName:'',
-      fromId:'',
+      formName:'',
+      formId:'',
       loading:{}
     };
   },
@@ -117,53 +117,37 @@ export default {
     FormConfigurationAdd
   },
   mounted() {
-    this.postRouterpages();
+    this.postGetAllFormLists();
   },
   computed: {},
   methods: {
     // 获取
-    async postRouterpages() {
+    async postGetAllFormLists() {
        let data = {
           size:this.size,
           currentPage:this.currentPage
       }
-      if(this.fromName){
-        data.fromName = this.fromName
+      if(this.formName){
+        data.formName = this.formName
       }
-      if(this.fromId){
-          data.fromId = this.fromId
+      if(this.formId){
+          data.formId = this.formId
       }
-        let datas = [
-          {
-            fromName:'受益权转让新增',
-            fromId:'1234567890',
-            fontSize:'14',
-            sidebar:'1',
-          },
-           {
-            fromName:'中后期-赎回-新增弹窗',
-            fromId:'1234567891',
-            fontSize:'14',
-            sidebar:'0',
-          }
-        ]
-        this.tableData = datas;
-        this.total = datas.length
-      // this.loading = this.$loading({
-      //     lock: true,
-      //     text: '正在加载中',
-      //     spinner: 'el-icon-loading',
-      //     background: 'rgba(0, 0, 0, 0.7)'
-      //   });
-      // let router = await AllQueryRouterList(data);
-      // if (router.code == 2000) {
-      //   this.tableData = router.data;
-      //   this.total = router.total
-      //   this.loading.close();
-      // } else {
-      //   this.loading.close();
-      //   this.$message.error(data.message);
-      // }
+      this.loading = this.$loading({
+          lock: true,
+          text: '正在加载中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+      let router = await postGetAllFormList(data);
+      if (router.code == 2000) {
+        this.tableData = router.data;
+        this.total = router.total
+        this.loading.close();
+      } else {
+        this.loading.close();
+        this.$message.error(data.message);
+      }
     },
     // 删除
     async postDeleteRouterpages(row) {
@@ -173,14 +157,14 @@ export default {
           message: data.message,
           type: "success",
         });
-        this.postRouterpages();
+        this.postGetAllFormLists();
       } else {
         this.$message.error(data.message);
       }
     },
     menuAdd(ishow) {
       if (ishow == "addshou") {
-        this.postRouterpages();
+        this.postGetAllFormLists();
       }
       this.rowList = {};
       this.ishouAdd = !this.ishouAdd;
@@ -188,11 +172,11 @@ export default {
  
     handleSizeChange(val) {
       this.size = val;
-      this.postRouterpages();
+      this.postGetAllFormLists();
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.postRouterpages();
+      this.postGetAllFormLists();
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -205,6 +189,8 @@ export default {
       this.postDeleteRouterpages(row);
     },
     handleConfigure(index, row){
+      console.log(row)
+      sessionStorage.setItem('from-to-configure',JSON.stringify({formId:row.formId,formName:row.formName}))
       this.$router.push('/main/form-configuration/from-to-configure')
     },
   },

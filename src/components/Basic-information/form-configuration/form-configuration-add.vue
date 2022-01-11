@@ -12,11 +12,11 @@
         label-width="150px"
         class="demo-ruleForm"
       >
-        <el-form-item label="表单编号" prop="fromId"  v-if="fromId">
-          <el-input v-model="ruleForm.fromId"></el-input>
+        <el-form-item label="表单编号" prop="formId" v-if="ruleForm.formId">
+          <el-input v-model="ruleForm.formId" disabled ></el-input>
         </el-form-item>
-        <el-form-item label="表单名称" prop="fromName">
-          <el-input v-model="ruleForm.fromName"></el-input>
+        <el-form-item label="表单名称" prop="formName">
+          <el-input v-model="ruleForm.formName"></el-input>
         </el-form-item>
         <el-form-item label="字体大小" prop="fontSize">
           <el-input v-model="ruleForm.fontSize"></el-input>
@@ -39,7 +39,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { postAddrouterpage,postUpdateRouterListPage } from "../../../api/user";
+import { postAddFormList,postModifyFormList } from "../../../api/user";
 export default {
   props: ["menuadd", "rowlist"],
   data() {
@@ -51,16 +51,16 @@ export default {
         checkStrictly: true,
       },
       ruleForm: {
-        fromId:'',
-        fromName: "",
+        formId:'',
+        formName: "",
         fontSize: "14",
         sidebar: '1',
       },
       rules: {
-        fromId: [
+        formId: [
           { required: true, message: "请输入表单编号", trigger: ["blur",'change'] },
         ],
-        fromName: [{ required: true, message: "请输入表单名称", trigger: "blur" }],
+        formName: [{ required: true, message: "请输入表单名称", trigger: "blur" }],
         fontSize: [{ required: true, message: "请设置字体大小", trigger: "blur" }],
         sortid: [
           {
@@ -86,8 +86,8 @@ export default {
 
   methods: {
     // 添加接口
-    async postAddrouterpages(row) {
-      let data = await postAddrouterpage(row);
+    async postAddFormLists(row) {
+      let data = await postAddFormList(row);
       if (data.code == 2000) {
         this.$message.success({
           message: data.message,
@@ -99,8 +99,8 @@ export default {
       }
     },
     // 修改
-    async postUpdateRouterListPages(row){
-     let data = await postUpdateRouterListPage(row)
+    async postModifyFormLists(row){
+     let data = await postModifyFormList(row)
       if (data.code == 2000) {
         this.$message.success({
           message: data.message,
@@ -115,14 +115,10 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.ruleForm.cascader.length) {
-            let ids = this.ruleForm.cascader.length - 1;
-            this.ruleForm.pid =JSON.parse(JSON.stringify(this.ruleForm.cascader[ids]));
-          }
           if (!this.shows) {
-            this.postAddrouterpages(this.ruleForm);
+            this.postAddFormLists(this.ruleForm)
           } else {
-            this.postUpdateRouterListPages(this.ruleForm)
+            this.postModifyFormLists(this.ruleForm)
           }
         } else {
           return false;

@@ -203,3 +203,33 @@ export let postAllRolePermissions = (data)=>{
         data,
     });
 }
+
+// 获取表单列表
+export let postGetAllFormList = (data)=>{
+    return axios({
+        url: `${url}/getAllFormList`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 修改表单列表
+export let postModifyFormList = (data)=>{
+    return axios({
+        url: `${url}/modifyFormList`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 添加表单列表
+export let postAddFormList = (data)=>{
+    return axios({
+        url: `${url}/addFormList`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
