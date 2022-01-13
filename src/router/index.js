@@ -93,6 +93,7 @@ router.beforeEach(async (to, from, next) => {
             next();
 
           } else {
+            ElMessage.error(data.message);
             stores.dispatch('AppState',true );
             router.replace("/login");
             next();

@@ -8,24 +8,27 @@
     </div>
 </template>
 <script>
-import { onMounted, reactive,  } from "vue";
+import { onMounted, reactive, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 export default {
    setup() {
     const router = useRouter();
     let data = reactive({
-      time: 2,
+      time: 5,
+      dataTimes:null,
     });
     onMounted(()=>{
-       let times =  setInterval(()=>{
+       data.dataTimes =  setInterval(()=>{
            if(data.time==0){
-               clearInterval(times)
-               router.replace("/main/home");
+               router.replace("/main");
            }else{
                data.time--
            }
        },1000)
 
+    })
+    onUnmounted(() => {
+         clearInterval(data.dataTimes)
     })
     return {
         data

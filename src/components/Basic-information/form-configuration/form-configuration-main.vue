@@ -1,27 +1,29 @@
 <template>
-     <div class="menu-boxs container-adapt">
+  <div class="menu-boxs container-adapt">
     <div class="menu-nav">
       <div class="menu-shou">
         <div class="menu-box">
-          <span >表单编号：</span>
+          <span>表单编号：</span>
           <el-input
             class="input-user"
             placeholder="表单编号"
             v-model="formId"
-            clearable>
+            clearable
+          >
           </el-input>
         </div>
         <div class="menu-box">
           <span>表单名称：</span>
-           <el-input
+          <el-input
             class="input-user"
             placeholder="表单名称"
             v-model="formName"
-            clearable>
+            clearable
+          >
           </el-input>
         </div>
-        
-         <el-button type="primary" @click="postGetAllFormLists">查询</el-button>
+
+        <el-button type="primary" @click="postGetAllFormLists">查询</el-button>
       </div>
       <div class="menu-operation">
         <div>
@@ -35,19 +37,16 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        height='100%'
+        height="100%"
         align="center"
         :highlight-current-row="true"
         :cell-style="{ textAlign: 'center' }"
         :header-cell-style="{ textAlign: 'center' }"
       >
         <!-- <el-table-column type="selection"> </el-table-column> -->
-        <el-table-column prop="formName" label="表单名称">
-        </el-table-column>
-        <el-table-column prop="formId" label="表单编号" >
-        </el-table-column>
-         <el-table-column prop="fontSize" label="字体大小" >
-        </el-table-column>
+        <el-table-column prop="formName" label="表单名称"> </el-table-column>
+        <el-table-column prop="formId" label="表单编号"> </el-table-column>
+        <el-table-column prop="fontSize" label="字体大小"> </el-table-column>
         <el-table-column prop="sidebar" label="使用状态">
           <template #default="scope">{{
             scope.row.sidebar == 1 ? "使用" : "禁用"
@@ -95,7 +94,7 @@
   </div>
 </template>
 <script>
-import FormConfigurationAdd from './form-configuration-add'
+import FormConfigurationAdd from "./form-configuration-add";
 import { postGetAllFormList } from "../../../api/user";
 export default {
   data() {
@@ -108,13 +107,13 @@ export default {
       total: 1,
       size: 10,
       rowList: {},
-      formName:'',
-      formId:'',
-      loading:{}
+      formName: "",
+      formId: "",
+      loading: {},
     };
   },
   components: {
-    FormConfigurationAdd
+    FormConfigurationAdd,
   },
   mounted() {
     this.postGetAllFormLists();
@@ -123,26 +122,26 @@ export default {
   methods: {
     // 获取
     async postGetAllFormLists() {
-       let data = {
-          size:this.size,
-          currentPage:this.currentPage
+      let data = {
+        size: this.size,
+        currentPage: this.currentPage,
+      };
+      if (this.formName) {
+        data.formName = this.formName;
       }
-      if(this.formName){
-        data.formName = this.formName
-      }
-      if(this.formId){
-          data.formId = this.formId
+      if (this.formId) {
+        data.formId = this.formId;
       }
       this.loading = this.$loading({
-          lock: true,
-          text: '正在加载中',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        });
+        lock: true,
+        text: "正在加载中",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
       let router = await postGetAllFormList(data);
       if (router.code == 2000) {
         this.tableData = router.data;
-        this.total = router.total
+        this.total = router.total;
         this.loading.close();
       } else {
         this.loading.close();
@@ -169,7 +168,7 @@ export default {
       this.rowList = {};
       this.ishouAdd = !this.ishouAdd;
     },
- 
+
     handleSizeChange(val) {
       this.size = val;
       this.postGetAllFormLists();
@@ -188,10 +187,13 @@ export default {
     handleDelete(index, row) {
       this.postDeleteRouterpages(row);
     },
-    handleConfigure(index, row){
-      console.log(row)
-      sessionStorage.setItem('from-to-configure',JSON.stringify({formId:row.formId,formName:row.formName}))
-      this.$router.push('/main/form-configuration/from-to-configure')
+    handleConfigure(index, row) {
+      console.log(row);
+      sessionStorage.setItem(
+        "from-to-configure",
+        JSON.stringify({ formId: row.formId, formName: row.formName })
+      );
+      this.$router.push("/main/form-configuration/from-to-configure");
     },
   },
 };
@@ -200,14 +202,14 @@ export default {
 .menu-boxs {
   // position: relative;
 }
-.menu-nav{
+.menu-nav {
   display: flex;
 }
-.menu-shou{
-  flex:1;
+.menu-shou {
+  flex: 1;
   display: flex;
 }
-.input-user{
+.input-user {
   // width: 30%;
   flex: 1.5;
   margin-right: 10px;
@@ -219,12 +221,12 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
-.menu-box{
+.menu-box {
   display: flex;
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
 }
-.flex-1{
+.flex-1 {
   flex: 1;
 }
 </style>

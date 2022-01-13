@@ -6,9 +6,8 @@
       :rules="rules"
       ref="refFormInit"
       label-width="150px"
-      class="demo-ruleForm"
     >
-      <template v-for="item in formData" :key="item.id">
+      <template v-for="(item,index) in formData" :key="index">
         <el-form-item
           :label="item.label"
           :prop="item.formModel"
@@ -33,10 +32,9 @@
           <template v-if="item.type == 'radio'"></template>
           <template v-if="item.type == 'textarea'"></template>
           <template v-if="item.type == 'button'">
-              <!-- {{eval(item.onEvent)}} -->
-               <el-button :type="item.btnType" @click="btns(item.btnFun)">
-                   {{item.text}}
-               </el-button>
+            <el-button :type="item.btnType" @click="btns(item.btnFun)">
+              {{item.text}}
+            </el-button>
           </template>
         </el-form-item>
       </template>
@@ -55,137 +53,11 @@ export default {
     };
   },
   created() {
-      console.log(this.formInitDatas)
-    let arr = [
-      {
-        id: 1,
-        formModel: "username",
-        label: "用户名",
-        type: "text",
-        size: "14",
-        editlist: 1,
-        disabled: 0,
-        check: 1,
-        isValidator: 0,
-        rules: [
-          {
-            required: 1,
-            message: "请输入用户名",
-            trigger: ["blur"],
-          },
-          {
-            min: 3,
-            max: 5,
-            message: "长度应为3到5",
-            trigger: ["blur"],
-          },
-        ],
-      },
-      {
-        id: 2,
-        formModel: "pass",
-        label: "密码",
-        type: "password",
-        size: "14",
-        editlist: 1,
-        disabled: 0,
-        check: 1,
-        isValidator: 1,
-        rules: [
-          {
-            required: 1,
-            validator: "validatePass",
-            trigger: ["blur"],
-          },
-        ],
-      },
-      {
-        id: 3,
-        formModel: "checkPass",
-        label: "确认密码",
-        type: "password",
-        size: "14",
-        editlist: 1,
-        disabled: 0,
-        check: 1,
-        isValidator: 1,
-        rules: [
-          {
-            required: 1,
-            validator: "validatePass1",
-            trigger: ["blur"],
-          },
-        ],
-      },
-      {
-        id: 4,
-        formModel: "region",
-        label: "活动区域",
-        type: "select",
-        size: "14",
-        editlist: 1,
-        disabled: 0,
-        check: 0,
-        isValidator: 1,
-        rules: [
-          {
-            required: 1,
-            validator: "validatePass1",
-            trigger: ["blur"],
-          },
-        ],
-      },
-      {
-        id: 5,
-        formModel: "",
-        label: "",
-        type: "button",
-        size: "14",
-        btnFun:"chengong",
-        btnType:'primary',
-        editlist: 1,
-        disabled: 0,
-        check: 0,
-        isValidator: 1,
-        text:'成功',
-        rules: [
-          {
-            required: 1,
-            validator: "validatePass1",
-            trigger: ["blur"],
-          },
-        ],
-      },
-      {
-        id: 6,
-        formModel: "",
-        label: "",
-        type: "button",
-        size: "14",
-        btnFun:"warning",
-        btnType:'warning',
-        editlist: 1,
-        disabled: 0,
-        check: 0,
-        isValidator: 1,
-        text:'提示',
-        rules: [
-          {
-            required: 1,
-            validator: "validatePass1",
-            trigger: ["blur"],
-          },
-        ],
-      },
-    ];
-
-    setTimeout(() => {
-      this.formInit(arr);
-    }, 1000);
+      // 这里是要数据处理方法
+      this.formInit(this.formInitDatas);
   },
   methods: {
     formInit(arr) {
-      let propValidator = this.validator();
       let ruleFormObj = {};
       let rulesObj = {};
       arr.map((item) => {
@@ -197,6 +69,7 @@ export default {
           // 自定义校验  隐藏不进行校验
           if (item.isValidator == 1 && item.editlist != 0 && item.type!='button') {
             let rulesItemArr = [];
+            let propValidator = this.validator();
             item.rules.map((rulesItem) => {
               let obj = {
                 required: rulesItem.required == 1 ? true : false,
@@ -252,6 +125,7 @@ export default {
       });
       return isValid;
     },
+    // 获取值
     getData() {
       return this.ruleForm;
     },
@@ -259,9 +133,7 @@ export default {
       this.$refs.refFormInit.validateField(item);
     },
     btns(data){
-        console.log(data)
         this.$emit('formBtn',data)
-        console.log('sdsdjks')
     }
   },
 };
