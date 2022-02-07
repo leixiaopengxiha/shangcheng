@@ -65,7 +65,7 @@ export default {
           ruleFormObj[item.formModel] = "";
         }
         // 是否进行校验
-        if (item.check == 1) {
+        if (item.isCheck == 1) {
           // 自定义校验  隐藏不进行校验
           if (item.isValidator == 1 && item.editlist != 0 && item.type!='button') {
             let rulesItemArr = [];

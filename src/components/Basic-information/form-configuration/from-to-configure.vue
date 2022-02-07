@@ -39,6 +39,7 @@
         <el-table-column prop="formModel" label="英文名称"> </el-table-column>
         <el-table-column prop="label" label="属性名称"> </el-table-column>
         <el-table-column prop="type" label="控件类型	"> </el-table-column>
+          <el-table-column prop="text" label="按钮名称"> </el-table-column>
         <el-table-column label="操作" width="200">
           <template #default="scope">
             <el-button
@@ -82,7 +83,7 @@
 <script>
 import FromToConfigureAdd from "./from-to-configure-add";
 import FromToConfigureYulian from './from-to-configure-yulian';
-
+import {postAllFormConfigurationList,postAddFormConfiguration} from '@/api/user'
 export default {
   data() {
     return {
@@ -125,7 +126,7 @@ export default {
           size: "14",
           editlist: 1,
           disabled: 0,
-          check: 1,
+          isCheck: 1,
           isValidator: 0,
           rules: [
             {
@@ -140,52 +141,71 @@ export default {
     },
     // 获取
     async postGetAllFormLists() {
-      let data = {
+      let datas = {
         formId: this.fromData.formId,
       };
-      console.log(data);
-      this.tableData = [
-        {
-          formModel: "aasa",
-          label: "测试001",
-          type: "text",
-          formId: this.fromData.formId,
-          size: "14",
-          editlist: 1,
-          disabled: 0,
-          check: 1,
-          isValidator: 0,
-          rules: [
-            {
-              required: 1,
-              message: "请录入内容",
-              trigger: ["blur"],
-            },
-          ],
-        },
-        {
-          formModel: "aasa",
-          label: "测试0023",
-          type: "text",
-          formId: this.fromData.formId,
-          size: "14",
-          editlist: 1,
-          disabled: 0,
-          check: 1,
-          isValidator: 0,
-          rules: [
-            {
-              required: 1,
-              message: "请录入内容",
-              trigger: ["blur"],
-            },
-          ],
-        },
-      ];
+      let data = await postAllFormConfigurationList(datas)
+      if (data.code == 2000) {
+        this.tableData = data.data
+      } else {
+        this.$message.error(data.message);
+      }
+      // console.log(data);
+      // this.tableData = [
+      //   {
+      //     formModel: "aasa",
+      //     label: "测试001",
+      //     type: "text",
+      //     formId: this.fromData.formId,
+      //     size: "14",
+      //     editlist: 1,
+      //     disabled: 0,
+      //     isCheck: 1,
+      //     isValidator: 0,
+      //     rules: [
+      //       {
+      //         required: 1,
+      //         message: "请录入内容",
+      //         trigger: ["blur"],
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     formModel: "aasa",
+      //     label: "测试0023",
+      //     type: "text",
+      //     formId: this.fromData.formId,
+      //     size: "14",
+      //     editlist: 1,
+      //     disabled: 0,
+      //     isCheck: 1,
+      //     isValidator: 0,
+      //     rules: [
+      //       {
+      //         required: 1,
+      //         message: "请录入内容",
+      //         trigger: ["blur"],
+      //       },
+      //     ],
+      //   },
+      // ];
     },
     // 保存
-    getCheckedKeys() {
-      console.log(this.tableData);
+    async getCheckedKeys() {
+     let data= await postAddFormConfiguration({
+        formId: this.fromData.formId,
+        list:this.tableData
+      })
+      console.log(data)
+      if(data.code==2000){
+        this.$message.success({
+          message: data.message,
+          type: "success",
+        });
+        this.cancel();
+      }else{
+         this.$message.error(data.message);
+      }
     },
     menuAdd() {
       this.rowList = {};

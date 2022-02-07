@@ -6,7 +6,7 @@
         <i class="el-icon-circle-close iconcal" @click="yulian"></i>
       </div>
       <div class="demo-ruleForm">
-        <FormInit ref='form' :formInitDatas="tableData"></FormInit>
+        <FormInit ref='form' :formInitDatas="tableData" :validator="validator"></FormInit>
       </div>
         <!-- <div class="menu-operation">
           <el-button class="btns" @click="yulian">取消</el-button>
@@ -36,7 +36,27 @@ export default {
       },
     };
   },
+  created(){
+  },
   methods: {
+    // 自定义校验使用 
+    validator(){
+      let obj = {}
+      this.tableData.map(item=>{
+        if(item.isValidator==1){
+          item.rules.map(rls=>{
+             obj[rls.validator] = (rule, value, callback)=>{
+              if (value === "") {
+                  callback(new Error("该校验为自定义校验"));
+                } else {
+                  callback();
+                }
+             }
+          })
+        }
+      })
+      return obj
+    },
     // 保存
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {

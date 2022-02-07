@@ -233,3 +233,23 @@ export let postAddFormList = (data)=>{
         data,
     });
 }
+
+//  添加修改表单配置列表
+export let postAddFormConfiguration = (data)=>{
+    return axios({
+        url: `${url}/addFormConfiguration`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 添加表单列表
+export let postAllFormConfigurationList = (data)=>{
+    return axios({
+        url: `${url}/getAllFormConfigurationList`,
+        method: "post",
+        // 传参
+        data,
+    });
+}

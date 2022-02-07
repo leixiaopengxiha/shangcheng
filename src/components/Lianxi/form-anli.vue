@@ -35,7 +35,7 @@ export default {
         size: "14",
         editlist: 1,
         disabled: 0,
-        check: 1,
+        isCheck: 1,
         isValidator: 0,
         rules: [
           {
@@ -59,7 +59,7 @@ export default {
         size: "14",
         editlist: 1,
         disabled: 0,
-        check: 1,
+        isCheck: 1,
         isValidator: 1,
         rules: [
           {
@@ -77,7 +77,7 @@ export default {
         size: "14",
         editlist: 1,
         disabled: 0,
-        check: 1,
+        isCheck: 1,
         isValidator: 1,
         rules: [
           {
@@ -95,7 +95,7 @@ export default {
         size: "14",
         editlist: 1,
         disabled: 0,
-        check: 0,
+        isCheck: 0,
         isValidator: 1,
         rules: [
           {
@@ -115,7 +115,7 @@ export default {
         btnType:'primary',
         editlist: 1,
         disabled: 0,
-        check: 0,
+        isCheck: 0,
         isValidator: 1,
         text:'成功',
         rules: [
@@ -136,7 +136,7 @@ export default {
         btnType:'warning',
         editlist: 1,
         disabled: 0,
-        check: 0,
+        isCheck: 0,
         isValidator: 1,
         text:'提示',
         rules: [

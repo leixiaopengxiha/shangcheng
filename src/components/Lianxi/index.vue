@@ -4,6 +4,7 @@
       <div class="menu-operation">
         <div>
           <el-button type="primary" @click="yulian">表单案例展示</el-button>
+          <el-button type="primary" @click="yulianApi">表单接口案例展示</el-button>
         </div>
       </div>
     </div>
@@ -12,28 +13,41 @@
         :yulian="yulian"
       ></FormAnli>
     </template>
+
+      <template v-if="isApis">
+      <FormApis
+        :yulian="yulianApi"
+      ></FormApis>
+    </template>
+    
   </div>
 </template>
 
 <script>
 import FormAnli from './form-anli'
+import FormApis from './form-apis.vue'
+
 
 
 export default {
   data() {
     return {
       isyulian: false,
+      isApis:false,
     };
   },
   components: {
-    FormAnli
+    FormAnli,
+    FormApis
   },
   methods: {
     // 预览
     yulian(){
       this.isyulian = !this.isyulian;
     },
-    
+    yulianApi(){
+       this.isApis = !this.isApis;
+    }
   },
 };
 </script>
