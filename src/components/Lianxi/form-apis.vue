@@ -3,7 +3,7 @@
   <div class="bullet-frame">
     <div class="menu-addbox">
       <div class="demo-ruleForm" v-if="formInitDatas.length">
-          <FormInit ref='form' :formInitDatas="formInitDatas" :validator="validator" ></FormInit>
+          <FormInit ref='form' :formInitDatas="formInitDatas" :validator="validator" @formBtn='chengong' ></FormInit>
       </div>
       <div class="btn-box">
         <el-button type="primary" @click="submitForm()"
@@ -73,6 +73,9 @@ export default {
       } else {
         callback();
       }
+    },
+    chengong(data){
+      console.log(data,'sdjskd')
     },
     submitForm() {
       console.log(this.$refs.form.getData())

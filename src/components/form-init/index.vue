@@ -31,8 +31,8 @@
           <template v-if="item.type == 'checkbox'"></template>
           <template v-if="item.type == 'radio'"></template>
           <template v-if="item.type == 'textarea'"></template>
-          <template v-if="item.type == 'button'">
-            <el-button :type="item.btnType" @click="btns(item.btnFun)">
+          <template v-if="item.type == 'button'"  >
+            <el-button :type="item.btnType" @click="btns(item.btnFun)" :disabled="item.disabled == 1">
               {{item.text}}
             </el-button>
           </template>

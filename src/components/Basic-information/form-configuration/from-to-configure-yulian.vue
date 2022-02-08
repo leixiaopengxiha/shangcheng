@@ -47,7 +47,7 @@ export default {
           item.rules.map(rls=>{
              obj[rls.validator] = (rule, value, callback)=>{
               if (value === "") {
-                  callback(new Error("该校验为自定义校验"));
+                  callback(new Error("该校验为自定义校验,校验写法在案例查看"));
                 } else {
                   callback();
                 }

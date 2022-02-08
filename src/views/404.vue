@@ -20,6 +20,7 @@ export default {
     onMounted(()=>{
        data.dataTimes =  setInterval(()=>{
            if(data.time==0){
+               clearInterval(data.dataTimes)
                router.replace("/main");
            }else{
                data.time--

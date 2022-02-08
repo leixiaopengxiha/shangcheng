@@ -77,18 +77,28 @@
         :tableData="tableData"
       ></FromToConfigureYulian>
     </template>
+     <!-- 表单配置页面 -->
+     <template v-if="ispeizhi">
+      <FromToConfigurePeizhi
+        :rowList="rowList"
+        :peizhiEixt="peizhiEixt"
+      ></FromToConfigurePeizhi>
+    </template>
   </div>
 </template>
 
 <script>
 import FromToConfigureAdd from "./from-to-configure-add";
 import FromToConfigureYulian from './from-to-configure-yulian';
+import FromToConfigurePeizhi from './from-to-configure-peizhi.vue';
+
 import {postAllFormConfigurationList,postAddFormConfiguration} from '@/api/user'
 export default {
   data() {
     return {
       ishouAdd: false,
       isyulian: false,
+      ispeizhi: false,
       fromData: {},
       tableData: [],
       rowList: {},
@@ -98,6 +108,7 @@ export default {
   components: {
     FromToConfigureAdd,
     FromToConfigureYulian,
+    FromToConfigurePeizhi
   },
   created() {
     this.fromData = JSON.parse(sessionStorage.getItem("from-to-configure"));
@@ -118,6 +129,7 @@ export default {
       if (isFormModel) {
         return;
       }
+      // 新增默认数据
       this.tableData = [
         ...this.tableData,
         {
@@ -144,51 +156,20 @@ export default {
       let datas = {
         formId: this.fromData.formId,
       };
+      this.loading = this.$loading({
+        lock: true,
+        text: "正在加载中",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
       let data = await postAllFormConfigurationList(datas)
       if (data.code == 2000) {
         this.tableData = data.data
+         this.loading.close();
       } else {
+         this.loading.close();
         this.$message.error(data.message);
       }
-      // console.log(data);
-      // this.tableData = [
-      //   {
-      //     formModel: "aasa",
-      //     label: "测试001",
-      //     type: "text",
-      //     formId: this.fromData.formId,
-      //     size: "14",
-      //     editlist: 1,
-      //     disabled: 0,
-      //     isCheck: 1,
-      //     isValidator: 0,
-      //     rules: [
-      //       {
-      //         required: 1,
-      //         message: "请录入内容",
-      //         trigger: ["blur"],
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     formModel: "aasa",
-      //     label: "测试0023",
-      //     type: "text",
-      //     formId: this.fromData.formId,
-      //     size: "14",
-      //     editlist: 1,
-      //     disabled: 0,
-      //     isCheck: 1,
-      //     isValidator: 0,
-      //     rules: [
-      //       {
-      //         required: 1,
-      //         message: "请录入内容",
-      //         trigger: ["blur"],
-      //       },
-      //     ],
-      //   },
-      // ];
     },
     // 保存
     async getCheckedKeys() {
@@ -196,7 +177,6 @@ export default {
         formId: this.fromData.formId,
         list:this.tableData
       })
-      console.log(data)
       if(data.code==2000){
         this.$message.success({
           message: data.message,
@@ -208,14 +188,30 @@ export default {
       }
     },
     menuAdd() {
-      this.rowList = {};
+      // this.rowList = {};
       this.ishouAdd = !this.ishouAdd;
     },
+    peizhiEixt(data){
+
+     console.log(data)
+      if(data){
+       this.tableData = this.tableData.map(item=>{
+          if(item.id==data.row.id){
+            item = data.row
+          }
+          return item
+        })
+      }
+      this.rowList = {};
+      console.log(this.tableData)
+      this.ispeizhi = !this.ispeizhi;
+    },
     handleConfigure(index, row) {
+       this.rowList = {index:index,row};
+      this.ispeizhi = true
       console.log(row);
     },
     handleDelete(index, row) {
-      console.log(row);
       this.tableData = this.tableData.filter(
         (item) => item.formModel != row.formModel
       );

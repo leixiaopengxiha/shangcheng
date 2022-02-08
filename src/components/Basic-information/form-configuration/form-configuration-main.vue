@@ -188,7 +188,6 @@ export default {
       this.postDeleteRouterpages(row);
     },
     handleConfigure(index, row) {
-      console.log(row);
       sessionStorage.setItem(
         "from-to-configure",
         JSON.stringify({ formId: row.formId, formName: row.formName })
