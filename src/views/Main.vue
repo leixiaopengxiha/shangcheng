@@ -8,10 +8,12 @@
         <Headers></Headers>
     </el-header>
       <el-main>
-        <router-view v-if="$route.meta.keepAlive!=1"></router-view>
-        <keep-alive>
-            <router-view v-if="$route.meta.keepAlive==1"></router-view>
-        </keep-alive>
+          <router-view v-slot="{ Component }">
+            <keep-alive >
+              <component :is="Component" v-if="$route.meta.keepAlive" />
+            </keep-alive>
+             <component :is="Component" v-if="!$route.meta.keepAlive" />
+          </router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -35,6 +37,7 @@ export default {
       let routerpath = store.state.routerpath
       router.push(routerpath)
     })
+    
     return {
       routeList: computed(() => store.state.routeList),
       userList: computed(() => store.state.userList),

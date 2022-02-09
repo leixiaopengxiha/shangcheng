@@ -17,7 +17,7 @@ exports.Router_tree=(jsonData,data={
   let results = [], temps = {},lens= jsonData.length
   for (let i = 0; i < lens; i++) {
     jsonData[i].meta={}
-    jsonData[i].meta.keepAlive = jsonData[i]['keepAlive']
+    jsonData[i].meta.keepAlive = jsonData[i]['keepAlive']==1?true:false
     // 以id作为索引存储元素，可以无需遍历直接快速定位元素
     jsonData[i]['path'] = `/main${jsonData[i]['path']}`;
     jsonData[i]['component'] = routerCom(jsonData[i]['component']);
