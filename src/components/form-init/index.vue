@@ -7,7 +7,7 @@
       ref="refFormInit"
       label-width="150px"
     >
-      <template v-for="(item,index) in formData" :key="index">
+      <template v-for="(item, index) in formData" :key="index">
         <el-form-item
           :label="item.label"
           :prop="item.formModel"
@@ -21,9 +21,16 @@
             ></el-input>
           </template>
           <template v-if="item.type == 'select'">
-            <el-select v-model="ruleForm[item.formModel]" placeholder="请选择活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+            <el-select
+              v-model="ruleForm[item.formModel]"
+              placeholder="请选择活动区域"
+              :multiple='item.multiple'
+            >
+            <template v-for="(item,index) in DicList['opas']" :key="index">
+                 <el-option :label="item.label" :value="item.value"></el-option>
+            </template>
+              <!-- <el-option label="区域一" value="shanghai"></el-option> -->
+              <!-- <el-option label="区域二" value="beijing"></el-option> -->
             </el-select>
           </template>
           <template v-if="item.type == 'switch'"></template>
@@ -31,9 +38,13 @@
           <template v-if="item.type == 'checkbox'"></template>
           <template v-if="item.type == 'radio'"></template>
           <template v-if="item.type == 'textarea'"></template>
-          <template v-if="item.type == 'button'"  >
-            <el-button :type="item.btnType" @click="btns(item.btnFun)" :disabled="item.disabled == 1">
-              {{item.text}}
+          <template v-if="item.type == 'button'">
+            <el-button
+              :type="item.btnType"
+              @click="btns(item.btnFun)"
+              :disabled="item.disabled == 1"
+            >
+              {{ item.text }}
             </el-button>
           </template>
         </el-form-item>
@@ -44,62 +55,74 @@
 
 <script>
 export default {
-  props: ['formInitDatas', "validator"],
+  props: ["formInitDatas", "validator"],
   data() {
     return {
       ruleForm: {},
       formData: [],
       rules: {},
+      DicList:{},
     };
   },
   created() {
-      // 这里是要数据处理方法
-      this.formInit(this.formInitDatas);
+    // 这里是要数据处理方法
+    this.formInit(this.formInitDatas);
+  },
+  mounted(){
+    setTimeout(()=>{
+      this.DicList['opas'] = [
+        {
+          label:"区域一",
+          value:"shanghai",
+        },
+        {
+          label:"区域二",
+          value:"beijing",
+        }
+      ]
+    },500)
   },
   methods: {
     formInit(arr) {
       let ruleFormObj = {};
       let rulesObj = {};
       arr.map((item) => {
-        if (item.editlist != 0&&item.type!='button') {
+        if (item.editlist != 0 && item.type != "button") {
           ruleFormObj[item.formModel] = "";
         }
         // 是否进行校验
         if (item.isCheck == 1) {
-          // 自定义校验  隐藏不进行校验
-          if (item.isValidator == 1 && item.editlist != 0 && item.type!='button') {
+          // 系统配置交易 并且 隐藏不进行校验
+          if (item.editlist != 0 && item.type != "button") {
             let rulesItemArr = [];
             let propValidator = this.validator();
             item.rules.map((rulesItem) => {
-              let obj = {
-                required: rulesItem.required == 1 ? true : false,
-                validator: propValidator[rulesItem.validator],
-                trigger: rulesItem.trigger,
-              };
-              rulesItemArr.push(obj);
-            });
-            rulesObj[item.formModel] = rulesItemArr;
-          }
-          // 系统配置交易 并且 隐藏不进行校验
-          if (item.isValidator == 0 && item.editlist != 0 && item.type!='button') {
-            let rulesItemArr = [];
-            item.rules.map((rulesItem) => {
-              let obj = {
-                required: rulesItem.required == 1 ? true : false,
-                message: rulesItem.message,
-                trigger: rulesItem.trigger,
-              };
-              if (rulesItemArr.length) {
-                delete obj.required;
-              }
-              if (rulesItem.type) {
-                obj.type = rulesItem.type;
-              }
-              if (rulesItem.min) {
-                obj.min = rulesItem.min;
-              }
-              if (rulesItem.max) {
-                obj.max = rulesItem.max;
+              let obj = {};
+              // 自定义校验
+              if (rulesItem.isValidator == 1) {
+                obj = {
+                  required: rulesItem.required == 1 ? true : false,
+                  validator: propValidator[rulesItem.validator],
+                  trigger: rulesItem.trigger,
+                };
+              } else {
+                obj = {
+                  required: rulesItem.required == 1 ? true : false,
+                  message: rulesItem.message,
+                  trigger: rulesItem.trigger,
+                };
+                if (rulesItemArr.length) {
+                  delete obj.required;
+                }
+                if (rulesItem.type) {
+                  obj.type = rulesItem.type;
+                }
+                if (rulesItem.min) {
+                  obj.min = rulesItem.min;
+                }
+                if (rulesItem.max) {
+                  obj.max = rulesItem.max;
+                }
               }
               rulesItemArr.push(obj);
             });
@@ -132,9 +155,9 @@ export default {
     validateField(item) {
       this.$refs.refFormInit.validateField(item);
     },
-    btns(data){
-        this.$emit('formBtn',data)
-    }
+    btns(data) {
+      this.$emit("formBtn", data);
+    },
   },
 };
 </script>

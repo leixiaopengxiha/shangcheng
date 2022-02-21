@@ -15,7 +15,7 @@
         <el-form-item label="英文名称" prop="formModel" v-if="!isBtn">
           <el-input v-model="ruleForm.formModel"></el-input>
         </el-form-item>
-        
+
         <el-form-item label="属性名称" prop="label" v-if="!isBtn">
           <el-input v-model="ruleForm.label"></el-input>
         </el-form-item>
@@ -44,13 +44,13 @@
             <el-option label="button" value="button"></el-option>
           </el-select>
         </el-form-item>
-         <el-form-item label="按钮名称" prop="text" v-if="isBtn">
+        <el-form-item label="按钮名称" prop="text" v-if="isBtn">
           <el-input v-model="ruleForm.text"></el-input>
         </el-form-item>
         <el-form-item label="按钮方法名" prop="btnFun" v-if="isBtn">
           <el-input v-model="ruleForm.btnFun"></el-input>
         </el-form-item>
-          <el-form-item label="按钮样式" prop="btnType" v-if="isBtn">
+        <el-form-item label="按钮样式" prop="btnType" v-if="isBtn">
           <el-select
             class="select-wh"
             v-model="ruleForm.btnType"
@@ -64,7 +64,7 @@
               })
             "
           >
-           <el-option label="Default" value=""></el-option>
+            <el-option label="Default" value=""></el-option>
             <el-option label="primary" value="primary"></el-option>
             <el-option label="success" value="success"></el-option>
             <el-option label="info" value="info"></el-option>
@@ -80,7 +80,7 @@
             :change="
               typeChange({
                 key: 'disabled',
-                label: '是否校验状态',
+                label: '是否禁用',
                 value: ruleForm.disabled,
               })
             "
@@ -105,31 +105,124 @@
             <el-radio label="1">是</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-if="isValidators" label="是否自定义校验规则" prop="isValidator">
-          <el-radio-group
-            :change="
-              typeChange({
-                key: 'isValidator',
-                label: '是否自定义校验规则',
-                value: ruleForm.isValidator,
-              })
-            "
-            v-model="ruleForm.isValidator"
-          >
-            <el-radio label="0">否</el-radio>
-            <el-radio label="1">是</el-radio>
-          </el-radio-group>
-        </el-form-item>
+        <template v-if="isChecks">
+          <el-button type="primary" :disabled="ruleForm.rules.length==3" @click="addIsValidator('ruleForm')">
+            添加校验规则
+          </el-button>
+          <!-- <el-form-item class="fl" label="虚拟SKU" :prop="'sizeData.' + index + '.goods_sn'" :rules="sizeData.goods_sn" required> -->
+          <!-- <template> -->
 
-            <el-button type="primary" @click="addIsValidator('ruleForm')"
-            >添加校验规则</el-button>
-            <el-form-item v-for="(items,index) in ruleForm.rules" :key="index">
-                {{items}}
+          <template v-for="(items, index) in ruleForm.rules" :key="index">
+            <!-- {{rulesList[index].required}} -->
+            <div class="titles-file">
+              <div>配置校验规则{{ index + 1 }}</div>
+              <el-button size="mini"
+              type="danger" :disabled="ruleForm.rules.length==1" @click="remIsValidator(items,index)">
+            删除
+          </el-button>
+            </div> 
+            <el-form-item
+              v-if="!items.isJygz2"
+              label="校验是否加星号"
+              :prop="'rules.' + index + '.required'"
+              :rules="isRules.required"
+              required
+            >
+              <el-radio-group
+                :change="
+                  typeChange({
+                    key: 'required',
+                    label: '校验是否加星号',
+                    value: items.required,
+                  })
+                "
+                v-model="items.required"
+              >
+                <el-radio label="0">否</el-radio>
+                <el-radio label="1">是</el-radio>
+              </el-radio-group>
             </el-form-item>
 
-        
-        
+            <el-form-item
+              label="是否自定义校验规则"
+              :prop="'rules.' + index + '.isValidator'"
+              :rules="isRules.isValidator"
+              required
+            >
+              <el-radio-group
+                :change="
+                  typeChange({
+                    key: 'isValidator',
+                    label: '是否自定义校验规则',
+                    value: items.isValidator,
+                  })
+                "
+                v-model="items.isValidator"
+              >
+                <el-radio label="0">否</el-radio>
+                <el-radio label="1">是</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <template v-if="items.isValidator == '0'">
+              <el-form-item
+                label="设置小长度在"
+                v-if="items.isJygz2"
+              >
+                <el-input-number v-model="items.min"></el-input-number>
+              </el-form-item>
+              <el-form-item
+                label="设置大长度在"
+                v-if="items.isJygz2"
+              >
+                <el-input-number v-model="items.max"></el-input-number>
+              </el-form-item>
 
+              <el-form-item
+                label="校验提示"
+                :prop="'rules.' + index + '.message'"
+                :rules="isRules.message"
+                required
+              >
+                <el-input v-model="items.message"></el-input>
+              </el-form-item>
+            </template>
+            <el-form-item
+              label="自定义校验方法名称"
+              v-if="items.isValidator == '1'"
+              :prop="'rules.' + index + '.validator'"
+              :rules="isRules.validator"
+              required
+            >
+              <el-input v-model="items.validator"></el-input>
+            </el-form-item>
+
+            <el-form-item
+              label="校验触发方式"
+              :prop="'rules.' + index + '.trigger'"
+              :rules="isRules.trigger"
+              required
+            >
+              <el-select
+                class="select-wh"
+                v-model="items.trigger"
+                multiple
+                placeholder="校验触发方式"
+                filterable
+                :change="
+                  typeChange({
+                    key: 'trigger',
+                    label: '校验触发方式',
+                    value: items.trigger,
+                  })
+                "
+              >
+                <el-option label="blur" value="blur"></el-option>
+                <el-option label="change" value="change"></el-option>
+              </el-select>
+            </el-form-item>
+          </template>
+        </template>
+        <!-- </template> -->
         <el-form-item class="btn-box">
           <el-button type="primary" @click="submitForm('ruleForm')"
             >保存</el-button
@@ -142,7 +235,7 @@
 </template>
 <script>
 // import { mapState } from "vuex";
-
+let isValidatorLIsts=[]
 export default {
   props: ["peizhiEixt", "rowList"],
   data() {
@@ -154,56 +247,156 @@ export default {
         checkStrictly: true,
       },
       isBtn: false,
-      isValidators:false,
+      isChecks: false,
       yuanDate: {},
-      isValidatorList:1,
+      isValidatorList: 1,
+      isValidators: false,
+      isJygz2: true,
+      
       ruleForm: {
         disabled: "1",
         editlist: "1",
         formModel: "aasajd",
         isCheck: "0",
-        isValidator: "0",
         label: "测试说的1",
         type: "text",
         size: 14,
-        rules: [],
+        rules: [
+          {
+            isValidator: "0",
+            required: "1",
+            message: "",
+            trigger: ["blur", "change"],
+            min: '',
+            max: '',
+          },
+        ],
         btnFun: "",
         btnType: "",
         text: "",
       },
       rules: {
-        //     formId: [
-        //       { required: true, message: "请输入表单编号", trigger: ["blur",'change'] },
-        //     ],
-        //     formName: [{ required: true, message: "请输入表单名称", trigger: "blur" }],
-        //     fontSize: [{ required: true, message: "请设置字体大小", trigger: "blur" }],
-        //     sortid: [
-        //       {
-        //         required: true,
-        //         message: "请选择使用状态",
-        //         trigger: "change",
-        //       },
-        //     ],
+        disabled: [
+          {
+            required: true,
+            message: "请输入表单编号",
+            trigger: ["blur", "change"],
+          },
+        ],
+        editlist: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        formModel: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        isCheck: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        label: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        type: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        size: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+      },
+      isRules: {
+        isValidator: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        required: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        message: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        validator: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        trigger: [
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        min:[
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: [ "change"],
+          },
+        ],
+        max:[
+          {
+            required: true,
+            message: "请输入表单名称",
+            trigger: [ "change"],
+          },
+        ],
       },
     };
   },
-  computed: {
-    // ...mapState(["routeListOpstion",]),
-  },
-  mounted() {
-    console.log(this.rowList);
-    // // 修改
+  created() {
+    // 修改
     this.shows = Object.keys(this.rowList).length == 0 ? false : true;
-
     if (this.shows) {
+      if (this.rowList.row.type == "button") {
+        this.isBtn = true;
+      }
       this.yuanDate = JSON.parse(JSON.stringify(this.rowList.row));
       this.ruleForm = JSON.parse(JSON.stringify(this.rowList.row));
     }
   },
 
   methods: {
+    remIsValidator(data,index){
+      this.ruleForm.rules= this.ruleForm.rules.filter((item,idx)=>idx!=index)
+    },
+    // 方法使用
     typeChange(event) {
-      console.log(event);
       if (event.key === "type") {
         if (event.value === "button") {
           this.isBtn = true;
@@ -213,30 +406,46 @@ export default {
       }
       if (event.key === "isCheck") {
         if (event.value === "1") {
-          this.isValidators = true;
+          this.isChecks = true;
         } else {
-          this.isValidators = false;
+          this.isChecks = false;
         }
       }
     },
-    addIsValidator(){},
+    // 添加校验规则
+    addIsValidator() {
+      let lists = this.ruleForm.rules.filter((item) => item.isValidator == "0");
+      let obj = {
+        isJygz2:lists.length >= 1,
+        isValidator: "0",
+        required: "1",
+        message: "",
+        trigger: ["blur", "change"],
+      }
+      if(lists.length >= 1){
+        obj.min= 1;
+        obj.max= 100;
+       delete obj.required
+      }
+      this.ruleForm.rules.push(obj);
+    },
     // 保存
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.ruleForm);
           if (this.isBtn) {
             this.ruleForm.label = "";
             this.ruleForm.formModel = "";
             this.ruleForm.isCheck = "0";
-            this.ruleForm.isValidator = "0";
-            this.ruleForm.rules = []
-          }else{
+            this.ruleForm.rules = [];
+          } else {
             this.ruleForm.text = "";
             this.ruleForm.btnType = "";
             this.ruleForm.btnFun = "";
           }
-          // this.ruleForm = JSON.parse(JSON.stringify())
+          if (this.ruleForm.isCheck == "0") {
+            this.ruleForm.rules = [];
+          }
           this.rowList.row = this.ruleForm;
           this.peizhiEixt(this.rowList);
         } else {
@@ -284,5 +493,10 @@ export default {
 }
 .iconcal:hover {
   color: #f56c6c;
+}
+.titles-file{
+  margin: 10px 0 ;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

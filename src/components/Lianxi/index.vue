@@ -19,13 +19,15 @@
         :yulian="yulianApi"
       ></FormApis>
     </template>
-    
+    <Aa></Aa>
   </div>
 </template>
 
 <script>
 import FormAnli from './form-anli'
 import FormApis from './form-apis.vue'
+import Aa from './aa.vue'
+
 
 
 
@@ -38,7 +40,8 @@ export default {
   },
   components: {
     FormAnli,
-    FormApis
+    FormApis,
+    Aa,
   },
   methods: {
     // 预览

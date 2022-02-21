@@ -136,15 +136,15 @@ export default {
           formId: this.fromData.formId,
           type: "text",
           size: "14",
-          editlist: 1,
-          disabled: 0,
-          isCheck: 1,
-          isValidator: 0,
+          editlist: '1',
+          disabled:'0',
+          isCheck: '1',
           rules: [
             {
-              required: 1,
+              isValidator: '0',
+              required: '1',
               message: "请录入内容",
-              trigger: ["blur"],
+              trigger: ["blur","change"],
             },
           ],
           ...data,
@@ -192,8 +192,6 @@ export default {
       this.ishouAdd = !this.ishouAdd;
     },
     peizhiEixt(data){
-
-     console.log(data)
       if(data){
        this.tableData = this.tableData.map(item=>{
           if(item.id==data.row.id){
@@ -203,13 +201,11 @@ export default {
         })
       }
       this.rowList = {};
-      console.log(this.tableData)
       this.ispeizhi = !this.ispeizhi;
     },
     handleConfigure(index, row) {
        this.rowList = {index:index,row};
       this.ispeizhi = true
-      console.log(row);
     },
     handleDelete(index, row) {
       this.tableData = this.tableData.filter(
