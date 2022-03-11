@@ -17,8 +17,8 @@
           <el-button type="primary" @click="() => weiyi('shang')"
             >上移</el-button
           >
-          <el-button type="primary" @click="() => weiyi('xia')">下移</el-button>
-          <el-button type="primary" @click="yulian">预览</el-button>
+          <el-button type="primary" @click="() => weiyi('xia')" >下移</el-button>
+          <el-button type="primary" @click="yulian" :disabled="!tableData.length">预览</el-button>
         </div>
       </div>
     </div>
@@ -59,7 +59,7 @@
       </el-table>
     </div>
     <div class="menu-operation menu-operation-btn">
-      <el-button type="primary" @click="getCheckedKeys">保存</el-button>
+      <el-button type="primary" :disabled="!tableData.length&&!deleteList.length" @click="getCheckedKeys">保存</el-button>
       <el-button @click="cancel">返回</el-button>
     </div>
     <!-- 添编辑加弹框 -->
@@ -103,6 +103,7 @@ export default {
       tableData: [],
       rowList: {},
       multipleSelection: [],
+      deleteList: [],
     };
   },
   components: {
@@ -134,6 +135,7 @@ export default {
         ...this.tableData,
         {
           formId: this.fromData.formId,
+          newDate: new Date().getTime(),
           type: "text",
           size: "14",
           editlist: '1',
@@ -173,9 +175,15 @@ export default {
     },
     // 保存
     async getCheckedKeys() {
-     let data= await postAddFormConfiguration({
+      this.tableData = this.tableData.map((item,index)=>{
+        item.sortId = index
+        return item
+      })
+      console.log(this.tableData)
+      let data= await postAddFormConfiguration({
         formId: this.fromData.formId,
-        list:this.tableData
+        list:this.tableData,
+        deleteList:this.deleteList,
       })
       if(data.code==2000){
         this.$message.success({
@@ -194,7 +202,7 @@ export default {
     peizhiEixt(data){
       if(data){
        this.tableData = this.tableData.map(item=>{
-          if(item.id==data.row.id){
+          if(item.newDate==data.row.newDate){
             item = data.row
           }
           return item
@@ -204,12 +212,14 @@ export default {
       this.ispeizhi = !this.ispeizhi;
     },
     handleConfigure(index, row) {
-       this.rowList = {index:index,row};
+      this.rowList = {index:index,row};
       this.ispeizhi = true
     },
     handleDelete(index, row) {
+      
+      row.id&&(this.deleteList = [...this.deleteList,row.id])
       this.tableData = this.tableData.filter(
-        (item) => item.formModel != row.formModel
+        (item) => item.newDate != row.newDate
       );
     },
     cancel() {
@@ -232,7 +242,7 @@ export default {
       let objs = this.multipleSelection[0];
       let idx = "";
       this.tableData.map((item, index) => {
-        if (item.formModel == objs.formModel) {
+        if (item.newDate == objs.newDate) {
           idx = index;
         }
       });

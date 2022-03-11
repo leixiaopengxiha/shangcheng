@@ -54,6 +54,9 @@ export default {
       showlogin:false
     };
   },
+  created(){
+     sessionStorage.clear()
+  },
   methods: {
     // 获取用户信息
     async getGetInfos(doc){

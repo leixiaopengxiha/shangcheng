@@ -105,7 +105,7 @@
             <el-radio label="1">是</el-radio>
           </el-radio-group>
         </el-form-item>
-        <template v-if="isChecks">
+        <template v-if="isChecks" >
           <el-button type="primary" :disabled="ruleForm.rules.length==3" @click="addIsValidator('ruleForm')">
             添加校验规则
           </el-button>
@@ -325,6 +325,20 @@ export default {
             trigger: ["blur", "change"],
           },
         ],
+        text: [
+          {
+            required: true,
+            message: "请输入按钮名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+        btnFun:[
+          {
+            required: true,
+            message: "请输入按钮方法名",
+            trigger: ["blur", "change"],
+          },
+        ],
       },
       isRules: {
         isValidator: [
@@ -398,9 +412,11 @@ export default {
     // 方法使用
     typeChange(event) {
       if (event.key === "type") {
-        if (event.value === "button") {
+        if (event.value === "button") {          
+          this.isChecks = false;
           this.isBtn = true;
         } else {
+          this.isChecks = this.ruleForm.isCheck=='1'? true:false;
           this.isBtn = false;
         }
       }
