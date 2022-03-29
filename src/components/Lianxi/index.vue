@@ -3,6 +3,8 @@
     <div class="menu-nav">
       <div class="menu-operation">
         <div>
+          表单id录入展示
+          <el-input type="text" v-model="formId"></el-input>
           <el-button type="primary" @click="yulian">表单案例展示</el-button>
           <el-button type="primary" @click="yulianApi">表单接口案例展示</el-button>
         </div>
@@ -17,6 +19,7 @@
       <template v-if="isApis">
       <FormApis
         :yulian="yulianApi"
+        :formid="formId"
       ></FormApis>
     </template>
     <Aa></Aa>
@@ -36,6 +39,7 @@ export default {
     return {
       isyulian: false,
       isApis:false,
+      formId:"",
     };
   },
   components: {

@@ -6,7 +6,7 @@
       v-model="value2"
       type="year"
       placeholder="选择日期"
-      :disabled-date="disabledDate"
+
     >
     </el-date-picker>
     <input type="date">

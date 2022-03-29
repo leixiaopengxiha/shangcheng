@@ -7,4 +7,8 @@ import 'dayjs/locale/zh-cn'
 import locale from 'element-plus/lib/locale/lang/zh-cn'
 import 'element-plus/lib/theme-chalk/index.css';
 import 'default-passive-events'
-createApp(App).use(store).use(router).use(ElementPlus, { locale }).mount('#app')
+import directives from'./directives/index.js'
+
+let app = createApp(App);
+directives(app);
+app.use(store).use(router).use(ElementPlus, { locale }).mount('#app')

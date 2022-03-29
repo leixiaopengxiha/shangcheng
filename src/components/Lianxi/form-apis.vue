@@ -2,8 +2,8 @@
 <!-- 表单调用案例 -->
   <div class="bullet-frame">
     <div class="menu-addbox">
-      <div class="demo-ruleForm" v-if="formInitDatas.length">
-          <FormInit ref='form' :formInitDatas="formInitDatas" :validator="validator" @formBtn='chengong' ></FormInit>
+      <div class="demo-ruleForm" v-if="formPage.formId">
+          <FormInit ref='form' :formPage="formPage" @formBtn='chengong' @typeChange="typeChange" ></FormInit>
       </div>
       <div class="btn-box">
         <el-button type="primary" @click="submitForm()"
@@ -18,38 +18,90 @@
 <script>
 
 import FormInit from '../form-init'
-import {postAllFormConfigurationList} from '../../api/user'
+
 export default {
-  props: ["yulian"],
+  props: ["yulian","formid"],
   components:{
     FormInit,
   },
   data() {
-   
     return {
-      formInitDatas: []
+      formPage: {
+        formId: this.formid?this.formid:"5000000000000000", // 表单id
+        validator:{ // 自定义校验使用 
+           validatePass:this.validatePass,
+           validatePass1:this.validatePass1
+        },
+        selectOption:{
+          selects:[],
+          aasa:[],
+
+        },
+
+       
+        // 自定义配置
+        attributes:{
+          date:{
+
+              // format:"YYYY/MM/DD",
+              valueFormat:"YYYY/MM/DD",
+          //   type:'monthrange',
+          //   rangeSeparator:'至',
+          //   disabledDate: (time)=> {
+          //     return time.getTime() > Date.now()
+          //   },
+          //   shortcuts: [
+          //     {
+          //       text: 'Today',
+          //       value: new Date(),
+          //     },
+          //     {
+          //       text: 'Yesterday',
+          //       value: () => {
+          //         const date = new Date()
+          //         date.setTime(date.getTime() - 3600 * 1000 * 24)
+          //         return date
+          //       },
+          //     },
+          //     {
+          //       text: 'A week ago',
+          //       value: () => {
+          //         const date = new Date()
+          //         date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+          //         return date
+          //       },
+          //     },
+          //   ],
+          }
+        }
+      }
     };
   },
   created(){
-    this.postAllFormConfigurationLists()
+    // this.postUserFormConfigurations()
+  },
+  mounted(){
+   
+    setTimeout(()=>{
+       let aasa=[
+         {
+          label:"区域一001",
+          value:"shanghai",
+        },
+        {
+          label:"区域二",
+          value:"beijing",
+        },
+      ]
+      // 自定义字典
+      this.$refs.form.setOption('checkbox',aasa)
+    },100)
   },
   methods: {
-    async postAllFormConfigurationLists (){
-      let data = await postAllFormConfigurationList({formId:"5000000000000000"})
-      if (data.code == 2000) {
-        this.formInitDatas = data.data
-      } else {
-        this.$message.error(data.message);
-      }
-    },
-    // 自定义校验使用 
-    validator(){
-      return{
-        validatePass:this.validatePass,
-        validatePass1:this.validatePass1
-      }
-    },
-      // 自定义校验使用 1
+   typeChange(event){
+     console.log(event)
+   },
+    // 自定义校验使用 1
     validatePass(rule, value, callback){
          if (value === "") {
             callback(new Error("请输入密码"));

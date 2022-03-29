@@ -25,7 +25,7 @@
             v-model="ruleForm.type"
             placeholder="请选择表单类型"
             filterable
-            :change="
+            @change="
               typeChange({
                 key: 'type',
                 label: '表单类型',
@@ -37,10 +37,11 @@
             <el-option label="password" value="password"></el-option>
             <el-option label="select" value="select"></el-option>
             <el-option label="switch" value="switch"></el-option>
-            <el-option label="date" value="date"></el-option>
             <el-option label="checkbox" value="checkbox"></el-option>
             <el-option label="radio" value="radio"></el-option>
             <el-option label="textarea" value="textarea"></el-option>
+            <el-option label="date" value="date"></el-option>
+            <el-option label="daterange" value="daterange"></el-option>
             <el-option label="button" value="button"></el-option>
           </el-select>
         </el-form-item>
@@ -56,7 +57,7 @@
             v-model="ruleForm.btnType"
             filterable
             placeholder="请选择按钮样式"
-            :change="
+            @change="
               typeChange({
                 key: 'btnType',
                 label: '按钮样式',
@@ -77,7 +78,7 @@
         </el-form-item>
         <el-form-item label="是否禁用" prop="disabled">
           <el-radio-group
-            :change="
+            @change="
               typeChange({
                 key: 'disabled',
                 label: '是否禁用',
@@ -92,7 +93,7 @@
         </el-form-item>
         <el-form-item label="是否校验状态" prop="isCheck" v-if="!isBtn">
           <el-radio-group
-            :change="
+            @change="
               typeChange({
                 key: 'isCheck',
                 label: '是否校验状态',
@@ -129,7 +130,7 @@
               required
             >
               <el-radio-group
-                :change="
+                @change="
                   typeChange({
                     key: 'required',
                     label: '校验是否加星号',
@@ -150,7 +151,7 @@
               required
             >
               <el-radio-group
-                :change="
+                @change="
                   typeChange({
                     key: 'isValidator',
                     label: '是否自定义校验规则',
@@ -208,7 +209,7 @@
                 multiple
                 placeholder="校验触发方式"
                 filterable
-                :change="
+                @change="
                   typeChange({
                     key: 'trigger',
                     label: '校验触发方式',
@@ -402,6 +403,16 @@ export default {
       }
       this.yuanDate = JSON.parse(JSON.stringify(this.rowList.row));
       this.ruleForm = JSON.parse(JSON.stringify(this.rowList.row));
+      if(this.ruleForm.type=='button'){
+        this.isChecks = false;
+        this.isBtn = true;
+      }else{
+        this.isChecks = this.ruleForm.isCheck=='1'? true:false;
+        this.isBtn = false;
+      }
+      if(this.ruleForm.isCheck=='1'){
+        this.isChecks = true;
+      }
     }
   },
 

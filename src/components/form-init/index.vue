@@ -13,31 +13,127 @@
           :prop="item.formModel"
           v-if="item.editlist == 1"
         >
-          <template v-if="item.type == 'text' || item.type == 'password'">
+        <!-- input输入框 -->
+          <template v-if="item.type == 'text' || item.type == 'password'||item.type == 'textarea'">
             <el-input
               :type="item.type"
               v-model="ruleForm[item.formModel]"
+              :placeholder="item.placeholder"
               :disabled="item.disabled == 1"
+              @input="typeChange({
+                type:item.type,
+                key: item.formModel,
+                label: item.label,
+                value: ruleForm[item.formModel],
+                items: item,
+              })" 
             ></el-input>
           </template>
+          <!-- 下拉框 -->
           <template v-if="item.type == 'select'">
             <el-select
               v-model="ruleForm[item.formModel]"
-              placeholder="请选择活动区域"
+              :placeholder="item.placeholder"
               :multiple='item.multiple'
+              filterable
+              @change="typeChange({
+                type:item.type,
+                key: item.formModel,
+                label: item.label,
+                value: ruleForm[item.formModel],
+                items: item,
+                option: selectOption[item.formModel]
+              })" 
             >
-            <template v-for="(item,index) in DicList['opas']" :key="index">
-                 <el-option :label="item.label" :value="item.value"></el-option>
-            </template>
-              <!-- <el-option label="区域一" value="shanghai"></el-option> -->
-              <!-- <el-option label="区域二" value="beijing"></el-option> -->
+              <template v-for="(items,indexs) in selectOption[item.formModel]" :key="indexs">
+                  <el-option :label="items.label" :value="items.value"></el-option>
+              </template>
             </el-select>
           </template>
-          <template v-if="item.type == 'switch'"></template>
-          <template v-if="item.type == 'date'"></template>
-          <template v-if="item.type == 'checkbox'"></template>
-          <template v-if="item.type == 'radio'"></template>
-          <template v-if="item.type == 'textarea'"></template>
+          <!-- 开关 -->
+          <template v-if="item.type == 'switch'">
+             <el-switch 
+              v-model="ruleForm[item.formModel]" 
+              active-color="#13ce66" 
+              inactive-color="#ff4949"
+              @change="typeChange({
+                type:item.type,
+                key: item.formModel,
+                label: item.label,
+                value: ruleForm[item.formModel],
+                items: item,
+              })" 
+              ></el-switch>
+          </template>
+          <!-- 日期格式 -->
+          <template v-if="item.type == 'date'">
+            <el-date-picker v-if="!item.attributes['format']"
+              v-model="ruleForm[item.formModel]" 
+              :type="item.attributes['type']?item.attributes['type']:item.type"
+              :placeholder="item.placeholder"
+              :shortcuts="item.attributes['shortcuts']"
+              :disabled-date="item.attributes['disabledDate']"
+              :readonly="item.attributes['readonly']"
+              :range-separator="item.attributes['rangeSeparator']"
+              :default-time="item.attributes['defaultTime']"
+              :start-placeholder="item.attributes['startPlaceholder']"
+              :end-placeholder="item.attributes['endPlaceholder']"
+              :default-value="item.attributes['defaultValue']"
+              :unlink-panels="item.attributes['unlinkPanels']"
+              :prefix-icon="item.attributes['prefixIcon']"
+              :clear-icon="item.attributes['clearIcon']"
+              @change="typeChange({
+                type:item.type,
+                key: item.formModel,
+                label: item.label,
+                value: ruleForm[item.formModel],
+                items: item,
+              })" 
+            >
+            </el-date-picker>
+             <el-date-picker v-if="item.attributes['format']"
+              v-model="ruleForm[item.formModel]" 
+              :format="item.attributes['format']"
+              :type="item.attributes['type']?item.attributes['type']:item.type"
+              :placeholder="item.placeholder"
+              :shortcuts="item.attributes['shortcuts']"
+              :disabled-date="item.attributes['disabledDate']"
+              :readonly="item.attributes['readonly']"
+              :range-separator="item.attributes['rangeSeparator']"
+              :default-time="item.attributes['defaultTime']"
+              :start-placeholder="item.attributes['startPlaceholder']"
+              :end-placeholder="item.attributes['endPlaceholder']"
+              :default-value="item.attributes['defaultValue']"
+              :unlink-panels="item.attributes['unlinkPanels']"
+              :prefix-icon="item.attributes['prefixIcon']"
+              :clear-icon="item.attributes['clearIcon']"
+              @change="typeChange({
+                type:item.type,
+                key: item.formModel,
+                label: item.label,
+                value: ruleForm[item.formModel],
+                items: item,
+              })" 
+            >
+            </el-date-picker>
+          </template>
+          <!-- 多选框 -->
+          <template v-if="item.type == 'checkbox'">
+              <el-checkbox-group v-model="ruleForm[item.formModel]">
+                <template v-for="(itemRadio,indexss) in selectOption[item.formModel]" :key='indexss'>
+                  <el-checkbox :label="itemRadio.value" name="type">{{itemRadio.label}}</el-checkbox>
+                </template>
+              </el-checkbox-group>
+          </template>
+          <!-- 单选框 -->
+          <template v-if="item.type=='radio'">
+            <el-radio-group v-model="ruleForm[item.formModel]">
+              <template v-for="(itemRadio,indexss) in selectOption[item.formModel]" :key='indexss'>
+                  <el-radio :label="itemRadio.value" >{{itemRadio.label}}</el-radio>
+              </template>
+            </el-radio-group>
+          </template>
+          <!-- 按钮 -->
           <template v-if="item.type == 'button'">
             <el-button
               :type="item.btnType"
@@ -54,48 +150,69 @@
 </template>
 
 <script>
+import {postUserFormConfiguration} from '../../api/user'
 export default {
-  props: ["formInitDatas", "validator"],
+  props: ["formPage"],
   data() {
     return {
       ruleForm: {},
       formData: [],
       rules: {},
-      DicList:{},
+      selectOption:{},
+      selectCustomList:[],
     };
   },
   created() {
-    // 这里是要数据处理方法
-    this.formInit(this.formInitDatas);
+    // 获取表单数据
+    this.postUserFormConfigurations()
+   
   },
-  mounted(){
-    setTimeout(()=>{
-      this.DicList['opas'] = [
-        {
-          label:"区域一",
-          value:"shanghai",
-        },
-        {
-          label:"区域二",
-          value:"beijing",
-        }
-      ]
-    },500)
-  },
+
   methods: {
+    async postUserFormConfigurations (){
+      let data = await postUserFormConfiguration({formId:this.formPage.formId})
+      if (data.code == 2000) {
+        if(data.data.length==0){
+           this.$message.error(data.message);
+        }
+        // 这里是表单数据处理方法
+        this.formInit(data.data);
+      
+      } else {
+        this.$message.error(data.message);
+      }
+    },
     formInit(arr) {
       let ruleFormObj = {};
       let rulesObj = {};
       arr.map((item) => {
-        if (item.editlist != 0 && item.type != "button") {
-          ruleFormObj[item.formModel] = "";
+        // 是否需要字典
+        if(item.type == "select"||item.type == "radio"||item.type == "checkbox"){
+          this.selectOption[item.formModel]=[]
+          if(item.selectCustom==1){
+            this.selectCustomList.push({key:item.selectOptionKey,formModel:item.formModel})
+          }
         }
+        // 是否有自定义属性
+        item['attributes'] = {};
+        if(this.formPage.attributes){
+          item.attributes = this.formPage.attributes[item.formModel]?this.formPage.attributes[item.formModel]:{}
+        }
+        // 是否是按钮功能
+        if (item.editlist != 0 && item.type != "button") {
+          if(item.type == 'checkbox'){
+            ruleFormObj[item.formModel] = [];
+          }else{
+            ruleFormObj[item.formModel] = "";
+          }
+        }
+
         // 是否进行校验
         if (item.isCheck == 1) {
           // 系统配置交易 并且 隐藏不进行校验
           if (item.editlist != 0 && item.type != "button") {
             let rulesItemArr = [];
-            let propValidator = this.validator();
+            let propValidator = this.formPage.validator;
             item.rules.map((rulesItem) => {
               let obj = {};
               // 自定义校验
@@ -130,11 +247,47 @@ export default {
           }
         }
       });
-      console.log(ruleFormObj);
-      console.log(rulesObj);
       this.ruleForm = ruleFormObj;
       this.rules = rulesObj;
       this.formData = arr;
+      // 获取字典
+      this.dictionary();
+    
+    },
+    // 获取字典表单获取字典值
+    dictionary(){
+        let objs = {
+          cszd:[
+
+              {
+                label:"区域一",
+                value:"shanghai",
+              },
+              {
+                label:"区域二",
+                value:"beijing",
+              }
+
+          ]
+        }
+     this.selectCustomList.map(item=>{
+        this.selectOption[item.formModel] =objs[item.key];
+      })
+    },
+    // 设置自定义下拉框值
+    setOption(key,option){
+       this.selectOption[key] = option;
+    },
+    // 设置值
+    setVaule(key,vaule){
+      this.ruleForm[key] = vaule
+    },
+    // 获取值
+    getVaule(key){
+       return this.ruleForm[key]
+    },
+    typeChange(event){
+      this.$emit('typeChange',event)
     },
     formValidate() {
       let isValid = false;
@@ -152,9 +305,11 @@ export default {
     getData() {
       return this.ruleForm;
     },
+    // 
     validateField(item) {
       this.$refs.refFormInit.validateField(item);
     },
+    // 按钮时间
     btns(data) {
       this.$emit("formBtn", data);
     },

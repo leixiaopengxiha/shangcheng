@@ -244,10 +244,20 @@ export let postAddFormConfiguration = (data)=>{
     });
 }
 
-// 添加表单列表
+// 获取表单列表
 export let postAllFormConfigurationList = (data)=>{
     return axios({
         url: `${url}/getAllFormConfigurationList`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 用户获取表单信息
+export let postUserFormConfiguration = (data)=>{
+    return axios({
+        url: `${url}/getUserFormConfiguration`,
         method: "post",
         // 传参
         data,
