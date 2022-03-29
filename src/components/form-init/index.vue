@@ -152,7 +152,7 @@
 <script>
 import {postUserFormConfiguration} from '../../api/user'
 export default {
-  props: ["formPage"],
+  props: ["formPage",'formInitDatas'],
   data() {
     return {
       ruleForm: {},
@@ -163,8 +163,14 @@ export default {
     };
   },
   created() {
+    console.log(this.formPage)
     // 获取表单数据
-    this.postUserFormConfigurations()
+    if(!this.formPage.formId){
+       this.formInit(this.formInitDatas);
+    }else{
+        // 这里是表单数据处理方法
+        this.postUserFormConfigurations()
+    }
    
   },
 
@@ -195,7 +201,7 @@ export default {
         }
         // 是否有自定义属性
         item['attributes'] = {};
-        if(this.formPage.attributes){
+        if(this.formPage?.attributes){
           item.attributes = this.formPage.attributes[item.formModel]?this.formPage.attributes[item.formModel]:{}
         }
         // 是否是按钮功能

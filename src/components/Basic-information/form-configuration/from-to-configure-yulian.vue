@@ -6,7 +6,7 @@
         <i class="el-icon-circle-close iconcal" @click="yulian"></i>
       </div>
       <div class="demo-ruleForm">
-        <FormInit ref='form' :formInitDatas="tableData" :validator="validator"></FormInit>
+        <FormInit ref='form' :formInitDatas="tableData" :formPage="formPage" @formBtn='submitForm'></FormInit>
       </div>
         <!-- <div class="menu-operation">
           <el-button class="btns" @click="yulian">取消</el-button>
@@ -34,6 +34,14 @@ export default {
         ],
         label: [{ required: true, message: "请输入属性名称", trigger: "blur" }],
       },
+
+      formPage: {
+        validator:this.validator,
+        selectOption:{
+          selects:[],
+          aasa:[],
+        },
+      }
     };
   },
   created(){
@@ -59,14 +67,9 @@ export default {
     },
     // 保存
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-             this.$emit('onaddformitem',this.ruleForm)
-            // this.onaddformitem(this.ruleForm)
-        } else {
-          return false;
-        }
-      });
+      console.log(formName)
+     let data =  this.$refs['form'].getData()
+     console.log(data)
     },
   },
 };
