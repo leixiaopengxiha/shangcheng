@@ -535,7 +535,6 @@ export default {
     // 方法使用
     typeChange(event) {
       if (event.key === "type") {
-        console.log(event.value)
         if (event.value === "button") {          
           this.isChecks = false;
           this.isBtn = true;

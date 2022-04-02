@@ -163,7 +163,6 @@ export default {
     };
   },
   created() {
-    console.log(this.formPage)
     // 获取表单数据
     if(!this.formPage.formId){
        this.formInit(this.formInitDatas);
@@ -192,6 +191,7 @@ export default {
       let ruleFormObj = {};
       let rulesObj = {};
       arr.map((item) => {
+        console.log(item)
         // 是否需要字典
         if(item.type == "select"||item.type == "radio"||item.type == "checkbox"){
           this.selectOption[item.formModel]=[]
@@ -206,11 +206,9 @@ export default {
         }
         // 是否是按钮功能
         if (item.editlist != 0 && item.type != "button") {
-           console.log(item)
           if(item.type == 'checkbox'){
             ruleFormObj[item.formModel] = item.dicDefault?item.dicDefault.split(','):[];
           }else{
-            // console.log(item)
             ruleFormObj[item.formModel] = item.dicDefault?item.dicDefault:"";
           }
         }
@@ -264,7 +262,6 @@ export default {
     },
     // 获取字典表单获取字典值
     async dictionary(){
-      console.log(this.selectCustomList)
       let list =[]
        this.selectCustomList.map(items=>{
          let isItems = list.some(keys=>keys==items.key)
@@ -272,9 +269,7 @@ export default {
            list.push(items.key)
          }
        })
-          console.log(list)
         let data = await postUserDictionaryPage({list:list})
-        console.log(data)
         if(data.code==2000){
            this.selectCustomList.map(item=>{
               this.selectOption[item.formModel] =data.data[item.key];
@@ -282,23 +277,6 @@ export default {
         }else{
            this.$message.error(data.message);
         }
-        // let objs = {
-        //   cszd:[
-
-        //       {
-        //         label:"区域一",
-        //         value:"shanghai",
-        //       },
-        //       {
-        //         label:"区域二",
-        //         value:"beijing",
-        //       }
-
-        //   ]
-        // }
-    //  this.selectCustomList.map(item=>{
-    //     this.selectOption[item.formModel] =objs[item.key];
-    //   })
     },
     // 设置自定义下拉框值
     setOption(key,option){

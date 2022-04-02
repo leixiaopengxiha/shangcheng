@@ -179,7 +179,6 @@ export default {
         item.sortId = index
         return item
       })
-      console.log(this.tableData)
       let data= await postAddFormConfiguration({
         formId: this.fromData.formId,
         list:this.tableData,

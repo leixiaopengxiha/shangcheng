@@ -116,10 +116,6 @@ export default {
       console.log(this.$refs.form.getData())
       console.log(this.$refs.form.formValidate())
     },
-    quxiao(){
-        // sessionStorage.removeItem('from-to-configure')
-        // this.$router.push('/main/form-configuration/form-configuration-main')
-    }
   },
 };
 </script>
