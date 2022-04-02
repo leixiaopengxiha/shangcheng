@@ -80,23 +80,6 @@ export default {
   created(){
     // this.postUserFormConfigurations()
   },
-  mounted(){
-   
-    setTimeout(()=>{
-       let aasa=[
-         {
-          label:"区域一001",
-          value:"shanghai",
-        },
-        {
-          label:"区域二",
-          value:"beijing",
-        },
-      ]
-      // 自定义字典
-      this.$refs.form.setOption('checkbox',aasa)
-    },100)
-  },
   methods: {
    typeChange(event){
     //  console.log(event)
