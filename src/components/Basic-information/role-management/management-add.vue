@@ -1,6 +1,10 @@
 <template>
   <div class="bullet-frame">
     <div class="menu-addbox">
+      <div class="title">
+       <h3> {{editlist?"修改":"添加"}}</h3>
+        <i class="el-icon-circle-close iconcal" @click="menuadd"></i>
+      </div>
       <el-form
         :model="ruleForm"
         status-icon
@@ -137,7 +141,7 @@ export default {
   width: 50vw;
   margin: auto;
   background: #fff;
-  padding: 20px 10px;
+  // padding: 20px 10px;
   box-sizing: border-box;
   position: absolute;
   top: 50%;
@@ -150,5 +154,24 @@ export default {
 }
 .el-select{
 	width: 100%;
+}
+.title{
+  padding: 10px 30px;
+  display: flex;
+  justify-content:space-between;
+   color: #606266;
+}
+.iconcal{
+  font-size: 23px;
+  color: #C0C4CC;
+}
+.iconcal:hover{
+  color: #F56C6C;
+}
+.demo-ruleForm{
+  max-height: 70vh;
+  overflow: hidden;
+  overflow-y: scroll;
+  padding: 10px 30px;
 }
 </style>

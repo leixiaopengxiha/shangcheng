@@ -2,14 +2,14 @@
   <div class="bullet-frame">
     <div class="menu-addbox">
       <div class="title">
-       <span> {{ shows ? "编辑" : "添加" }}</span>
+       <h3> {{ shows ? "编辑" : "添加" }}</h3>
         <i class="el-icon-circle-close iconcal" @click="menuadd"></i>
       </div>
       <el-form
         :model="ruleForm"
         :rules="rules"
         ref="ruleForm"
-        label-width="150px"
+        label-width="100px"
         class="demo-ruleForm"
       >
         <el-form-item label="表单编号" prop="formId" v-if="ruleForm.formId">
@@ -130,7 +130,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .menu-addbox {
-  width: 55vw;
+  width: 40vw;
   margin: auto;
   background: #fff;
   box-sizing: border-box;
@@ -150,7 +150,7 @@ export default {
   text-align: center;
 }
 .demo-ruleForm{
-  height: 70vh;
+  max-height: 70vh;
   overflow: hidden;
   overflow-y: scroll;
   padding: 20px 30px;

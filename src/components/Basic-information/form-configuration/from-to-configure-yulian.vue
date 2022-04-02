@@ -2,7 +2,7 @@
   <div class="bullet-frame">
     <div class="menu-addbox">
       <div class="title">
-       <span>表单预览</span>
+       <h3>表单预览</h3>
         <i class="el-icon-circle-close iconcal" @click="yulian"></i>
       </div>
       <div class="demo-ruleForm">

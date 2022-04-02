@@ -1,12 +1,16 @@
 <template>
   <div class="bullet-frame">
     <div class="menu-addbox">
+       <div class="title">
+       <h3> {{editlist?"修改":"添加"}}</h3>
+        <i class="el-icon-circle-close iconcal" @click="menuadd"></i>
+      </div>
       <el-form
         :model="ruleForm"
         status-icon
         :rules="rules"
         ref="ruleForm"
-        label-width="150px"
+        label-width="100px"
         class="demo-ruleForm"
       >
         <el-form-item label="用户名" prop="username" v-if="!editlist">
@@ -142,17 +146,36 @@ export default {
 </script>
 <style lang="less" scoped>
 .menu-addbox {
-  width: 50vw;
+  width: 45vw;
   margin: auto;
   background: #fff;
-  padding: 20px 10px;
+  
   box-sizing: border-box;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.title{
+  padding: 10px 30px;
+  display: flex;
+  justify-content:space-between;
+   color: #606266;
+}
+.iconcal{
+  font-size: 23px;
+  color: #C0C4CC;
+}
+.iconcal:hover{
+  color: #F56C6C;
+}
 .btn-box {
   text-align: center;
+}
+.demo-ruleForm{
+  max-height: 70vh;
+  overflow: hidden;
+  overflow-y: scroll;
+  padding: 10px 30px;
 }
 </style>

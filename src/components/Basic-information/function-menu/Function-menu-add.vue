@@ -2,7 +2,7 @@
   <div class="bullet-frame">
     <div class="menu-addbox">
       <div class="title">
-       <span> {{ shows ? "编辑" : "添加" }}</span>
+       <h3> {{ shows ? "编辑" : "添加" }}</h3>
         <i class="el-icon-circle-close iconcal" @click="menuadd"></i>
       </div>
       <el-form

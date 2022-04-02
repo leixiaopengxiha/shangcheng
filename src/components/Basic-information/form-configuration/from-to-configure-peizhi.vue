@@ -2,7 +2,7 @@
   <div class="bullet-frame">
     <div class="menu-addbox">
       <div class="title">
-        <span>表单配置</span>
+        <h3>表单配置</h3>
         <i class="el-icon-circle-close iconcal" @click="peizhiEixt()"></i>
       </div>
       <el-form
