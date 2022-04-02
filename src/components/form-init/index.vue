@@ -46,7 +46,7 @@
               })" 
             >
               <template v-for="(items,indexs) in selectOption[item.formModel]" :key="indexs">
-                  <el-option :label="items.label" :value="items.value"></el-option>
+                  <el-option :label="items.dicValue" :value="items.dicKey"></el-option>
               </template>
             </el-select>
           </template>
@@ -121,7 +121,7 @@
           <template v-if="item.type == 'checkbox'">
               <el-checkbox-group v-model="ruleForm[item.formModel]">
                 <template v-for="(itemRadio,indexss) in selectOption[item.formModel]" :key='indexss'>
-                  <el-checkbox :label="itemRadio.value" name="type">{{itemRadio.label}}</el-checkbox>
+                  <el-checkbox :label="itemRadio.dicKey" name="type">{{itemRadio.dicValue}}</el-checkbox>
                 </template>
               </el-checkbox-group>
           </template>
@@ -129,7 +129,7 @@
           <template v-if="item.type=='radio'">
             <el-radio-group v-model="ruleForm[item.formModel]">
               <template v-for="(itemRadio,indexss) in selectOption[item.formModel]" :key='indexss'>
-                  <el-radio :label="itemRadio.value" >{{itemRadio.label}}</el-radio>
+                  <el-radio :label="itemRadio.dicKey" >{{itemRadio.dicValue}}</el-radio>
               </template>
             </el-radio-group>
           </template>
@@ -150,7 +150,7 @@
 </template>
 
 <script>
-import {postUserFormConfiguration} from '../../api/user'
+import {postUserFormConfiguration,postUserDictionaryPage} from '@/api/user'
 export default {
   props: ["formPage",'formInitDatas'],
   data() {
@@ -196,7 +196,7 @@ export default {
         if(item.type == "select"||item.type == "radio"||item.type == "checkbox"){
           this.selectOption[item.formModel]=[]
           if(item.selectCustom==1){
-            this.selectCustomList.push({key:item.selectOptionKey,formModel:item.formModel})
+            this.selectCustomList.push({key:item.dictionaryKey,formModel:item.formModel})
           }
         }
         // 是否有自定义属性
@@ -206,10 +206,12 @@ export default {
         }
         // 是否是按钮功能
         if (item.editlist != 0 && item.type != "button") {
+           console.log(item)
           if(item.type == 'checkbox'){
-            ruleFormObj[item.formModel] = [];
+            ruleFormObj[item.formModel] = item.dicDefault?item.dicDefault.split(','):[];
           }else{
-            ruleFormObj[item.formModel] = "";
+            // console.log(item)
+            ruleFormObj[item.formModel] = item.dicDefault?item.dicDefault:"";
           }
         }
 
@@ -261,24 +263,42 @@ export default {
     
     },
     // 获取字典表单获取字典值
-    dictionary(){
-        let objs = {
-          cszd:[
-
-              {
-                label:"区域一",
-                value:"shanghai",
-              },
-              {
-                label:"区域二",
-                value:"beijing",
-              }
-
-          ]
+    async dictionary(){
+      console.log(this.selectCustomList)
+      let list =[]
+       this.selectCustomList.map(items=>{
+         let isItems = list.some(keys=>keys==items.key)
+         if(!isItems){
+           list.push(items.key)
+         }
+       })
+          console.log(list)
+        let data = await postUserDictionaryPage({list:list})
+        console.log(data)
+        if(data.code==2000){
+           this.selectCustomList.map(item=>{
+              this.selectOption[item.formModel] =data.data[item.key];
+            })
+        }else{
+           this.$message.error(data.message);
         }
-     this.selectCustomList.map(item=>{
-        this.selectOption[item.formModel] =objs[item.key];
-      })
+        // let objs = {
+        //   cszd:[
+
+        //       {
+        //         label:"区域一",
+        //         value:"shanghai",
+        //       },
+        //       {
+        //         label:"区域二",
+        //         value:"beijing",
+        //       }
+
+        //   ]
+        // }
+    //  this.selectCustomList.map(item=>{
+    //     this.selectOption[item.formModel] =objs[item.key];
+    //   })
     },
     // 设置自定义下拉框值
     setOption(key,option){

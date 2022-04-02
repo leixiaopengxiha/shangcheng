@@ -263,3 +263,72 @@ export let postUserFormConfiguration = (data)=>{
         data,
     });
 }
+
+// 新增字典列表
+export let postAddDictionaryList = (data)=>{
+    return axios({
+        url: `${url}/addDictionaryList`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 获取字典列表
+export let postAllDictionaryList = (data)=>{
+    return axios({
+        url: `${url}/allDictionaryList`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 获取字典配置列表
+export let postAllDictionaryPage= (data)=>{
+    return axios({
+        url: `${url}/allDictionaryPage`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+// 配置和修改字典项
+export let postAddDictionaryPage= (data)=>{
+    return axios({
+        url: `${url}/addDictionaryPage`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 删除字典
+export let postDeleteDictionaryPage= (data)=>{
+    return axios({
+        url: `${url}/deleteDictionaryPage`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+// 页面获取字典信息
+export let postUserDictionaryPage= (data)=>{
+    return axios({
+        url: `${url}/userDictionaryPage`,
+        method: "post",
+        // 传参
+        data,
+    });
+}
+
+//  配置表单获取字典
+export let postFormDictionaryPage= (data)=>{
+    return axios({
+        url: `${url}/formDictionaryPage`,
+        method: "post",
+        // 传参
+        data,
+    });
+}

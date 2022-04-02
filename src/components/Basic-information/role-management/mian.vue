@@ -128,7 +128,8 @@ export default {
   computed: {},
   methods: {
     formatterFun(e,data){
-      let vuale =  data.filter(item=>item.key==e)[0].vuale
+      let vuale =  data.filter(item=>item.key==e)[0]
+      vuale  = vuale?.vuale
       return  vuale
     },
     // 获取

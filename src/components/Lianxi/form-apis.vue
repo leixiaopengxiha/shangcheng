@@ -99,7 +99,7 @@ export default {
   },
   methods: {
    typeChange(event){
-     console.log(event)
+    //  console.log(event)
    },
     // 自定义校验使用 1
     validatePass(rule, value, callback){

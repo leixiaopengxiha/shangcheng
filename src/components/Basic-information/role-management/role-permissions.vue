@@ -56,6 +56,7 @@ export default {
             let router = await postAllRolePermissions(data);
             if (router.code == 2000) {
                 this.loading.close();
+                console.log(router.data)
                 this.setCheckedKeysd(router.data)
             } else {
                 this.loading.close();
@@ -100,9 +101,8 @@ export default {
             }
         },
         getCheckedKeys() {
-            let datas = {roleId:this.handleMenu.id,list:this.$refs.tree.getCheckedKeys()}
+            let datas = {roleId:this.handleMenu.id,halfCheckedKeys:this.$refs.tree.getHalfCheckedKeys(),list:this.$refs.tree.getCheckedKeys()}
             this.postAddRolePermissionss(datas)
-            
         },
         cancel(){
             this.$router.push('/main/role-management/role-management-main')

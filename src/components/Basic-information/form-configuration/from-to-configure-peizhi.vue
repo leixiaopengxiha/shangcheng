@@ -45,6 +45,86 @@
             <el-option label="button" value="button"></el-option>
           </el-select>
         </el-form-item>
+        <template v-if="ruleForm.type=='select'||ruleForm.type=='radio'||ruleForm.type=='checkbox'">
+          <el-form-item label="字典配置" prop="selectCustom">
+            <el-select
+              class="select-wh"
+              v-model="ruleForm.selectCustom"
+              placeholder="请选择"
+              filterable
+              @change="
+                typeChange({
+                  key: 'selectCustom',
+                  label: '表单类型',
+                  value: ruleForm.selectCustom,
+                })
+              "
+            >
+              <el-option label="系统字典" value="1"></el-option>
+              <el-option label="自定义字典" value="0"></el-option>
+            </el-select>
+          </el-form-item>
+           <el-form-item label="字典配置" prop="dictionaryKey" v-if="ruleForm.selectCustom=='1'">
+            <el-select
+              class="select-wh"
+              v-model="ruleForm.dictionaryKey"
+              placeholder="请选择"
+              filterable
+              @change="
+                typeChange({
+                  key: 'dictionaryKey',
+                  label: '表单类型',
+                  value: ruleForm.dictionaryKey,
+                })
+              "
+            >
+              <template v-for="(dicItem) in dicOption.diclist" :key="dicItem.id">
+                 <el-option :label="dicItem.dictionaryName" :value="dicItem.dictionaryKey"></el-option>
+              </template>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="字典默认值"  v-if="ruleForm.selectCustom=='1'">
+            <!-- <template  v-if="ruleForm.type=='select'"></template> -->
+              <el-select
+                v-if="ruleForm.type=='select'"
+                class="select-wh"
+                v-model="ruleForm.dicDefault"
+                placeholder="请选择"
+                filterable
+                @change="
+                  typeChange({
+                    key: 'dicDefault',
+                    label: '表单类型',
+                    value: ruleForm.dicDefault,
+                  })
+                "
+              >
+                <template v-for="(dicItem) in dicDefaultList" :key="dicItem.id">
+                  <el-option :label="dicItem.dicValue" :value="dicItem.dicKey"></el-option>
+                </template>
+              </el-select>
+            
+            <!-- 多选框 -->
+             <el-checkbox-group  v-if="ruleForm.type=='checkbox'" v-model="ruleForm.dicDefault">
+                <template v-for="(dicItem) in dicDefaultList" :key="dicItem.id">
+                  <el-checkbox :label="dicItem.dicKey" >{{dicItem.dicValue}}</el-checkbox>
+                </template>
+              </el-checkbox-group>
+
+            <!-- <template v-if="item.type == 'checkbox'">
+               
+            </template> -->
+            <!-- 单选框 -->
+             <el-radio-group  v-if="ruleForm.type=='radio'" v-model="ruleForm.dicDefault">
+                <template  v-for="(dicItem) in dicDefaultList" :key="dicItem.id">
+                    <el-radio :label="dicItem.dicKey" >{{dicItem.dicValue}}</el-radio>
+                </template>
+              </el-radio-group>
+            <!-- <template>
+             
+            </template> -->
+          </el-form-item>
+        </template>
         <el-form-item label="按钮名称" prop="text" v-if="isBtn">
           <el-input v-model="ruleForm.text"></el-input>
         </el-form-item>
@@ -236,6 +316,7 @@
 </template>
 <script>
 // import { mapState } from "vuex";
+import {postFormDictionaryPage} from '@/api/user'
 let isValidatorLIsts=[]
 export default {
   props: ["peizhiEixt", "rowList"],
@@ -253,7 +334,8 @@ export default {
       isValidatorList: 1,
       isValidators: false,
       isJygz2: true,
-      
+      dicDefaultList:[],
+      dicOption:{},
       ruleForm: {
         disabled: "1",
         editlist: "1",
@@ -272,6 +354,9 @@ export default {
             max: '',
           },
         ],
+        selectCustom:'',
+        dictionaryKey:"",
+        dicDefault:'',
         btnFun: "",
         btnType: "",
         text: "",
@@ -316,6 +401,20 @@ export default {
           {
             required: true,
             message: "请输入表单名称",
+            trigger: ["blur", "change"],
+          },
+        ],
+         selectCustom: [
+          {
+            required: true,
+            message: "请选择字典配置",
+            trigger: ["blur", "change"],
+          },
+        ],
+        dictionaryKey: [
+          {
+            required: true,
+            message: "请选择字典配置",
             trigger: ["blur", "change"],
           },
         ],
@@ -401,8 +500,15 @@ export default {
       if (this.rowList.row.type == "button") {
         this.isBtn = true;
       }
+      // dicDefault
+
+     
       this.yuanDate = JSON.parse(JSON.stringify(this.rowList.row));
       this.ruleForm = JSON.parse(JSON.stringify(this.rowList.row));
+      if(this.ruleForm.type=='checkbox'){
+         this.ruleForm.dicDefault= this.ruleForm.dicDefault?this.ruleForm.dicDefault.split(','):[]
+      }
+
       if(this.ruleForm.type=='button'){
         this.isChecks = false;
         this.isBtn = true;
@@ -414,19 +520,38 @@ export default {
         this.isChecks = true;
       }
     }
+    this.postFormDictionaryPages()
   },
 
   methods: {
+    async postFormDictionaryPages(){
+     let data = await postFormDictionaryPage()
+     if(data.code==2000){
+       this.dicOption = data.data
+       if(this.ruleForm.dictionaryKey){
+        this.dicDefaultList = this.dicOption.dicOption[this.ruleForm.dictionaryKey]
+      }
+     }else{
+        this.$message.error(data.message);
+     }
+    },
+
     remIsValidator(data,index){
       this.ruleForm.rules= this.ruleForm.rules.filter((item,idx)=>idx!=index)
     },
     // 方法使用
     typeChange(event) {
       if (event.key === "type") {
+        console.log(event.value)
         if (event.value === "button") {          
           this.isChecks = false;
           this.isBtn = true;
-        } else {
+          this.ruleForm.dicDefault=''
+        }else if(event.value=='checkbox'){
+          this.ruleForm.dicDefault=[]
+        }
+         else {
+          this.ruleForm.dicDefault=''
           this.isChecks = this.ruleForm.isCheck=='1'? true:false;
           this.isBtn = false;
         }
@@ -437,6 +562,9 @@ export default {
         } else {
           this.isChecks = false;
         }
+      }
+      if(event.key='dictionaryKey'){
+        this.dicDefaultList = this.dicOption.dicOption[this.ruleForm.dictionaryKey]
       }
     },
     // 添加校验规则
@@ -472,6 +600,14 @@ export default {
           }
           if (this.ruleForm.isCheck == "0") {
             this.ruleForm.rules = [];
+          }
+          if(this.ruleForm.type!='checkbox'&&this.ruleForm.type!='select'&&this.ruleForm.type!='radio'){
+            this.ruleForm.dicDefault= ''
+            this.ruleForm.selectCustom=''
+            this.ruleForm.dictionaryKey = ''
+          }
+          if(this.ruleForm.type=='checkbox'){
+            this.ruleForm.dicDefault= this.ruleForm.dicDefault?this.ruleForm.dicDefault.join(','):'';
           }
           this.rowList.row = this.ruleForm;
           this.peizhiEixt(this.rowList);
