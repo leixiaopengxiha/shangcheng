@@ -79,13 +79,10 @@
       </el-pagination>
     </div>
     <!-- 添编辑加弹框 -->
-    <DictionariesAdd
-      v-if="ishouAdd"
-      :menuadd="menuAdd"
-    ></DictionariesAdd>
+     <DictionariesPeizhi  v-if="ishouAdd"  :menuadd="menuAdd">
+    </DictionariesPeizhi>
 
     <DictionariesPeizhi  v-if="isPaizhi"  :menuadd="paizhiFun"   :rowList="rowList">
-
     </DictionariesPeizhi>
   </div>
 </template>

@@ -14,7 +14,7 @@
         class="demo-ruleForm"
       >
         <el-form-item label="字典KEY" prop="dictionaryKey">
-          <el-input v-model="ruleForm.dictionaryKey" disabled></el-input>
+          <el-input v-model="ruleForm.dictionaryKey" :disabled='!!rowList'></el-input>
         </el-form-item>
         <el-form-item label="字典名称" prop="dictionaryName">
           <el-input v-model="ruleForm.dictionaryName"></el-input>
@@ -80,16 +80,16 @@
   </div>
 </template>
 <script>
-import { postAddDictionaryPage,postAllDictionaryPage } from "@/api/user";
+import { postAddDictionaryPage,postAllDictionaryPage,postAddDictionaryList } from "@/api/user";
 export default {
   props: ["menuadd","rowList"],
   data() {
     return {
       ruleForm: {
-        id:this.rowList.id,
-        dictionaryKey: this.rowList.dictionaryKey,
-        dictionaryName: this.rowList.dictionaryName,
-        sidebar: this.rowList.sidebar,
+        id:this.rowList?.id,
+        dictionaryKey: this.rowList?this.rowList.dictionaryKey:'',
+        dictionaryName: this.rowList?this.rowList.dictionaryName:'',
+        sidebar: this.rowList?this.rowList.sidebar:'0',
         list: [
           {
             dicKey:"",
@@ -100,7 +100,9 @@ export default {
         deleteList:[],
       },
       rules: {
-        dictionaryKey: [{ required: true, message: "请输入字典KEY", trigger: "blur" }],
+        dictionaryKey: [
+          { required: true, validator: this.validateDictionaryKey, trigger: "blur" }
+        ],
         dictionaryName: [{ required: true, message: "请输入字典名称", trigger: "blur" }],
         sidebar: [
           {
@@ -117,6 +119,25 @@ export default {
   },
 
   methods: {
+      async validateDictionaryKey(rule, value, callback){
+        if (value === '') {
+          callback(new Error('请输入字典KEY'))
+        } else {
+            if(!this.rowList){
+              let data= await postAddDictionaryList({dictionaryKey:this.ruleForm.dictionaryKey});
+              if(data.code==2000){
+                callback()
+              }else{
+                this.$message.error(data.message);
+                callback("该字典已经存在")
+              }
+            }else{
+               callback()
+            }
+           
+        }
+
+    },
     // 获取字典配置列表
     async postAllDictionaryPages(){
       let data = await postAllDictionaryPage(this.rowList);
@@ -155,7 +176,6 @@ export default {
     },
     // 保存
     submitForm(formName) {
-      console.log(this.ruleForm)
       if(!this.ruleForm.list.length){
          this.$message.error('请至少录入一个选项');
         return
