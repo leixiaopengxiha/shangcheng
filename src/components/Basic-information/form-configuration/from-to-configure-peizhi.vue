@@ -84,12 +84,13 @@
             </el-select>
           </el-form-item>
           <el-form-item label="字典默认值"  v-if="ruleForm.selectCustom=='1'">
-            <!-- <template  v-if="ruleForm.type=='select'"></template> -->
-              <el-select
+            <!-- 下拉框 -->
+            <el-select
                 v-if="ruleForm.type=='select'"
                 class="select-wh"
                 v-model="ruleForm.dicDefault"
                 placeholder="请选择"
+                :clearable="true"
                 filterable
                 @change="
                   typeChange({
@@ -102,27 +103,19 @@
                 <template v-for="(dicItem) in dicDefaultList" :key="dicItem.id">
                   <el-option :label="dicItem.dicValue" :value="dicItem.dicKey"></el-option>
                 </template>
-              </el-select>
-            
+            </el-select>
             <!-- 多选框 -->
-             <el-checkbox-group  v-if="ruleForm.type=='checkbox'" v-model="ruleForm.dicDefault">
+            <el-checkbox-group  v-if="ruleForm.type=='checkbox'" v-model="ruleForm.dicDefault"  :clearable="true">
                 <template v-for="(dicItem) in dicDefaultList" :key="dicItem.id">
                   <el-checkbox :label="dicItem.dicKey" >{{dicItem.dicValue}}</el-checkbox>
                 </template>
               </el-checkbox-group>
-
-            <!-- <template v-if="item.type == 'checkbox'">
-               
-            </template> -->
             <!-- 单选框 -->
-             <el-radio-group  v-if="ruleForm.type=='radio'" v-model="ruleForm.dicDefault">
+             <el-radio-group  v-if="ruleForm.type=='radio'" v-model="ruleForm.dicDefault"  :clearable="true">
                 <template  v-for="(dicItem) in dicDefaultList" :key="dicItem.id">
                     <el-radio :label="dicItem.dicKey" >{{dicItem.dicValue}}</el-radio>
                 </template>
               </el-radio-group>
-            <!-- <template>
-             
-            </template> -->
           </el-form-item>
         </template>
         <el-form-item label="按钮名称" prop="text" v-if="isBtn">
