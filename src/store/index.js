@@ -12,6 +12,7 @@ export default createStore({
     appState:false,
     navactive:'',
     handleMenu:{},
+    isAsideWidth:true,
   },
   mutations: {
     Roterlists(state,data){
@@ -39,6 +40,9 @@ export default createStore({
     },
     HandleMenus(state,data){
       state.handleMenu=data
+    },
+    isAsideWidths(state,data){
+      state.isAsideWidth = data
     }
   },
   actions: {
@@ -62,6 +66,9 @@ export default createStore({
     },
     HandleMenu({commit},data){
       commit('HandleMenus',data)
+    },
+    isAsideWidth({commit},data){
+      commit('isAsideWidths',data)
     }
   },
   modules: {

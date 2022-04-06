@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside width="180px">
+    <el-aside :class="data.isAsideWidth?'aside-wk':'aside-wg'">
        <Myelmenu :data='routeList'></Myelmenu>
     </el-aside>
     <el-container>
@@ -21,7 +21,7 @@
 
 <script>
 import { useStore } from "vuex";
-import { computed, onMounted } from "vue";
+import { computed, onMounted,reactive } from "vue";
 import Myelmenu  from '@/components/main/Aside/Myelmenu';
 import { useRouter, useRoute} from 'vue-router';
 import Headers from '@/components/main/Headers'
@@ -33,12 +33,16 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter()
+    const data = reactive({
+      isAsideWidth: computed(() => store.state.isAsideWidth),
+    })
     onMounted(()=>{
       let routerpath = store.state.routerpath
       router.push(routerpath)
     })
     
     return {
+      data,
       routeList: computed(() => store.state.routeList),
       userList: computed(() => store.state.userList),
     };
@@ -55,15 +59,18 @@ export default {
   color: #333;
   text-align: center;
   line-height: 60px;
+  padding-left: 10px;
 }
 
 .el-aside {
   background-color: #d3dce6;
   color: #333;
   text-align: left;
+  transition: all .3s;
 }
 
 .el-main {
+  width: 100% !important;
   background-color: #e9eef3;
   color: #333;
   box-sizing: border-box;
@@ -72,6 +79,13 @@ export default {
   height:calc(100vh - 60px) ;
   overflow: hidden;
   overflow: scroll;
+ 
+}
+.aside-wk{
+  width: 180px !important;
+}
+.aside-wg{
+  width: 0px !important;
 }
 
 </style>

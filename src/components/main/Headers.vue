@@ -1,11 +1,14 @@
 <template>
   <div class="header-box">
+    <div class="icon-boxs">
+      <el-icon @click="onfold" :class="data.isAsideWidth?'el-icon-s-fold icon-size':'el-icon-s-unfold icon-size' "></el-icon>
+    </div>
     <div class="header-contenr">
       <span class="c-texts">消息提示：</span>
       <span>欢迎进入</span>
     </div>
     <div class="flex-end">
-      <h3>{{ userList.nickname }}</h3>
+      <!-- <h3>{{ userList.nickname }}</h3> -->
       <img @click="btnheader" class="imgs" :src="data.urlIp+userList.avatar" alt="" />
     </div>
     
@@ -33,22 +36,28 @@ export default {
      const router = useRouter();
     let data = reactive({
       drawer: false,
+      isAsideWidth: computed(() => store.state.isAsideWidth),
       urlIp:process.env.VUE_APP_EXTERNAL_LINK
     });
     const btnheader = () => {
       data.drawer = true;
     };
+ 
     const signOut=()=>{
         sessionStorage.clear()
         store.dispatch('Roterlist',[]);
         store.dispatch('RouterPath','/main/home')
         router.push('/login')
     }
+    const onfold=()=>{
+      store.dispatch('isAsideWidth',!data.isAsideWidth)
+    }
     return {
       data,
       userList: computed(() => store.state.userList),
       btnheader,
       signOut,
+      onfold
     };
   },
 };
@@ -82,5 +91,14 @@ export default {
   height: 50px;
   display: inline-block;
   border-radius: 50%;
+}
+.icon-boxs{
+  line-height: 70px;
+}
+.icon-size{
+ font-size: 28px;
+  color: #409EFF;
+  padding-right:10px;
+  cursor: pointer;
 }
 </style>
