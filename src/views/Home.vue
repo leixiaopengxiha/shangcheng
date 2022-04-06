@@ -1,6 +1,6 @@
 <template>
   <div>
-    首页 <router-link to="/main/home/myas">去我的详情</router-link>
+    首页 <router-link to="/main/home/myas1">去我的详情</router-link>
     <Haha></Haha>
   </div>
 </template>

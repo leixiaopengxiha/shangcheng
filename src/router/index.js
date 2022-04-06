@@ -23,6 +23,14 @@ const routes = [
   },
   
 ]
+// 一些配置页面可以配置为本地
+let routePageLists=[
+    {
+      path: '/main/home/myas1',
+      name: 'myas1',
+      component: () => import('../views/haha.vue'),
+    },
+]
 
 const router = createRouter({
   // history: createWebHashHistory(),
@@ -59,7 +67,7 @@ router.beforeEach(async (to, from, next) => {
   if(to.path=='/404'){
     stores.dispatch("RouterPath", "/main");
   }
-
+  // 进入系统动态获取地址
   if (to.path.indexOf('/main')!= -1 || to.path == '/404') {
     if (!stores.state.routeList.length) {
        await postRouterpage().then(( data ) => {
@@ -68,7 +76,7 @@ router.beforeEach(async (to, from, next) => {
             let sidelist=JSON.parse(JSON.stringify(data.data))
             let yijiList= Router_tree(routelist)
             let mains= routes.filter(item=>item.path=='/main')[0]
-            mains.children = yijiList;
+            mains.children =[ ...routePageLists,...yijiList];
             let navactive = sessionStorage.getItem("navactive");
             let urls = sessionStorage.getItem("urls");
             let isurls = (urls=='/404' ? '/main/home' : urls)

@@ -98,6 +98,7 @@ export default {
           { required: true, message: "请输入路由组件路径", trigger: "blur" },
         ],
         cascader:[{ required: true, message: "请输入菜单名称", trigger: "blur" }],
+        sortid:[{ required: true, message: "请输设置显示顺序", trigger: "blur" }],
         sidebar: [
           {
             required: true,
