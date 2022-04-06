@@ -6,14 +6,14 @@
     </div>
     <div class="flex-end">
       <h3>{{ userList.nickname }}</h3>
-      <img @click="btnheader" class="imgs" :src="userList.avatar" alt="" />
+      <img @click="btnheader" class="imgs" :src="data.urlIp+userList.avatar" alt="" />
     </div>
     
   </div>
   <el-drawer title="设置" v-model="data.drawer" :with-header="false">
     <h3>设置</h3>
     <div>
-      <img @click="btnheader" class="imgsh" :src="userList.avatar" alt="" />
+      <img @click="btnheader" class="imgsh" :src="data.urlIp+userList.avatar" alt="" />
       <div>{{ userList.username }}</div>
       <div>{{ userList.nickname }}</div>
       <div>{{ userList.introduction }}</div>
@@ -33,8 +33,8 @@ export default {
      const router = useRouter();
     let data = reactive({
       drawer: false,
+      urlIp:process.env.VUE_APP_EXTERNAL_LINK
     });
-
     const btnheader = () => {
       data.drawer = true;
     };
