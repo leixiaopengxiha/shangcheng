@@ -57,6 +57,9 @@ export default {
 .text-404{
     text-align: center;
 }
+.fanghui{
+    cursor: pointer;
+}
 .fanghui:hover{
     color: red;
 }
