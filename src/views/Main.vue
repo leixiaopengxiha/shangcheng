@@ -63,10 +63,16 @@ export default {
 }
 
 .el-aside {
-  background-color: #d3dce6;
+  height: 100vh;
+  background-color: #FFf;
   color: #333;
   text-align: left;
   transition: all .3s;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.el-aside ::-webkit-scrollbar {
+  display: none; 
 }
 
 .el-main {

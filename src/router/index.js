@@ -17,7 +17,7 @@ const routes = [
     component: () => import('@/views/Main.vue'),
   },
   {
-    path: '/404',
+    path: '/:pathMatch(.*)*',
     name: '404',
     component: () => import('../views/404.vue'),
   },
@@ -65,6 +65,7 @@ router.beforeEach(async (to, from, next) => {
      stores.dispatch("RouterPath", "/main");
    }
   if(to.path=='/404'){
+    stores.dispatch('Navactive','/main')
     stores.dispatch("RouterPath", "/main");
   }
   // 进入系统动态获取地址
@@ -77,6 +78,14 @@ router.beforeEach(async (to, from, next) => {
             let yijiList= Router_tree(routelist)
             let mains= routes.filter(item=>item.path=='/main')[0]
             mains.children =[ ...routePageLists,...yijiList];
+            let urlsa = sessionStorage.getItem("urls");
+            // 地址栏跳转页面的时候使用
+            let wsr = window.history.state.current.split('/')
+            if(urlsa&&(window.history.state.current!=urlsa)&&(window.history.state.current.indexOf('/main/')!=-1)&&wsr[2].length){
+              sessionStorage.setItem("urls",window.history.state.current);
+              let wsr = window.history.state.current.split('/')
+              sessionStorage.setItem("navactive",`/${wsr[1]}/${wsr[2]}`);
+            }
             let navactive = sessionStorage.getItem("navactive");
             let urls = sessionStorage.getItem("urls");
             let isurls = (urls=='/404' ? '/main/home' : urls)
@@ -93,7 +102,7 @@ router.beforeEach(async (to, from, next) => {
             }
             stores.dispatch('Roterlist',sidebarLsits );
             // 添加404页面
-            let err={ path: '/:pathMatch(.*)*', redirect: '/404'};
+            let err={ path: '/:pathMatch(.*)*', redirect: '/main/404'};
             router.addRoute(mains);
             router.addRoute(err);
             stores.dispatch('AppState',true );
@@ -108,6 +117,7 @@ router.beforeEach(async (to, from, next) => {
           }
         }).catch(err=>{
           router.replace("/login");
+          sessionStorage.clear();
           next();
           stores.dispatch('AppState',true );
           ElMessage.error('服务器异常请联系管理员');
@@ -126,8 +136,14 @@ router.beforeEach(async (to, from, next) => {
 router.onError((error) => {
   const pattern = /Loading chunk (\d)+ failed/g;
   const isChunkLoadFailed = error.message.match(pattern);
-  const targetPath = router.history.pending.fullPath;
-  if (isChunkLoadFailed) {
+  if(!isChunkLoadFailed){
+    const componentDefault = /Couldn't resolve component "default"/g;
+    const isComponentDefault = error.message.match(componentDefault);
+    if(isComponentDefault){
+      router.replace('/main/404');
+    }
+  }else {
+    const targetPath = router?.history?.pending?.fullPath;
     router.replace(targetPath);
   }
 });

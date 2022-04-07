@@ -113,8 +113,8 @@ export default {
       console.log(data,'sdjskd')
     },
     submitForm() {
-      console.log(this.$refs.form.getData())
-      console.log(this.$refs.form.formValidate())
+      this.$refs.form.formValidate()
+      this.$refs.form.getData()
     },
   },
 };

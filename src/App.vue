@@ -26,11 +26,7 @@ export default {
       if (typeof document.addEventListener === "undefined") {
         console.error("浏览器不支持addEventListener,请升级");
       } else {
-        // document.addEventListener("visibilitychange", () => {
-        //   if (document.visibilityState == "hidden") {
-        //     // console.log('visibilitychange___-----')
-        //   }
-        // });
+        // 缓存侧边栏选中状态避免刷新后找不到页面
         window.addEventListener("beforeunload", () => {
             sessionStorage.setItem("urls",route.path);
             sessionStorage.setItem("navactive",store.state.navactive);

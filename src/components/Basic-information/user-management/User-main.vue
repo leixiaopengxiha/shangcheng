@@ -36,7 +36,7 @@
         </el-table-column>
          <el-table-column prop="avatar" label="头像">
               <template #default="scope">
-                  <img class="img-colum" :src="scope.row.avatar" >
+                  <img class="img-colum" :src="urlIp+scope.row.avatar" >
               </template>
         </el-table-column>
         <el-table-column prop="date" label="创建时间" >
@@ -88,6 +88,7 @@ export default {
     return {
       ishouAdd: false,
       tableData: [],
+      urlIp:process.env.VUE_APP_EXTERNAL_LINK,
       multipleSelection: [],
       height: "17",
       total: 0,

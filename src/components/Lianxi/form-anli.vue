@@ -3,7 +3,8 @@
   <div class="bullet-frame">
     <div class="menu-addbox">
       <div class="demo-ruleForm">
-          <FormInit ref='form' :formInitDatas="formInitDatas" :validator="validator" ></FormInit>
+          <FormInit ref='form' :formInitDatas="formInitDatas" :formPage="formPage" :validator="validator" @formBtn='submitForm'></FormInit>
+
       </div>
       <div class="btn-box">
         <el-button type="primary" @click="submitForm()"
@@ -26,6 +27,13 @@ export default {
   data() {
    
     return {
+       formPage: {
+        validator:this.validator,
+        selectOption:{
+          selects:[],
+          aasa:[],
+        },
+      },
       formInitDatas: [
       {
         id: 1,
@@ -185,8 +193,8 @@ export default {
       }
     },
     submitForm() {
-      console.log(this.$refs.form.getData())
-      console.log(this.$refs.form.formValidate())
+      this.$refs.form.getData()
+      this.$refs.form.formValidate()
     },
     quxiao(){
         // sessionStorage.removeItem('from-to-configure')
