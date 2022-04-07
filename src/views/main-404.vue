@@ -3,7 +3,7 @@
         <el-empty description="没有此页面"></el-empty>
         <div class="text-404">
             {{data.time}}
-            <router-link to="/main/home">回到首页</router-link>
+            <span class="fanghui" @click="fanghui()">回到首页</span>
         </div>
     </div>
 </template>
@@ -28,11 +28,16 @@ export default {
        },1000)
 
     })
+
     onUnmounted(() => {
          clearInterval(data.dataTimes)
     })
+    let fanghui=()=>{
+          router.replace("/main/home");
+    }
     return {
-        data
+        data,
+        fanghui,
     };
   },
 }
@@ -46,5 +51,8 @@ export default {
 }
 .text-404{
     text-align: center;
+}
+.fanghui:hover{
+    color: red;
 }
 </style>

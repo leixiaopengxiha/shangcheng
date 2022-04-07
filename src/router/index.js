@@ -30,6 +30,7 @@ let routePageLists=[
       name: 'myas1',
       component: () => import('../views/haha.vue'),
     },
+    { path: '/main/:pathMatch(.*)*',  component: () => import('../views/main-404.vue')}
 ]
 
 const router = createRouter({
@@ -102,9 +103,9 @@ router.beforeEach(async (to, from, next) => {
             }
             stores.dispatch('Roterlist',sidebarLsits );
             // 添加404页面
-            let err={ path: '/:pathMatch(.*)*', redirect: '/main/404'};
+            // let err={ path: '/:pathMatch(.*)*', redirect: '/main/404'};
             router.addRoute(mains);
-            router.addRoute(err);
+            // router.addRoute(err);
             stores.dispatch('AppState',true );
             router.replace(url);
             next();
@@ -140,11 +141,13 @@ router.onError((error) => {
     const componentDefault = /Couldn't resolve component "default"/g;
     const isComponentDefault = error.message.match(componentDefault);
     if(isComponentDefault){
-      router.replace('/main/404');
+      let errArr = error.message.split(' ')
+      let arrl = errArr[errArr.length-1]
+      router.push(arrl.substring(1,arrl.length-2)); 
     }
   }else {
     const targetPath = router?.history?.pending?.fullPath;
-    router.replace(targetPath);
+    router.push(targetPath);
   }
 });
 
