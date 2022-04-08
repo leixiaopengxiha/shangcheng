@@ -43,7 +43,7 @@ export default {
       store.dispatch("LoginSt", LoginSts);
       setTimeout(()=>{
         if (store.state.loginSt == 1) {
-          store.dispatch("RouterPath", "/main");
+          store.dispatch("RouterPath", "/main/home");
           router.push("/login");
         }
       },600)

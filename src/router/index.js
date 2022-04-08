@@ -71,6 +71,7 @@ router.beforeEach(async (to, from, next) => {
   }
   // 进入系统动态获取地址
   if (to.path.indexOf('/main')!= -1 || to.path == '/404') {
+    console.log(stores.state.routeList)
     if (!stores.state.routeList.length) {
        await postRouterpage().then(( data ) => {
           if (data.code == 2000) {

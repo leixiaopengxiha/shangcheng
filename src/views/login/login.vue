@@ -93,6 +93,9 @@ export default {
         this.showlogin = true 
         let data = await postLogin(doc)
         if(data.code===20000){
+          this.$store.dispatch('Roterlist',[]);
+          this.$store.dispatch('RouterPath','/main/home');
+          
           this.getGetInfos()
           sessionStorage.setItem('userList',JSON.stringify(data.data))
         } else{
@@ -108,7 +111,6 @@ export default {
         }
     },
     loginKeydown(e){
-
       if(e.keyCode===13){
         this.submitForm('ruleForm')
       }

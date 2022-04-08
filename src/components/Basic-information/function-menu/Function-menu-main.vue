@@ -142,7 +142,8 @@ export default {
         this.total = router.total
         this.loading.close();
       } else {
-        this.$message.error(data.message);
+        this.loading.close();
+        this.$message.error(router.message);
       }
     },
     // 获取上级菜单
@@ -158,7 +159,8 @@ export default {
         this.routerData = router.data;
         this.loading.close();
       } else {
-        this.$message.error(data.message);
+        this.loading.close();
+        this.$message.error(router.message);
       }
     },
     // 删除
@@ -172,6 +174,7 @@ export default {
         this.postRouterpages();
         this.postSelectRouterpages()
       } else {
+        this.loading.close();
         this.$message.error(data.message);
       }
     },
