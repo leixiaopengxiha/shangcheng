@@ -20,25 +20,27 @@ export default {
       dataTimes:null,
     });
     onMounted(()=>{
-        store.dispatch("RouterPath", "/main/home");
-        store.dispatch('Navactive','/main/home')
+        store.dispatch("user/RouterPath", "/main/home");
+        store.dispatch('user/Navactive','/main/home')
         sessionStorage.setItem("urls",'/main/home');
         sessionStorage.setItem("navactive",'/main/home');
-       data.dataTimes =  setInterval(()=>{
-           if(data.time==0){
-               clearInterval(data.dataTimes)
-               router.replace("/main");
-           }else{
-               data.time--
-           }
-       },1000)
+        data.dataTimes =  setInterval(()=>{
+            if(data.time==0){
+                    clearInterval(data.dataTimes)
+                    store.dispatch('user/ClosePage')
+                    router.replace("/main");
+            }else{
+                data.time--
+            }
+        },1000)
 
     })
     onUnmounted(() => {
          clearInterval(data.dataTimes)
     })
     let fanghui=()=>{
-          router.replace("/main/home");
+        store.dispatch('user/ClosePage')
+        router.replace("/main/home");
     }
     return {
         data,

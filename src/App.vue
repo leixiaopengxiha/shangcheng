@@ -29,7 +29,7 @@ export default {
         // 缓存侧边栏选中状态避免刷新后找不到页面
         window.addEventListener("beforeunload", () => {
             sessionStorage.setItem("urls",route.path);
-            sessionStorage.setItem("navactive",store.state.navactive);
+            sessionStorage.setItem("navactive",store.state.user.navactive);
         });
       }
       let LoginSts = sessionStorage.getItem("LoginSt");
@@ -38,19 +38,19 @@ export default {
       }
       let userList = JSON.parse(sessionStorage.getItem("userList"));
       if (userList) {
-        store.dispatch("UserList", userList);
+        store.dispatch("user/UserList", userList);
       }
-      store.dispatch("LoginSt", LoginSts);
+      store.dispatch("user/LoginSt", LoginSts);
       setTimeout(()=>{
         if (store.state.loginSt == 1) {
-          store.dispatch("RouterPath", "/main/home");
+          store.dispatch("user/RouterPath", "/main/home");
           router.push("/login");
         }
       },600)
     });
     return {
       data,
-      appState:computed(() => store.state.appState)
+      appState:computed(() => store.state.user.appState)
     };
   },
 };
@@ -107,9 +107,9 @@ ul {
   z-index: 100;
 }
 .container-adapt{
-   height: calc(100vh - 100px);
+   height: calc(100vh - 150px);
 }
 .table-box-adapt{
-   height: calc(100vh - 200px);
+   height: calc(100vh - 240px);
 }
 </style>

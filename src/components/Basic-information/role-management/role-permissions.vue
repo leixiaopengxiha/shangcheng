@@ -35,12 +35,15 @@ export default {
       };
     },
     computed: {
-        ...mapState(["handleMenu","userList"]),
+        ...mapState({
+            handleMenu:state=>state.user.handleMenu,
+            userList:state=>state.user.userList,
+        }),
     },
     mounted(){
     if(!this.handleMenu['username']){
         let handleMenu =  JSON.parse(sessionStorage.getItem('HandleMenu'))
-        this.$store.dispatch('HandleMenu', handleMenu)
+        this.$store.dispatch('user/HandleMenu', handleMenu)
     }
     this.postRouterpagesa()
     this.postAllRolePermissionss({roleId:this.handleMenu.id})
@@ -56,7 +59,6 @@ export default {
             let router = await postAllRolePermissions(data);
             if (router.code == 2000) {
                 this.loading.close();
-                console.log(router.data)
                 this.setCheckedKeysd(router.data)
             } else {
                 this.loading.close();
@@ -105,6 +107,7 @@ export default {
             this.postAddRolePermissionss(datas)
         },
         cancel(){
+            this.$store.dispatch('user/ClosePage')
             this.$router.push('/main/role-management/role-management-main')
         },
         setCheckedKeysd(data) {

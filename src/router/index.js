@@ -47,31 +47,35 @@ router.beforeEach(async (to, from, next) => {
   }
   if(to.path!='/login'||to.path!='/main'||to.path!='/main/home'){
     let navactive = sessionStorage.getItem("navactive");
-    stores.dispatch("Navactive", navactive?navactive:'');
-   let aa= to.path.indexOf(navactive)
-   if(aa!=0){
-    stores.dispatch('Navactive','')
-    sessionStorage.getItem("navactive");
-   }
+    stores.dispatch("user/Navactive", navactive?navactive:'');
+    stores.dispatch("user/RouterPath", to.path);
+    let aa= to.path.indexOf(navactive)
+    if(aa!=0){
+      stores.dispatch('user/Navactive','');
+      stores.dispatch("user/RouterPath", "/main");
+      sessionStorage.getItem("navactive");
+    }
   }
   if(to.path=='/main/home'){
-   let aa= stores.state.routerpath.indexOf(stores.state.navactive)
+   let aa= stores.state.user.routerpath.indexOf(stores.state.user.navactive)
    if(aa==-1){
-    stores.dispatch('Navactive','')
+    stores.dispatch('user/CloseTabList',[])
+    stores.dispatch('user/Navactive','')
    }
   }
   if(to.path=='/login'){
      sessionStorage.clear()
-     stores.dispatch('Navactive','')
-     stores.dispatch("RouterPath", "/main");
+     stores.dispatch('user/Navactive','')
+     stores.dispatch('user/CloseTabList',[])
+     stores.dispatch("user/RouterPath", "/main");
    }
   if(to.path=='/404'){
-    stores.dispatch('Navactive','/main')
-    stores.dispatch("RouterPath", "/main");
+    stores.dispatch('user/Navactive','/main')
+    stores.dispatch("user/RouterPath", "/main");
   }
   // 进入系统动态获取地址
   if (to.path.indexOf('/main')!= -1 || to.path == '/404') {
-    if (!stores.state.routeList.length) {
+    if (!stores.state.user.routeList.length) {
        await postRouterpage().then(( data ) => {
           if (data.code == 2000) {
             let routelist=JSON.parse(JSON.stringify(data.data))
@@ -94,25 +98,25 @@ router.beforeEach(async (to, from, next) => {
             if(!navactive){
               sessionStorage.setItem("navactive",'/main/home');
             }
-            stores.dispatch('RouterPath',url)
+            stores.dispatch('user/RouterPath',url)
             mains.redirect = url
             let sidebarLsit= sidelist.filter(item=>item.sidebar==1)
             let sidebarLsits=[]
             if(sidebarLsit.length){
               sidebarLsits= Router_tree(sidebarLsit);
             }
-            stores.dispatch('Roterlist',sidebarLsits );
+            stores.dispatch('user/Roterlist',sidebarLsits );
             // 添加404页面
             // let err={ path: '/:pathMatch(.*)*', redirect: '/main/404'};
             router.addRoute(mains);
             // router.addRoute(err);
-            stores.dispatch('AppState',true );
+            stores.dispatch('user/AppState',true );
             router.replace(url);
             next();
 
           } else {
             ElMessage.error(data.message);
-            stores.dispatch('AppState',true );
+            stores.dispatch('user/AppState',true );
             router.replace("/login");
             next();
           }
@@ -120,15 +124,22 @@ router.beforeEach(async (to, from, next) => {
           router.replace("/login");
           sessionStorage.clear();
           next();
-          stores.dispatch('AppState',true );
+          stores.dispatch('user/AppState',true );
           ElMessage.error('服务器异常请联系管理员');
         })
     }else{
-      stores.dispatch('AppState',true );
+      let navactives = sessionStorage.getItem("navactive");
+      if(navactives){
+        let isPath = stores.state.user.tabList.some(item=>item.path==to.path)
+        if(!isPath){
+          stores.dispatch("user/TabList", {path:to.path,title:to.meta?.title,navactive:navactives});
+        }
+      }
+      stores.dispatch('user/AppState',true );
       next()
     }
   } else {
-      stores.dispatch('AppState',true );
+      stores.dispatch('user/AppState',true );
       next();
   }
 

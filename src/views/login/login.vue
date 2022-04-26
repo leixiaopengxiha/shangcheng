@@ -62,8 +62,9 @@ export default {
     async getGetInfos(doc){
         let data = await getGetInfo(doc)
         if(data.code===20000){
-            this.$store.dispatch('LoginSt',2)
-            this.$store.dispatch('UserList',data.data)
+           this.$store.dispatch('user/CloseTabList',[])
+            this.$store.dispatch('user/LoginSt',2)
+            this.$store.dispatch('user/UserList',data.data)
             let userList =JSON.parse(sessionStorage.getItem('userList'))
             sessionStorage.setItem('LoginSt',2)
             sessionStorage.setItem('userList',JSON.stringify({...data.data,...userList}))
@@ -93,8 +94,8 @@ export default {
         this.showlogin = true 
         let data = await postLogin(doc)
         if(data.code===20000){
-          this.$store.dispatch('Roterlist',[]);
-          this.$store.dispatch('RouterPath','/main/home');
+          this.$store.dispatch('user/Roterlist',[]);
+          this.$store.dispatch('user/RouterPath','/main/home');
           
           this.getGetInfos()
           sessionStorage.setItem('userList',JSON.stringify(data.data))

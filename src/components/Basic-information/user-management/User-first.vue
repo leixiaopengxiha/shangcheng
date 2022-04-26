@@ -35,7 +35,9 @@ export default {
       };
     },
     computed: {
-        ...mapState(["handleMenu"]),
+         ...mapState({
+            handleMenu:state=>state.user.handleMenu,
+        }),
     },
     mounted(){
     if(!this.handleMenu['username']){

@@ -10,9 +10,11 @@
 <script>
 import { onMounted, reactive, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useStore } from "vuex";
 export default {
    setup() {
     const router = useRouter();
+    const store = useStore()
     let data = reactive({
       time: 5,
       dataTimes:null,
@@ -20,8 +22,9 @@ export default {
     onMounted(()=>{
        data.dataTimes =  setInterval(()=>{
            if(data.time==0){
-               clearInterval(data.dataTimes)
-               router.replace("/main/home");
+                clearInterval(data.dataTimes)
+                store.dispatch('user/ClosePage')
+                router.replace("/main/home");
            }else{
                data.time--
            }
@@ -33,7 +36,8 @@ export default {
          clearInterval(data.dataTimes)
     })
     let fanghui=()=>{
-          router.replace("/main/home");
+        store.dispatch('user/ClosePage')
+        router.replace("/main/home");
     }
     return {
         data,

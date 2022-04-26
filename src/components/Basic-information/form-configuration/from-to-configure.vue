@@ -222,6 +222,7 @@ export default {
       );
     },
     cancel() {
+      this.$store.dispatch('user/ClosePage')
       sessionStorage.removeItem("from-to-configure");
       this.$router.push("/main/form-configuration/form-configuration-main");
     },

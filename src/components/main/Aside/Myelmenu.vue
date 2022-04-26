@@ -26,7 +26,8 @@ export default {
     setup(props){
         const store = useStore();
        let funSelect=(e)=>{
-            store.dispatch('Navactive',e)
+           console.log(e,'asaa')
+            store.dispatch('user/Navactive',e)
             sessionStorage.setItem("navactive",e);
         }
         const route = useRoute();
@@ -35,7 +36,7 @@ export default {
             count,
             route,
             funSelect,
-            navactive: computed(() => store.state.navactive),
+            navactive: computed(() => store.state.user.navactive),
         }
     }
 }

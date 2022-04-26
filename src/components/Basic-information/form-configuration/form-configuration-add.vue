@@ -73,7 +73,9 @@ export default {
     };
   },
   computed: {
-    ...mapState(["routeListOpstion",]),
+    ...mapState({
+      routeListOpstion:state=>state.user.routeListOpstion,
+    }),
   },
   mounted() {
     // 修改

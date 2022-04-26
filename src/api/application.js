@@ -2,7 +2,7 @@
 import axios from './api'
 let url = '/applicationRouter'
 
-// 注册
+// 新增记账
 export let postRegister= (data) => {
     return axios({
         url: `${url}/register`,
@@ -11,7 +11,7 @@ export let postRegister= (data) => {
         data,
     });
 }
-// 获取用户信息
+// 获取记账列表
 export let getGetInfo = (data)=>{
     return axios({
         url: `${url}/GetInfo`,

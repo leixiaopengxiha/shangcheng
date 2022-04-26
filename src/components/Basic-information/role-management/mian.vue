@@ -219,7 +219,7 @@ export default {
     },
     handleMenu(index, row){
       sessionStorage.setItem('HandleMenu',JSON.stringify(row))
-      this.$store.dispatch('HandleMenu', JSON.parse(JSON.stringify(row)))
+      this.$store.dispatch('user/HandleMenu', JSON.parse(JSON.stringify(row)))
       this.$router.push('/main/role-management/role-menu')
     }
   },

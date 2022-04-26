@@ -51,12 +51,18 @@
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
               >修改密码</el-button
             >
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button
+            <el-popconfirm
+              confirmButtonText="确定"
+              cancelButtonText="取消"
+              icon="el-icon-info"
+              iconColor="red"
+              title="确定要删除该用户吗？"
+              @confirm="handleDelete(scope.$index, scope.row)"
             >
+              <template #reference>
+                <el-button  size="mini" type="danger">删除</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>

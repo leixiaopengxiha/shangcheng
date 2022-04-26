@@ -57,12 +57,18 @@
               @click="handleConfigure(scope.$index, scope.row)"
               >配置</el-button
             >
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button
+            <el-popconfirm
+              confirmButtonText="确定"
+              cancelButtonText="取消"
+              icon="el-icon-info"
+              iconColor="red"
+              title="确定要删除吗？"
+              @confirm="handleDelete(scope.$index, scope.row)"
             >
+              <template #reference>
+                <el-button  size="mini" type="danger">删除</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -81,13 +87,11 @@
     <!-- 添编辑加弹框 -->
      <DictionariesPeizhi  v-if="ishouAdd"  :menuadd="menuAdd">
     </DictionariesPeizhi>
-
     <DictionariesPeizhi  v-if="isPaizhi"  :menuadd="paizhiFun"   :rowList="rowList">
     </DictionariesPeizhi>
   </div>
 </template>
 <script>
-import DictionariesAdd from "./dictionaries-add.vue";
 import DictionariesPeizhi from "./dictionaries-peizhi.vue";
 import { postAllDictionaryList,postDeleteDictionaryPage } from "@/api/user";
 export default {
@@ -109,7 +113,6 @@ export default {
     };
   },
   components: {
-    DictionariesAdd,
     DictionariesPeizhi
   },
   mounted() {

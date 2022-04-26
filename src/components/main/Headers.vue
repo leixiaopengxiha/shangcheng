@@ -45,16 +45,16 @@ export default {
  
     const signOut=()=>{
         sessionStorage.clear()
-        store.dispatch('Roterlist',[]);
-        store.dispatch('RouterPath','/main/home')
+        store.dispatch('user/Roterlist',[]);
+        store.dispatch('user/RouterPath','/main/home')
         router.push('/login')
     }
     const onfold=()=>{
-      store.dispatch('isAsideWidth',!data.isAsideWidth)
+      store.dispatch('user/isAsideWidth',!data.isAsideWidth)
     }
     return {
       data,
-      userList: computed(() => store.state.userList),
+      userList: computed(() => store.state.user.userList),
       btnheader,
       signOut,
       onfold

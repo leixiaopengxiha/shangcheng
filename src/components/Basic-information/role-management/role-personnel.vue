@@ -34,12 +34,15 @@ export default {
       };
     },
     computed: {
-        ...mapState(["handleMenu","userList"]),
+        ...mapState({
+            handleMenu:state=>state.user.handleMenu,
+            userList:state=>state.user.userList,
+        }),
     },
     mounted(){
         if(!this.handleMenu['username']){
             let handleMenu =  JSON.parse(sessionStorage.getItem('HandleMenu'))
-            this.$store.dispatch('HandleMenu', handleMenu)
+            this.$store.dispatch('user/HandleMenu', handleMenu)
         }
         this.AllUserpages()
         this.postAllRolePersonnels({roleId:this.handleMenu.id})
@@ -105,6 +108,7 @@ export default {
             
         },
         cancel(){
+            this.$store.dispatch('user/ClosePage')
             this.$router.push('/main/role-management/role-management-main')
         },
         setCheckedKeysd(data) {
