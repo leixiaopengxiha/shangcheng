@@ -8,10 +8,8 @@
       <span>欢迎进入</span>
     </div>
     <div class="flex-end">
-      <!-- <h3>{{ userList.nickname }}</h3> -->
       <img @click="btnheader" class="imgs" :src="data.urlIp+userList.avatar" alt="" />
     </div>
-    
   </div>
   <el-drawer title="设置" v-model="data.drawer" :with-header="false">
     <h3>设置</h3>
@@ -20,29 +18,49 @@
       <div>{{ userList.username }}</div>
       <div>{{ userList.nickname }}</div>
       <div>{{ userList.introduction }}</div>
+       <div @click="xgmmBtn">修改密码</div>
     </div>
+     <el-dialog
+      width="40%"
+      title="修改密码"
+      v-model="data.innerVisible"
+      :close-on-click-modal='false'
+      :destroy-on-close='true'
+      append-to-body
+    >
+      <my-update-pswd :xgmmBtn="xgmmBtn" @busss="busss"></my-update-pswd>
+    </el-dialog>
     <div @click="signOut">退出</div>
   </el-drawer>
 </template>
 
 <script>
 import { useStore } from "vuex";
-import { computed, onMounted, reactive } from "vue";
+import { computed, onMounted, reactive, defineComponent } from "vue";
 import { useRouter, useRoute} from 'vue-router';
-export default {
+import UpdatePswd from './Update-pswd.vue'
+export default defineComponent({
   name: "headers",
+  components:{'my-update-pswd':UpdatePswd},
   setup() {
     const store = useStore();
      const router = useRouter();
     let data = reactive({
       drawer: false,
-      isAsideWidth: computed(() => store.state.isAsideWidth),
-      urlIp:process.env.VUE_APP_EXTERNAL_LINK
+      innerVisible:false,
+      isAsideWidth: computed(() => store.state.user.isAsideWidth),
+      urlIp:process.env.VUE_APP_EXTERNAL_LINK,
     });
     const btnheader = () => {
       data.drawer = true;
     };
- 
+    const xgmmBtn = (datas) => {
+      if(datas==false){
+         data.innerVisible = false;
+      }else{
+         data.innerVisible = true;
+      }
+    };
     const signOut=()=>{
         sessionStorage.clear()
         store.dispatch('user/Roterlist',[]);
@@ -50,17 +68,22 @@ export default {
         router.push('/login')
     }
     const onfold=()=>{
-      store.dispatch('user/isAsideWidth',!data.isAsideWidth)
+      store.dispatch('user/IsAsideWidth',!data.isAsideWidth)
+    }
+    const busss = (datas)=>{
+      console.log(datas)
     }
     return {
       data,
       userList: computed(() => store.state.user.userList),
       btnheader,
       signOut,
-      onfold
+      onfold,
+      xgmmBtn,
+      busss,
     };
   },
-};
+});
 </script>
 <style lang="less" scoped>
 .header-box {

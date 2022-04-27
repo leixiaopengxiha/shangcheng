@@ -332,3 +332,12 @@ export let postFormDictionaryPage= (data)=>{
         data,
     });
 }
+// 修改密码
+export let postUpdatePswd= (data)=>{
+    return axios({
+        url: `${url}/postUpdatePswd`,
+        method: "post",
+        // 传参
+        data,
+    });
+}

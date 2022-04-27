@@ -77,7 +77,7 @@ const actions = {
     HandleMenu({ commit }, data) {
         commit('HandleMenus', data)
     },
-    isAsideWidth({ commit }, data) {
+    IsAsideWidth({ commit }, data) {
         commit('isAsideWidths', data)
     },
     // 页签数据
