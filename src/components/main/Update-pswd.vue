@@ -34,7 +34,7 @@
 import { computed, reactive,ref } from "vue";
 import { useStore } from "vuex";
 import md5 from "js-md5";
-import { ElMessage } from 'element-plus';
+import { ElMessage,ElLoading } from 'element-plus';
 import { postUpdatePswd } from "@/api/user";
 
 export default {
@@ -90,15 +90,28 @@ export default {
      
     })
     let postUpdateUserPwds = async(doc)=>{
-     
+      const loading = ElLoading.service({
+          lock: true,
+          text: '正在加载中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)',
+      });
       let data = await postUpdatePswd(doc);
+      console.log(!data)
+      if(!data){
+        loading.close();
+        ElMessage.error('服务器异常请联系管理员');
+        return
+      }
       if (data.code == 2000) {
+        loading.close();
         props.xgmmBtn(false)
         ElMessage.success({
           message: "修改成功",
           type: "success",
         });
       } else {
+        loading.close();
         ElMessage.error(data.message);
       }
     }

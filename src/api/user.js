@@ -335,7 +335,7 @@ export let postFormDictionaryPage= (data)=>{
 // 修改密码
 export let postUpdatePswd= (data)=>{
     return axios({
-        url: `${url}/postUpdatePswd`,
+        url: `${url}/updatePswd`,
         method: "post",
         // 传参
         data,

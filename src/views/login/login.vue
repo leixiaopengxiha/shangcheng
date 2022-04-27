@@ -93,6 +93,12 @@ export default {
         });
         this.showlogin = true 
         let data = await postLogin(doc)
+        if(!data){
+          this.loading.close();
+          this.showlogin = false 
+          this.$message.error('服务器异常请联系管理员');
+          return
+        }
         if(data.code===20000){
           this.$store.dispatch('user/Roterlist',[]);
           this.$store.dispatch('user/RouterPath','/main/home');
