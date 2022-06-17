@@ -3,7 +3,24 @@
   <div class="bullet-frame">
     <div class="menu-addbox">
       <div class="demo-ruleForm" v-if="formPage.formId">
-          <FormInit ref='form' :formPage="formPage" @formBtn='chengong' @typeChange="typeChange" ></FormInit>
+          <FormInit ref='form' :formPage="formPage" @formBtn='chengong' @typeChange="typeChange" >
+            <!-- 自定义设置 -->
+            <template  v-slot:zdycc="{ item,ruleForm }">
+               <el-input
+                :type="item.type"
+                v-model="ruleForm[item.formModel]"
+                :placeholder="item.placeholder"
+                :disabled="item.disabled == 1"
+                @input="typeChange({
+                  type:item.type,
+                  key: item.formModel,
+                  label: item.label,
+                  value: ruleForm[item.formModel],
+                  items: item,
+                })" 
+              ></el-input>
+            </template>
+          </FormInit>
       </div>
       <div class="btn-box">
         <el-button type="primary" @click="submitForm()"
@@ -35,18 +52,21 @@ export default {
         selectOption:{
           selects:[],
           aasa:[],
-
         },
+       
 
        
         // 自定义配置
         attributes:{
           date:{
 
-              // format:"YYYY/MM/DD",
-              valueFormat:"YYYY/MM/DD",
-          //   type:'monthrange',
-          //   rangeSeparator:'至',
+            // format:"YYYY-MM-DD",
+            format:"YYYY 年 MM 月 DD 日",
+            valueFormat:"YYYY-MM-DD",
+            type:'daterange',
+            startPlaceholder:"开始日期",
+            endPlaceholder:"结束日期",
+            rangeSeparator:'至',
           //   disabledDate: (time)=> {
           //     return time.getTime() > Date.now()
           //   },
@@ -82,7 +102,7 @@ export default {
   },
   methods: {
    typeChange(event){
-    //  console.log(event)
+     console.log(event.value)
    },
     // 自定义校验使用 1
     validatePass(rule, value, callback){
@@ -115,6 +135,7 @@ export default {
     submitForm() {
       this.$refs.form.formValidate()
       this.$refs.form.getData()
+      console.log(this.$refs.form.getData())
     },
   },
 };

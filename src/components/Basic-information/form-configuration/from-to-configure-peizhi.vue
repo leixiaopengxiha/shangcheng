@@ -43,7 +43,11 @@
             <el-option label="date" value="date"></el-option>
             <el-option label="daterange" value="daterange"></el-option>
             <el-option label="button" value="button"></el-option>
+            <el-option label="custom" value="custom"></el-option>            
           </el-select>
+        </el-form-item>
+         <el-form-item label="自定义名称" prop="customName" v-if="ruleForm.type=='custom'">
+          <el-input v-model="ruleForm.customName"></el-input>
         </el-form-item>
         <template v-if="ruleForm.type=='select'||ruleForm.type=='radio'||ruleForm.type=='checkbox'">
           <el-form-item label="字典配置" prop="selectCustom">
@@ -337,6 +341,7 @@ export default {
         label: "测试说的1",
         type: "text",
         size: 14,
+        customName:'',
         rules: [
           {
             isValidator: "0",
@@ -359,6 +364,13 @@ export default {
           {
             required: true,
             message: "请输入表单编号",
+            trigger: ["blur", "change"],
+          },
+        ],
+        customName: [
+          {
+            required: true,
+            message: "请输入自定义名称",
             trigger: ["blur", "change"],
           },
         ],
@@ -542,7 +554,10 @@ export default {
         }else if(event.value=='checkbox'){
           this.ruleForm.dicDefault=[]
         }
-         else {
+        if(event.value!='custom'){
+          this.ruleForm.customName=''
+        }
+        else {
           this.ruleForm.dicDefault=''
           this.isChecks = this.ruleForm.isCheck=='1'? true:false;
           this.isBtn = false;

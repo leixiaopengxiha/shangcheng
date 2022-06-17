@@ -26,7 +26,6 @@ export default {
     setup(props){
         const store = useStore();
        let funSelect=(e)=>{
-           console.log(e,'asaa')
             store.dispatch('user/Navactive',e)
             sessionStorage.setItem("navactive",e);
         }

@@ -13,7 +13,11 @@
           :prop="item.formModel"
           v-if="item.editlist == 1"
         >
-        <!-- input输入框 -->
+          <!-- 自定义插槽 -->
+          <template v-if="item.type == 'custom'">
+            <slot :name="item.customName" :item="item" :ruleForm="ruleForm"  ></slot>
+          </template>
+          <!-- input输入框 -->
           <template v-if="item.type == 'text' || item.type == 'password'||item.type == 'textarea'">
             <el-input
               :type="item.type"
@@ -67,36 +71,13 @@
           </template>
           <!-- 日期格式 -->
           <template v-if="item.type == 'date'">
-            <el-date-picker v-if="!item.attributes['format']"
+            <el-date-picker
               v-model="ruleForm[item.formModel]" 
               :type="item.attributes['type']?item.attributes['type']:item.type"
               :placeholder="item.placeholder"
               :shortcuts="item.attributes['shortcuts']"
-              :disabled-date="item.attributes['disabledDate']"
-              :readonly="item.attributes['readonly']"
-              :range-separator="item.attributes['rangeSeparator']"
-              :default-time="item.attributes['defaultTime']"
-              :start-placeholder="item.attributes['startPlaceholder']"
-              :end-placeholder="item.attributes['endPlaceholder']"
-              :default-value="item.attributes['defaultValue']"
-              :unlink-panels="item.attributes['unlinkPanels']"
-              :prefix-icon="item.attributes['prefixIcon']"
-              :clear-icon="item.attributes['clearIcon']"
-              @change="typeChange({
-                type:item.type,
-                key: item.formModel,
-                label: item.label,
-                value: ruleForm[item.formModel],
-                items: item,
-              })" 
-            >
-            </el-date-picker>
-             <el-date-picker v-if="item.attributes['format']"
-              v-model="ruleForm[item.formModel]" 
               :format="item.attributes['format']"
-              :type="item.attributes['type']?item.attributes['type']:item.type"
-              :placeholder="item.placeholder"
-              :shortcuts="item.attributes['shortcuts']"
+              :value-format="item.attributes['valueFormat']"
               :disabled-date="item.attributes['disabledDate']"
               :readonly="item.attributes['readonly']"
               :range-separator="item.attributes['rangeSeparator']"
@@ -116,6 +97,31 @@
               })" 
             >
             </el-date-picker>
+             <!-- <el-date-picker v-if="item.attributes['format']"
+              v-model="ruleForm[item.formModel]" 
+              :type="item.attributes['type']?item.attributes['type']:item.type"
+              :placeholder="item.placeholder"
+              
+              :shortcuts="item.attributes['shortcuts']"
+              :disabled-date="item.attributes['disabledDate']"
+              :readonly="item.attributes['readonly']"
+              :range-separator="item.attributes['rangeSeparator']"
+              :default-time="item.attributes['defaultTime']"
+              :start-placeholder="item.attributes['startPlaceholder']"
+              :end-placeholder="item.attributes['endPlaceholder']"
+              :default-value="item.attributes['defaultValue']"
+              :unlink-panels="item.attributes['unlinkPanels']"
+              :prefix-icon="item.attributes['prefixIcon']"
+              :clear-icon="item.attributes['clearIcon']"
+              @change="typeChange({
+                type:item.type,
+                key: item.formModel,
+                label: item.label,
+                value: ruleForm[item.formModel],
+                items: item,
+              })" 
+            >
+            </el-date-picker> -->
           </template>
           <!-- 多选框 -->
           <template v-if="item.type == 'checkbox'">
@@ -191,7 +197,6 @@ export default {
       let ruleFormObj = {};
       let rulesObj = {};
       arr.map((item) => {
-        console.log(item)
         // 是否需要字典
         if(item.type == "select"||item.type == "radio"||item.type == "checkbox"){
           this.selectOption[item.formModel]=[]
