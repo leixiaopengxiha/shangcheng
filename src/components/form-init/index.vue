@@ -5,13 +5,15 @@
       status-icon
       :rules="rules"
       ref="refFormInit"
-      label-width="150px"
+      label-width="120px"
+      class="form-box"
     >
-      <template v-for="(item, index) in formData" :key="index">
+      <template v-for="(item, index) in formData" :key="index"  class="el-form-item-boxs">
         <el-form-item
           :label="item.label"
           :prop="item.formModel"
           v-if="item.editlist == 1"
+          :style="itemClassFun(item)"
         >
           <!-- 自定义插槽 -->
           <template v-if="item.type == 'custom'">
@@ -40,6 +42,7 @@
               :placeholder="item.placeholder"
               :multiple='item.multiple'
               filterable
+              class="form-widths"
               @change="typeChange({
                 type:item.type,
                 key: item.formModel,
@@ -60,6 +63,7 @@
               v-model="ruleForm[item.formModel]" 
               active-color="#13ce66" 
               inactive-color="#ff4949"
+               class="form-widths"
               @change="typeChange({
                 type:item.type,
                 key: item.formModel,
@@ -72,6 +76,7 @@
           <!-- 日期格式 -->
           <template v-if="item.type == 'date'">
             <el-date-picker
+              class="form-widths"
               v-model="ruleForm[item.formModel]" 
               :type="item.attributes['type']?item.attributes['type']:item.type"
               :placeholder="item.placeholder"
@@ -97,42 +102,17 @@
               })" 
             >
             </el-date-picker>
-             <!-- <el-date-picker v-if="item.attributes['format']"
-              v-model="ruleForm[item.formModel]" 
-              :type="item.attributes['type']?item.attributes['type']:item.type"
-              :placeholder="item.placeholder"
-              
-              :shortcuts="item.attributes['shortcuts']"
-              :disabled-date="item.attributes['disabledDate']"
-              :readonly="item.attributes['readonly']"
-              :range-separator="item.attributes['rangeSeparator']"
-              :default-time="item.attributes['defaultTime']"
-              :start-placeholder="item.attributes['startPlaceholder']"
-              :end-placeholder="item.attributes['endPlaceholder']"
-              :default-value="item.attributes['defaultValue']"
-              :unlink-panels="item.attributes['unlinkPanels']"
-              :prefix-icon="item.attributes['prefixIcon']"
-              :clear-icon="item.attributes['clearIcon']"
-              @change="typeChange({
-                type:item.type,
-                key: item.formModel,
-                label: item.label,
-                value: ruleForm[item.formModel],
-                items: item,
-              })" 
-            >
-            </el-date-picker> -->
           </template>
           <!-- 多选框 -->
           <template v-if="item.type == 'checkbox'">
-              <el-checkbox-group v-model="ruleForm[item.formModel]">
+              <el-checkbox-group v-model="ruleForm[item.formModel]"  class="form-widths">
                 <template v-for="(itemRadio,indexss) in selectOption[item.formModel]" :key='indexss'>
                   <el-checkbox :label="itemRadio.dicKey" name="type">{{itemRadio.dicValue}}</el-checkbox>
                 </template>
               </el-checkbox-group>
           </template>
           <!-- 单选框 -->
-          <template v-if="item.type=='radio'">
+          <template v-if="item.type=='radio'"  class="form-widths">
             <el-radio-group v-model="ruleForm[item.formModel]">
               <template v-for="(itemRadio,indexss) in selectOption[item.formModel]" :key='indexss'>
                   <el-radio :label="itemRadio.dicKey" >{{itemRadio.dicValue}}</el-radio>
@@ -140,7 +120,7 @@
             </el-radio-group>
           </template>
           <!-- 按钮 -->
-          <template v-if="item.type == 'button'">
+          <template v-if="item.type == 'button'"  class="form-widths">
             <el-button
               :type="item.btnType"
               @click="btns(item.btnFun)"
@@ -180,6 +160,29 @@ export default {
   },
 
   methods: {
+    // 计算是否一行显示几个
+    itemClassFun(data){
+      // console.log(data);
+      // 占有列数
+      // let list =  this.formData.filter(item=>item.occupiedColumns>1)
+      // console.log(list)
+     let  fromList = JSON.parse(JSON.stringify(this.formData))
+     let list =fromList.sort((obj1,obj2)=>{
+        return obj2.occupiedColumns - obj1.occupiedColumns
+      })
+     let foccupiedColumns =  list[0].occupiedColumns
+      let  width= 100;
+      if(foccupiedColumns){
+         width = 100/foccupiedColumns;
+      }
+
+      if(data.occupiedColumns>1){
+        width = width*data.occupiedColumns
+      }
+      return  {
+         width:`${width}%`,
+      };
+    },
     async postUserFormConfigurations (){
       let data = await postUserFormConfiguration({formId:this.formPage.formId})
       if (data.code == 2000) {
@@ -187,6 +190,12 @@ export default {
            this.$message.error(data.message);
         }
         // 这里是表单数据处理方法
+        data.data.map(item=>{
+          item.occupiedColumns='1'
+        })
+        data.data[0].occupiedColumns = '2'
+        data.data[1].occupiedColumns = '2'
+        data.data[3].occupiedColumns = '2'
         this.formInit(data.data);
       
       } else {
@@ -325,3 +334,15 @@ export default {
   },
 };
 </script>
+<style lang="less">
+  .form-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    .form-widths{
+      width: 100%;
+    }
+  }
+  
+</style>

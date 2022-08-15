@@ -274,7 +274,7 @@ export default {
 };
 </script>
 <style lang="less" >
-.el-form-item__label{
+.login-box .el-form-item__label{
   color: #fff;
    width: 80px;
 }

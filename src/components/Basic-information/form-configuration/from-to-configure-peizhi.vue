@@ -50,16 +50,16 @@
           <el-input v-model="ruleForm.customName"></el-input>
         </el-form-item>
         <template v-if="ruleForm.type=='select'||ruleForm.type=='radio'||ruleForm.type=='checkbox'">
-          <el-form-item label="字典配置" prop="selectCustom">
+          <el-form-item label="请选择字典来源" prop="selectCustom">
             <el-select
               class="select-wh"
               v-model="ruleForm.selectCustom"
-              placeholder="请选择"
+              placeholder="请选择字典来源"
               filterable
               @change="
                 typeChange({
                   key: 'selectCustom',
-                  label: '表单类型',
+                  label: '请选择字典来源',
                   value: ruleForm.selectCustom,
                 })
               "
@@ -72,12 +72,12 @@
             <el-select
               class="select-wh"
               v-model="ruleForm.dictionaryKey"
-              placeholder="请选择"
+              placeholder="请选择字典配置"
               filterable
               @change="
                 typeChange({
                   key: 'dictionaryKey',
-                  label: '表单类型',
+                  label: '字典配置',
                   value: ruleForm.dictionaryKey,
                 })
               "
@@ -183,6 +183,42 @@
             <el-radio label="1">是</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="占有列数" prop="occupiedColumns">
+            <el-select
+              class="select-wh"
+              v-model="ruleForm.occupiedColumns"
+              placeholder="请选择"
+              filterable
+              @change="
+                typeChange({
+                  key: 'occupiedColumns',
+                  label: '占有列数',
+                  value: ruleForm.occupiedColumns,
+                })
+              "
+            >
+              <el-option label="1" value="1"></el-option>
+              <el-option label="2" value="2"></el-option>
+              <el-option label="3" value="3"></el-option>
+              <el-option label="4" value="4"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="是否显示" prop="editlist">
+            <el-radio-group
+              @change="
+                typeChange({
+                  key: 'editlist',
+                  label: '是否显示',
+                  value: ruleForm.editlist,
+                })
+              "
+              v-model="ruleForm.editlist"
+            >
+              <el-radio label="0">否</el-radio>
+              <el-radio label="1">是</el-radio>
+            </el-radio-group>
+         </el-form-item>
+
         <template v-if="isChecks" >
           <el-button type="primary" :disabled="ruleForm.rules.length==3" @click="addIsValidator('ruleForm')">
             添加校验规则
@@ -358,6 +394,7 @@ export default {
         btnFun: "",
         btnType: "",
         text: "",
+        occupiedColumns:"1",
       },
       rules: {
         disabled: [
@@ -377,7 +414,7 @@ export default {
         editlist: [
           {
             required: true,
-            message: "请输入表单名称",
+            message: "请输选择是否显示",
             trigger: ["blur", "change"],
           },
         ],
@@ -391,7 +428,7 @@ export default {
         isCheck: [
           {
             required: true,
-            message: "请输入表单名称",
+            message: "请输选择是否校验状态",
             trigger: ["blur", "change"],
           },
         ],
@@ -412,7 +449,7 @@ export default {
          selectCustom: [
           {
             required: true,
-            message: "请选择字典配置",
+            message: "请选择字典来源",
             trigger: ["blur", "change"],
           },
         ],
@@ -441,6 +478,13 @@ export default {
           {
             required: true,
             message: "请输入按钮方法名",
+            trigger: ["blur", "change"],
+          },
+        ],
+        occupiedColumns:[
+          {
+            required: true,
+            message: "请选择占有列数",
             trigger: ["blur", "change"],
           },
         ],

@@ -141,6 +141,7 @@ export default {
           editlist: '1',
           disabled:'0',
           isCheck: '1',
+          occupiedColumns:'1',
           rules: [
             {
               isValidator: '0',
