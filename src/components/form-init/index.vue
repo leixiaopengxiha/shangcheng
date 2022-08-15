@@ -190,12 +190,6 @@ export default {
            this.$message.error(data.message);
         }
         // 这里是表单数据处理方法
-        data.data.map(item=>{
-          item.occupiedColumns='1'
-        })
-        data.data[0].occupiedColumns = '2'
-        data.data[1].occupiedColumns = '2'
-        data.data[3].occupiedColumns = '2'
         this.formInit(data.data);
       
       } else {

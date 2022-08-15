@@ -50,7 +50,7 @@
           <el-input v-model="ruleForm.customName"></el-input>
         </el-form-item>
         <template v-if="ruleForm.type=='select'||ruleForm.type=='radio'||ruleForm.type=='checkbox'">
-          <el-form-item label="请选择字典来源" prop="selectCustom">
+          <el-form-item label="字典来源" prop="selectCustom">
             <el-select
               class="select-wh"
               v-model="ruleForm.selectCustom"
@@ -59,7 +59,7 @@
               @change="
                 typeChange({
                   key: 'selectCustom',
-                  label: '请选择字典来源',
+                  label: '字典来源',
                   value: ruleForm.selectCustom,
                 })
               "
