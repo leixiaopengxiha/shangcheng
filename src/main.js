@@ -1,14 +1,17 @@
-import { createApp } from 'vue'
+import { createApp, ref } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementPlus from 'element-plus';
-import 'dayjs/locale/zh-cn'
-import locale from 'element-plus/lib/locale/lang/zh-cn'
 import 'element-plus/lib/theme-chalk/index.css';
+import zhLocale from 'element-plus/lib/locale/lang/zh-cn';
+import 'dayjs/locale/zh-cn';
 import 'default-passive-events'
-import directives from'./directives/index.js'
+import {ElementPlusUseLang} from './util/elementLocale'
+import directives from './directives/index.js'
 
-let app = createApp(App);
+const app = createApp(App);
+// 转换语言
+ElementPlusUseLang(app, ref,ElementPlus,zhLocale)
 directives(app);
-app.use(store).use(router).use(ElementPlus, { locale }).mount('#app')
+app.use(store).use(router).use(ElementPlus).mount('#app')
