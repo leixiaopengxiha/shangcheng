@@ -150,6 +150,11 @@
             <el-option label="danger" value="danger"></el-option>
           </el-select>
         </el-form-item>
+        <template v-if="isplaceholder">
+          <el-form-item label="默认提示" prop="placeholder" >
+            <el-input v-model="ruleForm.placeholder"></el-input>
+          </el-form-item>
+        </template>
         <el-form-item label="字体大小" prop="size">
           <el-input v-model="ruleForm.size"></el-input>
         </el-form-item>
@@ -361,6 +366,7 @@ export default {
         label: "title",
         checkStrictly: true,
       },
+      isplaceholder:true,
       isBtn: false,
       isChecks: false,
       yuanDate: {},
@@ -378,6 +384,7 @@ export default {
         type: "text",
         size: 14,
         customName:'',
+        placeholder:'',
         rules: [
           {
             isValidator: "0",
@@ -488,6 +495,13 @@ export default {
             trigger: ["blur", "change"],
           },
         ],
+        placeholder:[
+          {
+            required: true,
+            message: "默认提示",
+            trigger: ["blur", "change"],
+          },
+        ],
       },
       isRules: {
         isValidator: [
@@ -557,7 +571,6 @@ export default {
       if(this.ruleForm.type=='checkbox'){
          this.ruleForm.dicDefault= this.ruleForm.dicDefault?this.ruleForm.dicDefault.split(','):[]
       }
-
       if(this.ruleForm.type=='button'){
         this.isChecks = false;
         this.isBtn = true;
@@ -567,6 +580,13 @@ export default {
       }
       if(this.ruleForm.isCheck=='1'){
         this.isChecks = true;
+      }
+      if(this.ruleForm.type=='select'){
+        this.isplaceholder = true
+      }else if(this.ruleForm.type=='custom'||this.ruleForm.type=='checkbox'||this.ruleForm.type=== "button"||this.ruleForm.type=== "radio"||this.ruleForm.type=='switch'){
+        this.isplaceholder = false
+      }else{
+        this.isplaceholder = true
       }
     }
     this.postFormDictionaryPages()
@@ -595,16 +615,30 @@ export default {
           this.isChecks = false;
           this.isBtn = true;
           this.ruleForm.dicDefault=''
+          this.ruleForm.placeholder = ''
         }else if(event.value=='checkbox'){
           this.ruleForm.dicDefault=[]
+           this.ruleForm.placeholder = ''
         }
         if(event.value!='custom'){
           this.ruleForm.customName=''
-        }
-        else {
+          this.ruleForm.placeholder = ''
+        }else {
           this.ruleForm.dicDefault=''
           this.isChecks = this.ruleForm.isCheck=='1'? true:false;
           this.isBtn = false;
+        }
+        console.log(event.value)
+        if(event.value=='select'){
+          this.isplaceholder = true
+          this.ruleForm.placeholder =`请选择${this.ruleForm.label}`
+        }else if(event.value=='custom'||event.value=='checkbox'||event.value === "button"||event.value === "radio"||event.value=='switch'){
+          this.isplaceholder = false
+          this.ruleForm.placeholder = ''
+        }
+        else{
+          this.isplaceholder = true
+          this.ruleForm.placeholder = `请输入${this.ruleForm.label}`
         }
       }
       if (event.key === "isCheck") {
@@ -648,6 +682,9 @@ export default {
             this.ruleForm.text = "";
             this.ruleForm.btnType = "";
             this.ruleForm.btnFun = "";
+          }
+          if(this.isplaceholder = false){
+              this.ruleForm.placeholder = "";
           }
           if (this.ruleForm.isCheck == "0") {
             this.ruleForm.rules = [];
