@@ -563,12 +563,9 @@ export default {
       if (this.rowList.row.type == "button") {
         this.isBtn = true;
       }
-      // dicDefault
       if(!this.rowList.row.placeholder){
         this.rowList.row.placeholder=`请输入${this.rowList.row.label}`
       }
-    
-     
       this.yuanDate = JSON.parse(JSON.stringify(this.rowList.row));
       this.ruleForm = JSON.parse(JSON.stringify(this.rowList.row));
       if(this.ruleForm.type=='checkbox'){
