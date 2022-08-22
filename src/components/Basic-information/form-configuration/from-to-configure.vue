@@ -142,6 +142,7 @@ export default {
           disabled:'0',
           isCheck: '1',
           occupiedColumns:'1',
+          placeholder:`请输入${data.label}`,
           rules: [
             {
               isValidator: '0',
