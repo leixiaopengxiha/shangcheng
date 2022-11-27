@@ -1,21 +1,11 @@
 
 <template>
+
 <div>
-    <!-- <el-table
-      :data="tableData"
-      style="width: 100%;margin-bottom: 20px;"
-      row-key="id"
-      border
-      default-expand-all
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-    >
-      <el-table-column prop="date" label="日期" sortable width="180">
-      </el-table-column>
-      <el-table-column prop="name" label="姓名" sortable width="180">
-      </el-table-column>
-      <el-table-column prop="address" label="地址"> </el-table-column>
-    </el-table> -->
-  <el-table
+    <div class="menu-operation mb-10">
+      <el-button type="primary" @click="applicationfun">新增</el-button>
+    </div>
+    <el-table
       :data="tableData"
       style="width: 100%"
       row-key="id"
@@ -29,12 +19,22 @@
       <el-table-column prop="name" label="姓名" width="180"> </el-table-column>
       <el-table-column prop="address" label="地址"> </el-table-column>
     </el-table>
+    <template v-if="isApplicationAdd">
+      <ApplicationAdd
+        :applicationfun="applicationfun"
+      ></ApplicationAdd>
+    </template>
   </div>
 </template>
 <script>
+  import ApplicationAdd from './application-add.vue'
   export default {
+    components: {
+      ApplicationAdd,
+    },
     data() {
       return {
+        isApplicationAdd:false,
         tableData: [
           {
             id: 1,
@@ -154,10 +154,23 @@
           resolve(arrObj)
         }, 1000)
       },
+      applicationfun(){
+        this.isApplicationAdd = !this.isApplicationAdd
+      },
     },
   }
 </script>
 
-<style>
-
+<style  lang="less" scoped>
+.menu-nav {
+  width: 100%;
+  display: flex;
+}
+.menu-operation {
+  display: flex;
+  justify-content: flex-end;
+}
+.mb-10{
+  margin-bottom: 10px;
+}
 </style>

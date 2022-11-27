@@ -4,11 +4,11 @@ import router from '../router'
 import { ElMessage } from 'element-plus'
 // 设置默认访问路径
 axios.defaults.baseURL = process.env.VUE_APP_EXTERNAL_LINK;
-
+axios.defaults.timeout = 2000;
 // 在封装axios的文件中添加拦截器
 // 添加请求拦截器，在请求头中加token
-axios.interceptors.request.use(
-    config => {
+axios.interceptors.request.use(config => {
+    config.cache = false
     let userList= JSON.parse(sessionStorage.getItem('userList'))
       // 判断本地的cookie中是否有token
     if (userList) {
