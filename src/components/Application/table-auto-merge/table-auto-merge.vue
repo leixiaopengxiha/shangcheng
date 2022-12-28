@@ -1,9 +1,28 @@
 <template>
-  <div>
+   <div class="menu-operation mb-10">
+    <el-button type="primary" @click="yulian">表格合并</el-button>
+    <el-button type="primary" @click="quxiaohb">取消合并</el-button>
+  </div>
+  <div v-if="isyulian">
     <TableAutoMergeAssembly 
-    :arrlist="arrlist" 
-    :data="data" 
-    :tableautomerge="tableautomerge" 
+    :tableList="tableList" 
+    :tableData="tableData"
+    :tableListChildren ="tableListChildren"
+    :tableautomerge="tableautomerge"
+    :ischeckbox="true"
+    :handleSelectionChange="handleSelectionChange"
+    :tableDatachildren="tableData"
+    ></TableAutoMergeAssembly>
+  </div>
+  <div v-else>
+    <TableAutoMergeAssembly 
+    :tableList="tableList" 
+    :tableData="tableData" 
+    :tableListChildren ="tableListChildren"
+    :tableautomerge="tableautomerge"
+    :ischeckbox="true"
+    :handleSelectionChange="handleSelectionChange"
+    :tableDatachildren="tableDatachildren"
     ></TableAutoMergeAssembly>
   </div>
 </template>
@@ -15,7 +34,8 @@ export default {
   },
   data() {
       return {
-      data:[
+        isyulian:true,
+        tableData:[
           {
             id: 3,
             type:'xmcl',
@@ -73,11 +93,11 @@ export default {
             address: '上海市普陀区金沙江路 1516 弄',
           },
         ],
-        tableautomerge:['typeName','date','name','address'],
-        arrlist: [
+        tableautomerge:[],
+        tableList: [
           {
             key:"typeName",
-            label:' ',
+            label:'',
             align:'center',
             width:'40',
           },
@@ -85,20 +105,73 @@ export default {
             key:"date",
             label:"日期",
             align:'center',
-            width:'180',
+            width:'480',
           },
           {
             key:"name",
             label:"姓名",
             align:'center',
+            width:'480',
           },
           {
             key:"address",
             label:"地址",
             align:'center',
+            width:'480',
           }
         ],
+        tableListChildren:[
+            {
+            key:"date",
+            label:"日期",
+            align:'center',
+            width:'480',
+          },
+          {
+            key:"name",
+            label:"姓名",
+            align:'center',
+            width:'480',
+          },
+          {
+            key:"address",
+            label:"地址",
+            align:'center',
+            width:'480',
+          }
+        ],
+        multipleSelection: [],
+        tableDatachildren:[],
     }
+  },
+  mounted(){
+    this.tableDatachildren = this.tableData
+  },
+  methods:{
+    handleSelectionChange(val){
+      console.log(val,'1-----');
+      this.multipleSelection = val;
+    },
+    yulian(){
+      console.log('2323');
+      this.tableautomerge= ['typeName','date','name']
+      this.isyulian = !this.isyulian
+
+    },
+    quxiaohb(){
+      this.tableautomerge=[]
+      this.isyulian = !this.isyulian
+    },
   }
 }
 </script>
+<style scoped>
+.menu-operation {
+  display: flex;
+  /* justify-content: flex-end; */
+}
+.mb-10{
+  margin-bottom: 10px;
+}
+
+</style>
