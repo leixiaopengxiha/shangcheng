@@ -7,6 +7,7 @@
     :data="tableData1"
     :span-method="objectSpanMethod"
     max-height="600"
+    highlight-current-row
     border
     @selection-change="handleSelectionChange"
     style="width: 100%"
@@ -25,12 +26,13 @@
         :sortable="item.label.length ? true : false"
       />
     </template>
-    <el-table-column v-if="tableListChildren?.length"  width="50" type="expand" class="row-boxs" fixed="right" >
+    <el-table-column v-if="tableListChildren?.length"  type="expand" class="row-boxs">
       <el-row class="row-w">
         <el-table
           ref="multipleTables"
           id="multipleTables"
           :data="tableDatachildren"
+          highlight-current-row
           max-height="600"
           border
           style="width: 100%"
@@ -44,8 +46,13 @@
               :sortable="item.label.length ? true : false"
             />
           </template>
-          <el-table-column label="操作" width="150" fixed="right">
+          <el-table-column label="操作" width="250"  align="center">
             <template #default="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)"
+                >编辑</el-button
+              >
               <el-button
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)"
@@ -68,7 +75,7 @@
         </el-table>
       </el-row>
     </el-table-column>
-    <el-table-column label="操作" width="150" fixed="right">
+    <el-table-column label="操作" width="200" align="center">
       <template #default="scope">
         <el-popconfirm
           confirmButtonText="确定"

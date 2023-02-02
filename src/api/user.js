@@ -341,3 +341,16 @@ export let postUpdatePswd= (data)=>{
         data,
     });
 }
+
+// 录像
+export let postImgpage= (data)=>{
+    return axios({
+        url: `${url}/imgpage`,
+        method: "post",
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        // 传参
+        data,
+    });
+}

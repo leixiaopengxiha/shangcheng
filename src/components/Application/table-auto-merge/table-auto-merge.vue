@@ -105,19 +105,19 @@ export default {
             key:"date",
             label:"日期",
             align:'center',
-            width:'480',
+            // width:'480',
           },
           {
             key:"name",
             label:"姓名",
             align:'center',
-            width:'480',
+            // width:'480',
           },
           {
             key:"address",
             label:"地址",
             align:'center',
-            width:'480',
+            // width:'480',
           }
         ],
         tableListChildren:[
