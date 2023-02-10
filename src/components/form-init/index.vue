@@ -313,6 +313,21 @@ export default {
       });
       return isValid;
     },
+    setDisabled(key,isShow,type){
+      if(typeof(key)=="string"){
+        key= key.split(',')
+      }
+      this.formData= this.formData.map(item=>{
+        key.map(itemKey=>{
+          if(type=="button"&&item.btnFun==itemKey){
+          item.disabled = isShow?1:0
+          }else if(!type&&item.formModel==itemKey){
+            item.disabled = isShow?1:0
+          }
+        })
+        return item
+      })
+    },
     // 获取值
     getData() {
       return this.ruleForm;
