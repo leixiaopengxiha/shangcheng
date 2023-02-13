@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "@element-plus/icons": "^0.0.11",
+    "@toast-ui/editor": "^3.2.1",
+    "@toast-ui/vue-editor": "^3.2.2",
     "axios": "^0.21.1",
-    "core-js": "^3.6.5",
+    "core-js": "^3.27.2",
     "default-passive-events": "^2.0.0",
     "echarts": "^5.4.0",
     "element-plus": "^1.0.2-beta.71",

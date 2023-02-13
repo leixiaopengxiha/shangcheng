@@ -3,25 +3,22 @@
         <FormInit ref="FormInitComponent" :formPage="data.formPage" @formBtn='chengong' @typeChange="typeChange"></FormInit>
     </div>
     <div>
-            <el-input
-                class="textheight"
-              type="textarea"
-              v-model="data.textValue"
-            ></el-input>
-
+        <el-input
+            class="textheight"
+            type="textarea"
+            v-model="data.textValue"
+        ></el-input>
     </div>
   </template>
   <script>
 
   import { onMounted, reactive, computed,ref } from "vue";
-//   import { useRouter, useRoute } from "vue-router";
   import { useStore } from "vuex";
   import {GenerateAi} from '../../../api/openAi'
-//   5000000000000007
   import FormInit from '../../form-init'
   export default {
     components:{
-        FormInit
+        FormInit,
     },
     setup() {
         const FormInitComponent = ref(null)
@@ -49,7 +46,7 @@
                     data.historytextValue = GenerateData.data.text
                     data.textValue = `${data.textValue}${GenerateData.data.text}`
                     FormInitComponent.value.setDisabled("formData",false,'button')
-                    console.log(GenerateData.data.finish_reason);
+                    markdownEditor.value.setValue(data.textValue)
                     if(GenerateData.data.finish_reason!="stop"){
                         chengong('formData')
                     }else{
