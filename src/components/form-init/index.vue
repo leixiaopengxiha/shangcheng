@@ -33,6 +33,7 @@
                 value: ruleForm[item.formModel],
                 items: item,
               })" 
+              clearable
             ></el-input>
           </template>
           <!-- 下拉框 -->
@@ -51,6 +52,7 @@
                 items: item,
                 option: selectOption[item.formModel]
               })" 
+              clearable
             >
               <template v-for="(items,indexs) in selectOption[item.formModel]" :key="indexs">
                   <el-option :label="items.dicValue" :value="items.dicKey"></el-option>
@@ -100,12 +102,23 @@
                 value: ruleForm[item.formModel],
                 items: item,
               })" 
+              clearable
             >
             </el-date-picker>
           </template>
           <!-- 多选框 -->
           <template v-if="item.type == 'checkbox'">
-              <el-checkbox-group v-model="ruleForm[item.formModel]"  class="form-widths">
+              <el-checkbox-group 
+                  v-model="ruleForm[item.formModel]"  
+                  class="form-widths"
+                  @change="typeChange({
+                    type:item.type,
+                    key: item.formModel,
+                    label: item.label,
+                    value: ruleForm[item.formModel],
+                    items: item,
+                  })"
+                >
                 <template v-for="(itemRadio,indexss) in selectOption[item.formModel]" :key='indexss'>
                   <el-checkbox :label="itemRadio.dicKey" name="type">{{itemRadio.dicValue}}</el-checkbox>
                 </template>
@@ -113,7 +126,16 @@
           </template>
           <!-- 单选框 -->
           <template v-if="item.type=='radio'"  class="form-widths">
-            <el-radio-group v-model="ruleForm[item.formModel]">
+            <el-radio-group 
+              v-model="ruleForm[item.formModel]" 
+              @change="typeChange({
+                type:item.type,
+                key: item.formModel,
+                label: item.label,
+                value: ruleForm[item.formModel],
+                items: item,
+              })"  
+            >
               <template v-for="(itemRadio,indexss) in selectOption[item.formModel]" :key='indexss'>
                   <el-radio :label="itemRadio.dicKey" >{{itemRadio.dicValue}}</el-radio>
               </template>

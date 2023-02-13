@@ -29,6 +29,7 @@
         let data = reactive({
             isshow: false,
             textValue:'',
+            historytextValue:"",
             formPage: {
                 formId: '5000000000000007', // 表单id
             },
@@ -39,18 +40,20 @@
         let chengong=async(event)=>{
             // console.log(event);
             if(event=='formData'){
-                let datas =  {...FormInitComponent.value.getData()}
-                datas.animal = `${datas.animal}${data.textValue}`
-
+                let doce =  {...FormInitComponent.value.getData()}
+                doce.animal = `${data.historytextValue}${doce.animal}`
                 FormInitComponent.value.setDisabled("formData",true,'button')
-                let GenerateData =  await GenerateAi(datas)
+                let GenerateData =  await GenerateAi(doce)
                 if(GenerateData.code==2000){
                     console.log(GenerateData);
+                    data.historytextValue = GenerateData.data.text
                     data.textValue = `${data.textValue}${GenerateData.data.text}`
                     FormInitComponent.value.setDisabled("formData",false,'button')
                     console.log(GenerateData.data.finish_reason);
                     if(GenerateData.data.finish_reason!="stop"){
                         chengong('formData')
+                    }else{
+                        // data.historytextValue = '';
                     }
                 }else{
                     FormInitComponent.value.setDisabled("formData",false,'button')
@@ -58,7 +61,7 @@
             }
         }
         let typeChange=(event)=>{
-            console.log(event);
+            // console.log(event);
             if(!!event.key){
                 FormInitComponent.value.setDisabled("formData",false,'button')
             }
