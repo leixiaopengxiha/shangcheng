@@ -50,7 +50,7 @@
     methods:{
       // 将base64的图片转为文件流
       dataURLtoFile(dataUrl){
-        const filename = `img${Date.now()}`;
+        const filename = `录像截图-${Date.now()}`;
         const arr = dataUrl.split(',');
         const mime = arr[0].match(/:(.*?);/)[1];
         const bstr = atob(arr[1]);

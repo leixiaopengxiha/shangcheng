@@ -1,43 +1,57 @@
 <template>
-  <div ref="mycharts" class="demoDiv" ></div>
+  <!-- <div ref="mycharts" class="demoDiv" ></div> -->
+  <div>
+    <ExhartsYb ref="echartsyb"></ExhartsYb>
+  </div>
 </template>
 <script>
-import * as echarts from 'echarts'
-export default{
-  data(){
+import ExhartsYb from './echarts-yb'
+export default {
+  components: {
+    ExhartsYb
+  },
+  data() {
+
     return {
-      option: {
-        title: {
-          text: 'ECharts 入门示例'
-        },
-        tooltip: {},
-        legend: {
-          data: ['销量']
-        },
-        xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        },
-        yAxis: {},
-        series: [
-          {
-            name: '销量',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-          }
-        ]
-      }
+      optionData: {}
     }
   },
   mounted() {
-      const chartDom = this.$refs.mycharts
-      let myChart = echarts.init(chartDom);
-      myChart.setOption(this.option);
-  },
+    this.$nextTick(() => {
+      // this.echartsYbFuns()
+    })
 
+
+  },
+  methods: {
+    echartsYbFuns() {
+      // 模拟接口
+      setInterval(() => {
+        const random = +(Math.random() * 100).toFixed(2);
+        this.optionData = {
+          title: [
+            {
+              text: random + '%'
+            }
+          ],
+          series: [
+            {
+              data: [
+                {
+                  value: random
+                }
+              ]
+            },
+          ]
+        }
+        this.$refs.echartsyb.echartsYbFun(this.optionData)
+      }, 500)
+    }
+  }
 }
 </script>
 <style scoped>
-.demoDiv{
+.demoDiv {
   width: 500px;
   height: 300px;
 }

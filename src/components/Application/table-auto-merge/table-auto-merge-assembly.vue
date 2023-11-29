@@ -37,7 +37,7 @@
           border
           style="width: 100%"
         >
-         <template e v-for="(item, index) in tableListChildren" :key="index">
+         <template  v-for="(item, index) in tableListChildren" :key="index">
             <el-table-column
               :label="item.label"
               :prop="item.key"

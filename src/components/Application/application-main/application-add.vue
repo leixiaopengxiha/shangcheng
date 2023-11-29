@@ -59,10 +59,10 @@ export default {
     created() {
         // this.postUserFormConfigurations()
     },
-mounted(){
+    mounted(){
 
 
-},
+    },
     methods: {
         typeChange(event) {
             console.log(event.value)
