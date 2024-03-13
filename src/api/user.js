@@ -354,3 +354,16 @@ export let postImgpage= (data)=>{
         data,
     });
 }
+
+// 下载接口
+export let downloadExcel= (data)=>{
+    return axios({
+        url:  `https://glhlwyy-test.yuanhuimiaozhen.com/prod-api/shopstore/plf/drugs/expoertemplate`,
+        method: "get",
+        headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      responseType: 'blob'
+    });
+}
