@@ -112,4 +112,21 @@ ul {
 .table-box-adapt{
    height: calc(100vh - 240px);
 }
+.el-table__body-wrapper {
+  overflow-y: scroll !important;
+}
+
+.el-table__body-wrapper::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.el-table__body-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.el-table__body-wrapper::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
 </style>

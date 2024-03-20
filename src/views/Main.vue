@@ -58,7 +58,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .el-container {
   width: 100vw;
   height: 100vh;
@@ -106,11 +106,9 @@ export default {
   overflow: hidden;
   overflow-x: scroll;
 }
-::-webkit-scrollbar{
-    display:none;
+::-webkit-scrollbar {
+  display: none;
 }
-.element { -ms-overflow-style: none; }
-.element { overflow: -moz-scrollbars-none; }
 .main-box-page{
   width: 100% !important;
   background-color: #e9eef3;

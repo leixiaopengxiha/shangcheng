@@ -73,6 +73,14 @@ router.beforeEach(async (to, from, next) => {
     stores.dispatch('user/Navactive','/main')
     stores.dispatch("user/RouterPath", "/main");
   }
+  if(to.path.indexOf('/main')!= -1){
+    let userList = sessionStorage.getItem("userList");
+    if(!userList){
+      router.replace("/login");
+      next();
+      return
+    }
+  }
   // 进入系统动态获取地址
   if (to.path.indexOf('/main')!= -1 || to.path == '/404') {
     if (!stores.state.user.routeList.length) {

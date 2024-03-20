@@ -9,6 +9,10 @@ axios.defaults.timeout = 2000;
 // 添加请求拦截器，在请求头中加token
 axios.interceptors.request.use(config => {
     config.cache = false
+    // 设置请求头
+    config.headers={
+        'Access-Control-Allow-Origin': '*'
+    }
     let userList= JSON.parse(sessionStorage.getItem('userList'))
       // 判断本地的cookie中是否有token
     if (userList) {
