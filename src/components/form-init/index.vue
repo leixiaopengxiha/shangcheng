@@ -163,11 +163,12 @@ export default {
   props: ["formPage",'formInitDatas'],
   data() {
     return {
-      ruleForm: {},
+      ruleForm: {}, // 表单数据结构
       formData: [],
-      rules: {},
-      selectOption:{},
-      selectCustomList:[],
+      rules: {}, // 表单校验逻辑
+      selectOption:{}, // 存储字典进行对应表单赋值
+      selectCustomList:[], //存储表达需要的字典后期进行查询使用
+      initFormDatas:{}, // 在表单没有加载完成前实现表单数据暂存
     };
   },
   created() {
@@ -307,14 +308,31 @@ export default {
         }else{
            this.$message.error(data.message);
         }
+        this.setFormData(this.initFormDatas)
     },
     // 设置自定义下拉框值
     setOption(key,option){
        this.selectOption[key] = option;
     },
-    // 设置值
+    // 给表单单个属性设置值
     setVaule(key,vaule){
       this.ruleForm[key] = vaule
+    },
+    // 给整个表单赋值
+    setFormData(data){
+      // 校验传入的数据是否为空避免报错
+      if(!Object.keys(data).length){
+        return
+      }
+      // 在表单没有加载完成前进行数据暂存
+      if(!Object.keys(this.ruleForm).length){
+        this.initFormDatas = data
+        return
+      }
+      this.initFormDatas = {}
+      Object.keys(this.ruleForm).forEach(key => {
+        this.ruleForm[key] = data[key]?data[key]:this.ruleForm[key];
+      });
     },
     // 获取值
     getVaule(key){

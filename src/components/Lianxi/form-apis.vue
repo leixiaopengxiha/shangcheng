@@ -35,6 +35,7 @@
 <script>
 
 import FormInit from '../form-init'
+import {dateFormat} from '../../util/dateFormat.js'
 
 export default {
   props: ["yulian","formid"],
@@ -99,10 +100,31 @@ export default {
   },
   created(){
     // this.postUserFormConfigurations()
+    
+  },
+  mounted(){
+    console.log(dateFormat('YY-MM-DD',new Date()));
+    let aa  ={
+      aa: "1",
+      aasa: "1",
+      checkPass: '123456',
+      checkbox:  ['1', '2'],
+      date: ['2024-03-09', dateFormat('YY-MM-DD',new Date())],
+      name: "1",
+      pass: "123456",
+      radio: "1",
+      sds: "2",
+      zdycc: "1",
+
+    }
+    // setTimeout(()=>{
+    this.$refs.form.setFormData(aa)
+
+    // },1000)
   },
   methods: {
    typeChange(event){
-     console.log(event.value)
+     console.log(event)
    },
     // 自定义校验使用 1
     validatePass(rule, value, callback){
