@@ -39,6 +39,7 @@ import { useStore } from "vuex";
 import { computed, onMounted, reactive, defineComponent } from "vue";
 import { useRouter, useRoute} from 'vue-router';
 import UpdatePswd from './Update-pswd.vue'
+import {emitSocketEvent} from '@/util/socket.io'
 export default defineComponent({
   name: "headers",
   components:{'my-update-pswd':UpdatePswd},
@@ -62,6 +63,7 @@ export default defineComponent({
       }
     };
     const signOut=()=>{
+        emitSocketEvent('userUsage')
         sessionStorage.clear()
         store.dispatch('user/Roterlist',[]);
         store.dispatch('user/RouterPath','/main/home')

@@ -31,6 +31,7 @@ import Myelmenu  from '@/components/main/Aside/Myelmenu';
 import { useRouter, useRoute} from 'vue-router';
 import Headers from '@/components/main/Headers'
 import Tag from '@/components/main/Tag.vue'
+import {emitSocketEvent} from '@/util/socket.io'
 
 export default {
   components:{
@@ -45,6 +46,7 @@ export default {
       isAsideWidth: computed(() => store.state.user.isAsideWidth),
     })
     onMounted(()=>{
+      emitSocketEvent('userInformation')
       let routerpath = store.state.user.routerpath
       router.push(routerpath)
     })

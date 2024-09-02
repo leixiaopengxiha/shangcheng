@@ -9,8 +9,12 @@ import 'dayjs/locale/zh-cn';
 import 'default-passive-events'
 import {ElementPlusUseLang} from './util/elementLocale'
 import directives from './directives/index.js'
+import { connectSocket } from './util/socket.io';
 
 const app = createApp(App);
+// 连接socket
+connectSocket(process.env.VUE_APP_EXTERNAL_LINK);
+ 
 // 转换语言
 ElementPlusUseLang(app, ref,ElementPlus,zhLocale)
 directives(app);
